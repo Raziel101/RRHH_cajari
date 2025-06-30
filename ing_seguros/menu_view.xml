@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="ing_seguro_secure_submenu" name="Seguros"
+                  parent="hr.menu_hr_root"
+                  groups="ing_ausencias.group_ing_rrhh_ausencias_encargado"/>
+
+    </data>
+</odoo>

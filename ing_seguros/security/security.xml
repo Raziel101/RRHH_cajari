@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="rule_planillas_art_department" model="ir.rule">
+            <field name="name">Planillas ART: Ver solo de los departamentos asignados en el usuario</field>
+            <field name="model_id" ref="ing_seguros.model_ing_seguros_planilla_art"/>
+            <field name="groups" eval="[(4, ref('ing_ausencias.group_ing_rrhh_ausencias_encargado'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">[('employee_id.department_id.id','in',user.areasgob_ids.ids)]</field>
+        </record>
+
+        <record id="rule_planillas_art" model="ir.rule">
+            <field name="name">Planillas ART: Ver solo de los departamentos asignados en el usuario</field>
+            <field name="model_id" ref="ing_seguros.model_ing_seguros_planilla_art"/>
+            <field name="groups" eval="[(4, ref('ing_ausencias.group_ing_rrhh_ausencias_admin'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">[]</field>
+        </record>
+
+    </data>
+</odoo>

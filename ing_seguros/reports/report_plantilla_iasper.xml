@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="planilla_iasper_template">
+            <t t-foreach="docs" t-as="o">
+                <style>
+                    @page {
+                        size: A4;
+                        margin: 0;
+                    }
+                    body {
+                        margin: 0;
+                        padding: 0;
+                    }
+                    .page {
+                        width: 210mm;
+                        height: 297mm;
+                        position: relative;
+                        overflow: hidden;
+                    }
+                    .background-container {
+                        position: relative;
+                        width: 100%;
+                        height: 120vh;
+                    }
+                    .background-image {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
+                        z-index: 0;
+                    }
+                    .field-overlay {
+                        position: absolute;
+                        font-size: 12px;
+                        font-weight: bold;
+                        color: black;
+                        z-index: 1;
+                    }
+                    @media print {
+                        .page, .background-container {
+                            height: 1200px;
+                        }
+                        .background-image {
+                            object-fit: contain;
+                        }
+                    }
+                </style>
+                <div class="page">
+                    <main class="main-content">
+                        <div class="background-container" style="position: relative; width: 100%; height: 1000px;">
+                            <!--<img t-att-src="'/ing_seguros/static/src/pdf/Formulario-de-Denuncia.png'" class="background-image" style="position: absolute; top: 0; left: 0; width: 100%; height: 130%; object-fit: contain; z-index: 0;"/>-->
+                            <img t-att-src="'data:image/png;base64,%s' % o.imagen_fondo.decode('utf-8')" class="background-image" style="position: absolute; top: 0; left: 0; width: 210mm; height: 297mm; object-fit: cover; z-index: 0;"/>
+
+                            <span class="field-overlay" style="position: absolute; top: 145px; left: 120px; font-size: 12px;"><t t-esc="o.poliza_numero"/></span>
+                            <!--<span class="field-overlay" style="top: 280px; left: 910px;"><t t-esc="o.siniestro_numero"/></span>-->
+                            <span class="field-overlay" style="position: absolute; top: 165px; left: 120px; font-size: 12px;"><t t-esc="o.tomador_nombre"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 165px; left: 580px; font-size: 12px;"><t t-esc="o.tomador_telefono"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 185px; left: 120px; font-size: 12px;"><t t-esc="o.tomador_domicilio"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 185px; left: 430px; font-size: 12px;"><t t-esc="o.tomador_localidad"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 185px; left: 630px; font-size: 12px;"><t t-esc="o.tomador_dpto"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 200px; left: 120px; font-size: 12px;"><t t-esc="o.tomador_email"/></span>
+
+                            <!-- Datos del Asegurado -->
+                            <span class="field-overlay" style="position: absolute; top: 220px; left: 240px; font-size: 12px;"><t t-esc="o.employee_id.name"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 220px; left: 650px; font-size: 12px;"><t t-esc="o.asegurado_dni"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 240px; left: 120px; font-size: 12px;"><t t-esc="o.asegurado_calle"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 260px; left: 120px; font-size: 12px;"><t t-esc="o.asegurado_localidad"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 260px; left: 457px; font-size: 12px;"><t t-esc="o.asegurado_provincia"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 260px; left: 680px; font-size: 12px;"><t t-esc="o.asegurado_cp"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 280px; left: 120px; font-size: 12px;"><t t-esc="o.asegurado_email"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 295px; left: 180px; font-size: 12px; display: inline-block; max-width: 900px; overflow: hidden; word-wrap: break-word;"><t t-esc="o.tarea_efectuada"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 295px; left: 680px; font-size: 12px;"><t t-esc="o.asegurado_edad"/></span>
+                            <!--<span class="field-overlay" style="top: 605px; left: 470px;"><t t-esc="o.beneficiario_nombre"/></span>
+                            <span class="field-overlay" style="top: 705px; left: 200px;"><t t-esc="o.especificar_obra_social"/></span>-->
+
+                            <!-- Datos del Accidente -->
+                            <span class="field-overlay" style="position: absolute; top: 415px; left: 100px; font-size: 12px;"><t t-esc="o.dia"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 415px; left: 265px; font-size: 12px;"><t t-esc="o.mes"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 415px; left: 465px; font-size: 12px;"><t t-esc="o.anio"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 415px; left: 650px; font-size: 12px;"><t t-esc="o.hora"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 435px; left: 210px; font-size: 12px;"><t t-esc="o.lugar_accidente"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 470px; left: 50px; font-size: 12px; display: inline-block; max-width: 690px; overflow: hidden; word-wrap: break-word;"><t t-esc="o.circunstancias"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 565px; left: 395px; font-size: 12px;"><t t-esc="o.actividad_accidentado"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 585px; left: 235px; font-size: 12px;"><t t-esc="o.parte_cuerpo_lesionado"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 605px; left: 235px; font-size: 12px;"><t t-esc="o.parte_cuerpo_lesionado2"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 585px; left: 482px; font-size: 12px; max-width: 670px; display: inline-block; overflow: hidden; word-wrap: break-word;"><t t-esc="o.tipo_lesion"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 605px; left: 482px; font-size: 12px; max-width: 670px; display: inline-block; overflow: hidden; word-wrap: break-word;"><t t-esc="o.tipo_lesion2"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 1000px; left: 130px; font-size: 12px;"><t t-esc="o.denunciante_telefono_fondo"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 1000px; left: 450px; font-size: 12px;">
+                                Chajarí,<t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')"/>
+                            </span>
+
+                            <!--<t t-set="now" t-value="o.env.context.get('timestamp')"/>
+                            <span class="field-overlay" style="position: absolute; top: 1000px; left: 450px; font-size: 14px;">
+                                <t t-if="now">Chajarí, <t t-esc="now.strftime('%d/%m/%Y')"/></t>
+                                <t t-if="not now">Chajarí, [sin fecha actual]</t>
+                            </span>-->
+
+                            <!--<span class="field-overlay" style="top: 1190px; left: 150px;"><t t-esc="o.medico_primera_atencion"/></span>
+                            <span class="field-overlay" style="top: 1290px; left: 340px;"><t t-esc="o.nombres_testigos"/></span>
+                            <span class="field-overlay" style="top: 1360px; left: 340px;"><t t-esc="o.domicilios_testigos"/></span>
+                            <span class="field-overlay" style="top: 1470px; left: 150px;"><t t-esc="o.autoridad"/></span>-->
+                            <!-- Datos del Denunciante
+                            <span class="field-overlay" style="top: 1540px; left: 150px;"><t t-esc="o.tipo_denunciante"/></span>
+                            <span class="field-overlay" style="top: 1580px; left: 300px;"><t t-esc="o.denunciante_nombre"/></span>
+                            <span class="field-overlay" style="top: 1615px; left: 380px;"><t t-esc="o.denunciante_domicilio"/></span>-->
+                        </div>
+                    </main>
+                </div>
+            </t>
+        </template>
+
+        <record id="paperformat_info_planilla_iasper_mediaA4" model="report.paperformat">
+            <field name="name">A4</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <report
+            id="inf_planilla_iasper_report"
+            model="ing.seguros.planilla.iasper"
+            string="Informe Planilla IASPER"
+            report_type="qweb-pdf"
+            name="ing_seguros.planilla_iasper_template"
+            file="ing_seguros.planilla_iasper_template"
+            menu="False"
+            paperformat="paperformat_info_planilla_iasper_mediaA4"
+            print_report_name="'Planilla_IAPSER_%s' % (object.id)"/>
+    </data>
+</odoo>

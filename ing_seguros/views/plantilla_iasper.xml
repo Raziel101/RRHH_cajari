@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_planilla_iasper_form" model="ir.ui.view">
+        <field name="name">planilla.iasper.form</field>
+        <field name="model">ing.seguros.planilla.iasper</field>
+        <field name="arch" type="xml">
+            <form string="Denuncia de Accidente">
+                <header>
+                    <button name="print_planilla" type="object" string="Imprimir" class="btn-primary"/>
+                    <field name="state" invisible="1"/>
+                </header>
+                <sheet>
+                    <!--<group>
+                        <group string="Datos del Siniestro">
+                            <field name="poliza_numero"/>
+                            <field name="siniestro_numero"/>
+                            <field name="nota" readonly="1"/>
+                        </group>
+                    </group>-->
+                    <!--<group string="Datos del Tomador">
+                    </group>-->
+                    <group string="Datos del Asegurado">
+                        <field name="fecha_creacion" readonly="1" invisible="1" widget="date"/>
+                        <field name="tomador_nombre" invisible="1"/>
+                        <field name="tomador_telefono" invisible="1"/>
+                        <field name="tomador_domicilio" string="Domicilio" invisible="1"/>
+                        <field name="tomador_calle" invisible="1"/>
+                        <field name="tomador_numero" invisible="1"/>
+                        <field name="tomador_localidad" invisible="1"/>
+                        <field name="tomador_dpto" invisible="1" />
+                        <field name="tomador_email" invisible="1"/>
+                        <field name="employee_id"/>
+                        <!--<field name="asegurado_nombre"/>-->
+                        <field name="asegurado_dni" invisible="1"/>
+                        <field name="asegurado_email" invisible="1"/>
+                        <field name="asegurado_calle" invisible="1"/>
+                        <field name="asegurado_localidad"/>
+                        <field name="asegurado_provincia" invisible="1"/>
+                        <field name="asegurado_cp"/>
+                        <field name="asegurado_edad" readonly="1" invisible="1"/>
+                        <field name="asegurado_numero" invisible="1"/>
+                        <field name="asegurado_piso" invisible="1"/>
+                        <field name="asegurado_dpto" invisible="1"/>
+                        <field name="tarea_efectuada" invisible="1"/>
+                    </group>
+                    <!--<group string="Datos del Beneficiario">
+                        <field name="beneficiario_nombre"/>
+                        <field name="cuenta_obra_social"/>
+                        <field name="especificar_obra_social"/>
+                    </group>-->
+                    <group string="Circunstancias del Accidente">
+                        <field name="dia"/>
+                        <field name="mes"/>
+                        <field name="anio"/>
+                        <field name="hora"/>
+                        <separator/>
+                        <field name="lugar_accidente"/>
+                        <separator/>
+                        <field name="circunstancias"/>
+                        <separator/>
+                        <span class="field-overlay" style="display: inline-block; width: 100%; max-width: 500px; white-space: normal; word-wrap: break-word; word-break: break-word; overflow-wrap: break-word;">
+                            <t t-esc="o.circunstancias"/>
+                        </span>
+                        <separator/>
+                        <field name="actividad_accidentado"/>
+                        <separator/>
+                        <field name="parte_cuerpo_lesionado"/>
+                        <separator/>
+                        <field name="tipo_lesion"/>
+                        <separator/>
+                        <field name="parte_cuerpo_lesionado2"/>
+                        <separator/>
+                        <field name="tipo_lesion2"/>
+                        <!--<field name="medico_primera_atencion"/>-->
+                    </group>
+                    <!--<group string="Testigos">
+                        <field name="hubo_testigos"/>
+                        <field name="nombres_testigos" attrs="{'invisible': [('hubo_testigos', '=', False)]}"/>
+                        <field name="domicilios_testigos" attrs="{'invisible': [('hubo_testigos', '=', False)]}"/>
+                        <field name="sumario_policial"/>
+                        <field name="autoridad"/>
+                    </group>-->
+                    <group string="Datos del Denunciante">
+                        <field name="tipo_denunciante" invisible="1"/>
+                        <field name="denunciante_nombre" invisible="1"/>
+                        <field name="denunciante_domicilio" invisible="1"/>
+                        <field name="denunciante_telefono_fondo" string="Teléfono del Denunciante"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_planilla_iasper_tree" model="ir.ui.view">
+        <field name="name">planilla.iasper.tree</field>
+        <field name="model">ing.seguros.planilla.iasper</field>
+        <field name="arch" type="xml">
+            <tree string="Denuncias de Accidentes - Planillas IASPER">
+                <field name="poliza_numero"/>
+                <!--<field name="siniestro_numero"/>-->
+                <field name="employee_id"/>
+                <field name="lugar_accidente"/>
+                <field name="hora"/>
+                <field name="fecha_creacion" widget="date"/>
+                <field name="parte_cuerpo_lesionado"/>
+                <field name="tipo_lesion"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_planilla_iasper" model="ir.actions.act_window">
+        <field name="name">Planillas IAPSER</field>
+        <field name="res_model">ing.seguros.planilla.iasper</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_order_fecha': 1, 'default_order': 'fecha_creacion desc'}</field>
+    </record>
+
+    <menuitem id="menu_seguros_root" name="Seguros"/>
+
+    <menuitem id="menu_planilla_iasper" name="Planillas IAPSER" sequence="4"
+              parent="ing_seguro_secure_submenu" action="action_planilla_iasper"
+    groups="ing_ausencias.group_ing_rrhh_ausencias_encargado"/>
+</odoo>

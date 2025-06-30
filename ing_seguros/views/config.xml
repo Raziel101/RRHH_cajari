@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="ing_seguros_config_window" model="ir.actions.act_window">
+            <field name="name">Configuracion</field>
+            <field name="res_model">ing.seguros.config</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="ing_seguros_config_submenu" name="Configuracion" sequence="10"
+                  action="ing_seguros_config_window" parent="ing_seguro_secure_submenu"
+                  groups="ing_ausencias.group_ing_rrhh_ausencias_admin_rrhh"/>
+
+    </data>
+</odoo>

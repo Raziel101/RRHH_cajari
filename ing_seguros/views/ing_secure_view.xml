@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--        TREE VIEW-->
+        <record id="view_secure_tree" model="ir.ui.view">
+            <field name="name">ing.secure.employee.tree</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="replace">
+                    <tree decoration-danger="secure == 'NO'"
+                          decoration-info="secure == 'GA'"
+                          decoration-warning="secure == 'GB'"
+                          decoration-success="secure == 'SI'">
+                        <field name="name"/>
+                        <field name="secure"/>
+                        <field name="birthday"/>
+                        <field name="identification_id"/>
+                        <field name="department_id"/>
+                    </tree>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="view_ing_secure_search" model="ir.ui.view">
+            <field name="name">view_ing_secure_search</field>
+            <field name="model">hr.employee</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="identification_id"/>
+                    <field name="secure"/>
+                    <group expand="0" string="Agrupar por">
+                        <filter string="Estado de Seguro" name="filter_secure" context="{'group_by':'secure'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+
+        <record model="ir.actions.act_window" id="ing_seguro_secure_action">
+            <field name="name">Seguros</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[("tipo_contrato_id","in",["Locación de Servicios","Contrato de Voluntariado"])]</field>
+             <field name="context">{"search_default_filter_secure":1}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"><strong>Seguros</strong>.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_alta_baja_seguros_seguro_wizard"
+                model="ir.actions.act_window">
+            <field name="name">Alta - Baja</field>
+            <field name="res_model">ing.alta.baja.seguros.wz</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="ing_seguro_seguros_alta_submenu" name="Alta - Baja" sequence="1" groups="ing_ausencias.group_ing_rrhh_ausencias_admin_rrhh"
+                  action="action_alta_baja_seguros_seguro_wizard" parent="ing_seguro_secure_submenu"/>
+
+        <menuitem id="ing_seguro_seguros_submenu" name="Seguros Locacion" action="ing_seguro_secure_action"
+                  parent="ing_seguro_secure_submenu" sequence="0" groups="ing_ausencias.group_ing_rrhh_ausencias_admin_rrhh"/>
+
+    </data>
+</odoo>

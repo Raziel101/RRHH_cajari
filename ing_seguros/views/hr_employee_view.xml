@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- FORM VIEW -->
+        <record id="ing_seguros_view_employee_form" model="ir.ui.view">
+            <field name="name">ing.seguros.hr.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="/form/sheet/div/field[@name='tipo_contrato_id']" position="after">
+                    <group>
+                        <field name="view_secure_field" invisible="1"/>
+                        <field name="secure" attrs="{'invisible': [('view_secure_field','=',False)]}"/>
+                    </group>
+                </xpath>
+
+                <xpath expr="//header" position="inside">
+                    <button string="ART" name="get_historic_art" type="object" groups="ing_ausencias.group_ing_rrhh_ausencias_encargado"/>
+                </xpath>
+
+                <xpath  expr="//field[@name='country_of_birth']" position="replace">
+                    <field name="required_country_of_birth" invisible="1"/>
+                    <field name="country_of_birth" groups="hr.group_hr_user"
+                           attrs="{'required': [('required_country_of_birth','=',True)]}"/>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

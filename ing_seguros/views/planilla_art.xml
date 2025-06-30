@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="view_ing_secure_tree_planilla_art" model="ir.ui.view">
+            <field name="name">view_ing_secure_tree_planilla_art</field>
+            <field name="model">ing.seguros.planilla.art</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="employee_id"/>
+                    <field name="type_accident"/>
+                    <field name="date_accident"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_ing_secure_form_planilla_art" model="ir.ui.view">
+            <field name="name">view_ing_secure_form_planilla_art</field>
+            <field name="model">ing.seguros.planilla.art</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="print_planilla" type="object" string="Imprimir" class="btn-primary"/>
+                        <field name="state" invisible="1"/>
+                    </header>
+                    <sheet>
+                        <div class="row">
+                            <div class="col">
+                                <h2>
+                                    <label for="employee_id"/>
+                                </h2>
+                                <h2>
+                                    <field name="employee_id" attrs="{'readonly': [('state',  '=', 'save')]}"/>
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label for="type_accident"/>
+                                <field name="type_accident" attrs="{'readonly': [('state',  '=', 'save')]}"/>
+                            </div>
+                            <div class="col">
+                                <label for="regular_shift"/>
+                                <field name="regular_shift" attrs="{'readonly': [('state',  '=', 'save')]}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>
+                                    Jornada Habitual: de
+                                    <field name="init_hour_day" widget="float_time" attrs="{'readonly': [('state',  '=', 'save')]}" style="width: 50px;"/>
+                                    a
+                                    <field name="end_hour_day" widget="float_time" attrs="{'readonly': [('state',  '=', 'save')]}" style="width: 50px;"/>
+                                </p>
+                            </div>
+                            <div class="col">
+                                <label for="init_day_accide"/>
+                                <field name="init_day_accide" widget="float_time" attrs="{'readonly': [('state',  '=', 'save')]}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label for="date_accident" class="d-block"/>
+                                <field name="date_accident" attrs="{'readonly': [('state',  '=', 'save')]}"/>
+                            </div>
+                            <div class="col">
+                                <label for="hour_accident"/>
+                                <field name="hour_accident" widget="float_time" attrs="{'readonly': [('state',  '=', 'save')]}"/>
+                            </div>
+                            <div class="col">
+                                <label for="location"/>
+                                <field name="location" attrs="{'readonly': [('state',  '=', 'save')]}"/>
+                            </div>
+                            <div class="col">
+                                <label for="cod_pos"/>
+                                <field name="cod_pos" attrs="{'readonly': [('state',  '=', 'save')]}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label for="detail_accident"/>
+                                <field name="detail_accident" attrs="{'readonly': [('state',  '=', 'save')]}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label for="form_accident"/>
+                                <field name="form_accident" attrs="{'readonly': [('state',  '=', 'save')]}"/>
+                            </div>
+                            <div class="col">
+                                <label for="material_agent"/>
+                                <field name="material_agent" attrs="{'readonly': [('state',  '=', 'save')]}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label for="affected_zone"/>
+                                <field name="affected_zone" attrs="{'readonly': [('state',  '=', 'save')]}"/>
+                                <field name="affected_zone2" attrs="{'readonly': [('state',  '=', 'save')]}"/>
+                                <field name="affected_zone3" attrs="{'readonly': [('state',  '=', 'save')]}"/>
+                            </div>
+                            <div class="col">
+                                <label for="nature_injury"/>
+                                <field name="nature_injury" attrs="{'readonly': [('state',  '=', 'save')]}"/>
+                                <field name="nature_injury2" attrs="{'readonly': [('state',  '=', 'save')]}"/>
+                                <field name="nature_injury3" attrs="{'readonly': [('state',  '=', 'save')]}"/>
+                            </div>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_planillas_art" model="ir.actions.act_window">
+            <field name="name">Planillas ART</field>
+            <field name="res_model">ing.seguros.planilla.art</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="ing_seguro_planillas_art_submenu" name="Planillas ART" sequence="3"
+                  action="action_planillas_art" parent="ing_seguro_secure_submenu"
+                  groups="ing_ausencias.group_ing_rrhh_ausencias_encargado"/>
+
+    </data>
+</odoo>

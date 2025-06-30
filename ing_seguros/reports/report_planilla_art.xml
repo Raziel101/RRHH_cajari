@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <template id="planilla_art_template">
+            <t t-call="web.html_container">
+                <div class="page">
+                    <div class="container">
+                        <t t-foreach="docs" t-as="o">
+                            <style>
+                                p{margin-bottom:0;}
+                            </style>
+
+                            <div class="row mb-3 mx-0" style="border: 2px solid black;">
+                                <div class="col-5 d-flex align-items-center py-3">
+                                    <img src="/ing_seguros/static/description/instituto_del_seguro.png"/>
+                                </div>
+                                <div class="col my-3 mx-3" style="border: 1px solid black;">
+                                    <span class="d-block">DENUNCIA DE ACCIDENTES Y ENFERMEDADES PROFESIONALES</span>
+                                    <span class="d-block">San Martin 918/56 - C.PA E3100AAT - Parana - Entre Ríos</span>
+                                    <span class="d-block">Tel. 03434208888 - Fax. 03434208888 int. 202 - 0800 4440343</span>
+                                    <span class="d-block">Site. http://www.institutoseguro.com.ar</span>
+                                </div>
+
+                                <div class="row mx-0 d-flex justify-content-between w-100">
+                                    <div class="col d-flex mx-3 px-0">Accidente de Trabajo
+                                        <div class="ml-2 d-flex justify-content-center align-items-center"
+                                             style="width: 20px;height: 20px;border: 1px solid black;">
+                                            <t t-if="o.type_accident == 'AC'">X</t>
+                                        </div>
+                                    </div>
+                                    <div class="col d-flex justify-content-center mx-3 px-0">Enfermedad
+                                        Profesional
+                                        <div class="ml-2 d-flex justify-content-center align-items-center"
+                                             style="width: 20px;height: 20px;border: 1px solid black;">
+                                            <t t-if="o.type_accident == 'EP'">X</t>
+                                        </div>
+                                    </div>
+                                    <div class="col d-flex justify-content-end mx-3 px-0">Reingreso
+                                        <div class="ml-2 d-flex justify-content-center align-items-center"
+                                             style="width: 20px;height: 20px;border: 1px solid black;">
+                                            <t t-if="o.type_accident == 'R'">X</t>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mx-0 d-flex justify-content-between w-100">
+                                    <div class="col-6">Fecha de ingreso y hora a la ART
+                                        <span style="text-decoration: underline;">___/___/_____
+                                        </span>
+                                    </div>
+                                    <div class="col-2">HORA: ___:___</div>
+                                    <div class="col d-flex justify-content-end">N° de Siniestro: ________</div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 mx-0" style="font-size: 13px;">
+                                <div class="row w-100 mx-0 mb-2">
+                                    <div class="col" style="background-color: dimgrey;color: white;">
+                                        DATOS DEL EMPLEADOR
+                                    </div>
+                                </div>
+                                <div class="row mx-0">
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <p>Razón Social:
+                                            <span style="text-decoration: underline;">_MUNICIPALIDAD DE CHAJARI_
+                                            </span>
+                                        </p>
+                                        <p>
+                                            CUIT:
+                                            <span style="text-decoration: underline;">_30-9993567-8_</span>
+                                        </p>
+                                        <p>Contrato N°:__________</p>
+                                        <p>CIIU:__________</p>
+                                    </span>
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <p>Domicilio:
+                                            <span style="text-decoration: underline;">_SALVARREDY 1430_
+                                            </span>
+                                        </p>
+                                        <p>
+                                            Localidad:
+                                            <span style="text-decoration: underline;">_CHAJARI_
+                                            </span>
+                                        </p>
+                                        <p>
+                                            Provincia:
+                                            <span style="text-decoration: underline;">_ENTRE RIOS_
+                                            </span>
+                                        </p>
+                                    </span>
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <p>Cod. Postal Arg:
+                                            <span style="text-decoration: underline;">_3228_
+                                            </span>
+                                        </p>
+                                        <p>Tel.:
+                                            <span style="text-decoration: underline;">_03456-420135_
+                                            </span>
+                                        </p>
+                                        <p>
+                                            Fax: ___________________________
+                                        </p>
+                                        <p>Email:
+                                            <span style="text-decoration: underline;">_hys@chajari.gob.ar_
+                                            </span>
+                                        </p>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 mx-0" style="font-size: 13px;">
+                                <div class="row w-100 mx-0 mb-2">
+                                    <div class="col" style="background-color: dimgrey;color: white;">
+                                        DATOS DEL TRABAJADOR
+                                    </div>
+                                </div>
+                                <div class="col px-0">
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <p>Nombre y Apellido:
+                                            <span style="text-decoration: underline;">_
+                                                <t t-esc="o.employee_id.name"/>
+                                                _
+                                            </span>
+                                        </p>
+                                        <p>
+                                            CUIL:
+                                            <span style="text-decoration: underline;">_
+                                                <t t-esc="o.employee_id.cuit"/>
+                                                _
+                                            </span>
+                                        </p>
+                                        <p>
+                                            Tipo y N° Doc.:
+                                            <span style="text-decoration: underline;">_DNI_<t
+                                                    t-esc="o.employee_id.identification_id"/>_
+                                            </span>
+                                        </p>
+                                    </span>
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <p>Domicilio:
+                                            <span style="text-decoration: underline;">_
+                                                <t t-esc="o.employee_id.domic_real"/>
+                                                _
+                                            </span>
+                                        </p>
+                                        <p>
+                                            Localidad:
+                                            <span style="text-decoration: underline;">_<t t-esc="o.location"/>_
+                                            </span>
+                                        </p>
+                                        <p>
+                                            Provincia:
+                                            <span style="text-decoration: underline;">_ENTRE RIOS_
+                                            </span>
+                                        </p>
+                                    </span>
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <p>C.P.:
+                                            <span style="text-decoration: underline;">_<t t-esc="o.cod_pos"/>_
+                                            </span>
+                                        </p>
+                                        <p>
+                                            Nacionalidad:
+                                            <span style="text-decoration: underline;">_
+                                                <t t-esc="o.employee_id.country_of_birth.name"/>_
+                                            </span>
+                                        </p>
+                                        <p>
+                                            Sexo:
+                                            <span style="text-decoration: underline;">_
+                                                <t t-if="o.employee_id.gender == 'female'">F</t>
+                                                <t t-if="o.employee_id.gender == 'male'">M</t>
+                                                _
+                                            </span>
+                                        </p>
+                                        <p>
+                                            Fecha de Naci.:
+                                            <span style="text-decoration: underline;">_
+                                                <t t-esc="o.employee_id.birthday.strftime('%d-%m-%Y')"/>_
+                                            </span>
+                                        </p>
+                                        <p>
+                                            Estado civil:
+                                            <span style="text-decoration: underline;">_
+                                                <t t-if="o.employee_id.marital == 'single'">Soltero(a)</t>
+                                                <t t-if="o.employee_id.marital == 'married'">Casado(a)</t>
+                                                <t t-if="o.employee_id.marital == 'cohabitant'">Cohabitante Legal
+                                                </t>
+                                                <t t-if="o.employee_id.marital == 'widower'">Viudo(a)</t>
+                                                <t t-if="o.employee_id.marital == 'divorced'">Divorciado(a)</t>
+                                                _
+                                            </span>
+                                        </p>
+                                    </span>
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <p>Edad:
+                                            <span style="text-decoration: underline;">_<t t-esc="o.edad"/>_
+                                            </span>
+                                        </p>
+                                        <p>
+                                            Telefono:_______________
+                                        </p>
+                                        <p>Telefono Celular:
+                                            <span style="text-decoration: underline;">_<t
+                                                    t-esc="o.employee_id.telefono"/>_
+                                            </span>
+                                        </p>
+                                        <p>
+                                            Tarea Habitual:_________________
+                                        </p>
+                                    </span>
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <p>Fecha de ing. a la empresa:
+                                            <span style="text-decoration: underline;">_<t
+                                                    t-esc="o.employee_id.date_init_plant.strftime('%d-%m-%Y')"/>_
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <div class="d-flex">
+                                                Turno Habitual: Fijo
+                                                <div class="ml-2 d-flex justify-content-center align-items-center"
+                                                     style="width: 20px;height: 20px;border: 1px solid black;">
+                                                    <t t-if="o.regular_shift == 'F'">X</t>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex">
+                                                Rotativo
+                                                <div class="ml-2 d-flex justify-content-center align-items-center"
+                                                     style="width: 20px;height: 20px;border: 1px solid black;">
+                                                    <t t-if="o.regular_shift == 'R'">X</t>
+                                                </div>
+                                            </div>
+                                        </p>
+                                        <p>Jornada Habitual: de
+                                            <span style="text-decoration: underline;">_<t t-esc="o.init_hour_day" t-options="{'widget': 'float_time'}"/>_
+                                            </span>
+                                            a
+                                            <span style="text-decoration: underline;">
+                                                _
+                                                <t t-esc="o.end_hour_day" t-options="{'widget': 'float_time'}"/>
+                                            </span>
+                                        </p>
+                                    </span>
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <p>
+                                            Inicio de jornada el dia del accidente:
+                                            <span style="text-decoration: underline;">_<t
+                                                    t-esc="o.init_day_accide" t-options="{'widget': 'float_time'}"/>_
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <div class="d-flex">
+                                                Reparto
+                                                <div class="ml-2 d-flex justify-content-center align-items-center"
+                                                     style="width: 20px;height: 20px;border: 1px solid black;"/>
+                                            </div>
+                                            <div class="d-flex">
+                                                Capitalización
+                                                <div class="ml-2 d-flex justify-content-center align-items-center"
+                                                     style="width: 20px;height: 20px;border: 1px solid black;"/>
+                                            </div>
+                                        </p>
+                                        <p>A.F.J.P.:_____________________</p>
+                                    </span>
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <p>Obra Social:
+                                            <span style="text-decoration: underline;">_IOSPER_
+                                            </span>
+                                        </p>
+                                        <p>Se le han realizado exámenes periódicos:
+                                            <strong>S / N</strong>
+                                        </p>
+                                        <p>Fecha del ultimo examen:
+                                            <span style="text-decoration: underline;">___/___/_____
+                                            </span>
+                                        </p>
+                                    </span>
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <p>Puesto de trabajo en el momento del accidente o detección de Enfermedad
+                                            Profesional:
+                                        </p>
+                                        <p>
+                                            _____________________________________________
+                                        </p>
+                                    </span>
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <p>Antiguedad en esta Tarea:____Dias;___Meses;____Años.</p>
+                                        <p>Puesto de Trabajo anterior:
+                                            __________________________________________________
+                                        </p>
+                                    </span>
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <p>Mismo Empleador:
+                                            <strong>SI / NO</strong>
+                                        </p>
+                                        <p>Antiguedad en esta Tarea:_______Dias;_______Meses;_______Años.</p>
+                                        <p>Ultimo Salario Mensual:$__________________________</p>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 mx-0">
+                                <div class="row w-100 mx-0 mb-2">
+                                    <div class="col" style="background-color: dimgrey;color: white;">
+                                        INFORMACION SOBRE EL SINIESTRO
+                                    </div>
+                                </div>
+                                <div class="col px-0">
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <strong>Fecha del Accidente:
+                                            <t t-esc="o.date_accident.strftime('%d-%m-%Y')"/>
+                                        </strong>
+                                        <strong>Hora del Accidente:
+                                            <t t-esc="o.hour_accident" t-options="{'widget': 'float_time'}"/>
+                                        </strong>
+                                        <p>
+                                            <strong>Fecha de baja laboral:</strong>
+                                            <span style="text-decoration: underline;">___/___/_____
+                                            </span>
+                                        </p>
+                                    </span>
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <p>IN ITINERE: Denuncia policial N°_________________________(Adjuntar Copia)
+                                        </p>
+                                        <p>
+                                            Comisaria:__________________________________________________________
+                                        </p>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row w-100 mx-0 mb-0">
+                                <div class="col text-center" style="background-color: dimgrey;color: white;">
+                                    ACCIDENTE DE TRABAJO
+                                </div>
+                            </div>
+                            <table class="table table-bordered border-top-0"
+                                   style="font-size:12px; border:2px solid black;">
+                                <tr>
+                                    <td colspan="5" class="table-bordered p-0">DESCRIPCION DE CÓMO OCURRIO EL ACCIDENTE
+                                        (Modo y Circunstancia en que se Produjo):
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="table-bordered p-0">
+                                        <t t-esc="o.detail_accident"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="p-0 text-center" style="border-top:1.3px solid black">
+                                        Descripción del Accidente de Trabajo
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-0">
+                                        <div style="height: 20px;" class="table-bordered text-center">(Ver Tabla)</div>
+                                        <div style="height: 40px;" class="p-0 text-center table-bordered align-middle">
+                                            Forma del Accidente
+                                        </div>
+                                        <div style="height: 40px;" class="p-0 align-middle text-center table-bordered">
+                                            Agente Material Asociado
+                                        </div>
+                                    </td>
+                                    <td class="p-0">
+                                        <div style="height: 20px;" class="table-bordered text-center">Códigos</div>
+                                        <div style="height: 40px;" class="table-bordered p-0 text-center align-middle">
+                                            <t t-esc="o.form_accident"/>
+                                        </div>
+                                        <div style="height: 40px;" class="table-bordered p-0 align-middle text-center">
+                                            <t t-esc="o.material_agent"/>
+                                        </div>
+                                    </td>
+                                    <td class="p-0">
+                                        <div class="table-bordered p-0 text-center align-middle" style="height: 40px;">
+                                            Diagnostico
+                                        </div>
+                                        <div class="table-bordered p-0" style="height: 20px;">
+                                            <div class="table-bordered" style="width:15px;">1</div>
+                                        </div>
+                                        <div class="table-bordered p-0" style="height: 20px;">
+                                            <div class="table-bordered" style="width:15px;">2</div>
+                                        </div>
+                                        <div class="table-bordered p-0" style="height: 20px;">
+                                            <div class="table-bordered" style="width:15px;">3</div>
+                                        </div>
+                                    </td>
+                                    <td class="p-0">
+                                        <div class="table-bordered p-0 text-center align-middle" style="height: 40px;">
+                                            Zona del Cuerpo Afectada (Ver Tabla)
+                                        </div>
+                                        <div class="table-bordered p-0 text-center" style="height: 20px;">
+                                            <t t-esc="o.affected_zone"/>
+                                        </div>
+                                        <div class="table-bordered p-0 text-center" style="height: 20px;">
+                                            <t t-esc="o.affected_zone2"/>
+                                        </div>
+                                        <div class="table-bordered p-0 text-center" style="height: 20px;">
+                                            <t t-esc="o.affected_zone3"/>
+                                        </div>
+                                    </td>
+                                    <td class="p-0">
+                                        <div class="table-bordered p-0 text-center align-middle" style="height: 40px;">
+                                            Naturaleza de la Lesión (Ver Tabla)
+                                        </div>
+                                        <div class="table-bordered p-0 text-center" style="height: 20px;">
+                                            <t t-esc="o.nature_injury"/>
+                                        </div>
+                                        <div class="table-bordered p-0 text-center" style="height: 20px;">
+                                            <t t-esc="o.nature_injury2"/>
+                                        </div>
+                                        <div class="table-bordered p-0 text-center" style="height: 20px;">
+                                            <t t-esc="o.nature_injury3"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div class="row w-100 mx-0 mb-0">
+                                <div class="col text-center" style="background-color: dimgrey;color: white;">
+                                    ENFERMEDAD PROFESIONAL
+                                </div>
+                            </div>
+                            <table class="table table-bordered mb-0" style="font-size:12px; border:2px solid black;">
+                                <tr>
+                                    <td colspan="7" class="table-bordered text-center p-0">Descripción de la Enfermedad
+                                        Profesional
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-0 text-center table-bordered">Agente Causante</td>
+                                    <td class="p-0 text-center table-bordered">Agente Material Asociado</td>
+                                    <td class="p-0 text-center table-bordered">Tiempo de Expocición al Agente (en
+                                        Meses)
+                                    </td>
+                                    <td class="p-0 text-center table-bordered">Diagnostico (para ser cargado por el
+                                        medico de la ART)
+                                    </td>
+                                    <td class="p-0 text-center table-bordered">Fecha de Diagnostico</td>
+                                    <td class="p-0 text-center table-bordered">Zona del cuerpo afectada</td>
+                                    <td class="p-0 text-center table-bordered">Cod. de examen donde se detecto la EP
+                                        (ver tabla debajo)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="p-0">
+                                        <div style="height: 60px;" class="p-0 align-middle text-center table-bordered"/>
+                                    </td>
+                                    <td class="p-0">
+                                        <div style="height: 60px;" class="p-0 align-middle text-center table-bordered"/>
+                                    </td>
+                                    <td class="p-0">
+                                        <div style="height: 60px;" class="p-0 align-middle text-center table-bordered"/>
+                                    </td>
+                                    <td class="p-0">
+                                        <div style="height: 20px;" class="table-bordered">
+                                            <div class="table-bordered" style="width:15px;">1</div>
+                                        </div>
+                                        <div style="height: 20px;" class="table-bordered">
+                                            <div class="table-bordered" style="width:15px;">2</div>
+                                        </div>
+                                        <div style="height: 20px;" class="table-bordered">
+                                            <div class="table-bordered" style="width:15px;">3</div>
+                                        </div>
+                                    </td>
+                                    <td class="p-0">
+                                        <div style="height: 20px;" class="table-bordered text-center"/>
+                                        <div style="height: 20px;" class="table-bordered text-center"/>
+                                        <div style="height: 20px;" class="table-bordered text-center"/>
+                                    </td>
+                                    <td class="p-0">
+                                        <div style="height: 20px;" class="table-bordered text-center"/>
+                                        <div style="height: 20px;" class="table-bordered text-center"/>
+                                        <div style="height: 20px;" class="table-bordered text-center"/>
+                                    </td>
+                                    <td class="p-0">
+                                        <div style="height: 20px;" class="table-bordered text-center"/>
+                                        <div style="height: 20px;" class="table-bordered text-center"/>
+                                        <div style="height: 20px;" class="table-bordered text-center"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="table table-bordered border-top-0"
+                                   style="font-size:12px; border:2px solid black;">
+                                <tr>
+                                    <td colspan="6" class="table-bordered text-center p-0">Tabla de Códigos de
+                                        Exámenes
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-0 pr-0" style="border:1.1px solid black">Examen Preocupacional
+                                        <span class="text-center table-bordered float-right px-1">P</span>
+                                    </td>
+                                    <td class="py-0 pr-0" style="border:1.1px solid black">Examen Periódico
+                                        <span class="text-center table-bordered float-right px-1">R</span>
+                                    </td>
+                                    <td class="py-0 pr-0" style="border:1.1px solid black">Examen de Egreso
+                                        <span class="text-center table-bordered float-right px-1">E</span>
+                                    </td>
+                                    <td class="py-0 pr-0" style="border:1.1px solid black">Prestador de ART
+                                        <span class="text-center table-bordered float-right px-1">B</span>
+                                    </td>
+                                    <td class="py-0 pr-0" style="border:1.1px solid black">Sala, CAP, etc.
+                                        <span class="text-center table-bordered float-right px-1">M</span>
+                                    </td>
+                                    <td class="py-0 pr-0" style="border:1.1px solid black">Sanatorio Privado
+                                        <span class="text-center table-bordered float-right px-1">N</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-0 pr-0" style="border:1.1px solid black">Ausencia Prolongada
+                                        <span class="text-center table-bordered float-right px-1">A</span>
+                                    </td>
+                                    <td class="py-0 pr-0" style="border:1.1px solid black">Transferencia de Actividad
+                                        <span class="text-center table-bordered float-right px-1">T</span>
+                                    </td>
+                                    <td class="py-0 pr-0" style="border:1.1px solid black">Obra Social
+                                        <span class="text-center table-bordered float-right px-1">O</span>
+                                    </td>
+                                    <td class="py-0 pr-0" style="border:1.1px solid black">Peritaje Judicial
+                                        <span class="text-center table-bordered float-right px-1">J</span>
+                                    </td>
+                                    <td class="py-0 pr-0" style="border:1.1px solid black">Hospital Publico
+                                        <span class="text-center table-bordered float-right px-1">H</span>
+                                    </td>
+                                    <td class="py-0 pr-0" style="border:1.1px solid black">Comisíon Medica
+                                        <span class="text-center table-bordered float-right px-1">S</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div class="row" style="margin-bottom: 150px;">
+                                <div class="col">
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <p>
+                                            <strong>Centro asistencial de primera atención</strong>
+                                            _______________________________
+                                        </p>
+                                        <p>Localidad_____________________________
+                                        </p>
+                                        <p>CP:_______________
+                                        </p>
+                                    </span>
+                                    <span class="w-100 d-flex justify-content-between mt-3">
+                                        <p>Provincia_____________________________________
+                                        </p>
+                                        <p>Telefono_____________________
+                                        </p>
+                                        <p>Direccion_________________________________________________
+                                        </p>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-0">
+                                <div class="col">
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <p class="mb-0" style="text-decoration: underline;">__CHAJARI,_
+                                            <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')"/>
+                                            __________
+                                        </p>
+                                        <p class="mb-0">_______________________________________________________</p>
+                                    </span>
+                                    <span class="w-100 d-flex justify-content-between">
+                                        <p>Lugar y Fecha</p>
+                                        <p class="text-center mr-5">Firma, Aclaración y Dni<br/>Del Empleador o
+                                            Denunciante
+                                        </p>
+                                    </span>
+                                </div>
+                            </div>
+
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+
+        <record id="paperformat_info_planilla_art_mediaA4" model="report.paperformat">
+            <field name="name">Media A4</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">60</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <report
+                id="inf_planilla_art_report"
+                model="ing.seguros.planilla.art"
+                string="Informe Planilla ART"
+                report_type="qweb-html"
+                name="ing_seguros.planilla_art_template"
+                file="ing_seguros.planilla_art_template"
+                menu="False"
+                paperformat="paperformat_info_planilla_art_mediaA4"/>
+
+    </data>
+</odoo>

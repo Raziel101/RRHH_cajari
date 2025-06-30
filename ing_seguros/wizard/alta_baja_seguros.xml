@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="alta_baja_seguros_seguro_wizard_form_view">
+            <field name="name">ing.alta.baja.seguros.wz.form</field>
+            <field name="model">ing.alta.baja.seguros.wz</field>
+            <field name="arch" type="xml">
+                <form string="Alta - Baja">
+                    <sheet>
+                        <div class="row">
+                            <div class="col">
+                                <field name="employee_ids"/>
+                            </div>
+                        </div>
+
+                        <footer>
+                            <button name='alta_seguros' string="Generar Altas" type="object" class="btn btn-success"/>
+                            <button name='baja_seguros' string="Generar Bajas" type="object" class="btn btn-danger"/>
+                            <button special="cancel" string="Cancelar"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>
