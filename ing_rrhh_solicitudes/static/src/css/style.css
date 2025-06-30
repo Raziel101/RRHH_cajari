@@ -1,0 +1,23 @@
+.border-solicitud{
+    border-bottom: solid 1px;
+    padding-bottom: 10px;
+    margin-top: 1rem;
+}
+
+.margen-solicitud{
+    margin-bottom: 0px;
+}
+
+.margen{
+    padding-top: 120px;
+}
+
+.report-hr{
+    border-top: 1px solid rgb(0 0 0);
+}
+
+table tr td{
+    border: 1px solid black;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}

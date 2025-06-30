@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="paperformat_euro_licencia" model="report.paperformat">
+            <field name="name">European A4</field>
+            <field name="default" eval="True" />
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">40</field>
+            <field name="margin_bottom">23</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">35</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <report
+                id="report_ing_licencia"
+                model="ing.licencias.general"
+                string="Licencia"
+                report_type="qweb-pdf"
+                name="ing_licencias.ing_licencia_report"
+                file="ing_licencias.ing_licencia_report"
+                menu="True"
+                paperformat="paperformat_euro_licencia"
+
+        />
+
+        <report
+                id="report_ing_hours_sev"
+                model="ing.hours.sev"
+                string="Licencia"
+                report_type="qweb-html"
+                name="ing_licencias.ing_hours_sev_report"
+                file="ing_licencias.ing_hours_sev_report"
+                menu="True"
+                paperformat="paperformat_euro_licencia"
+
+        />
+
+        <record id="hr_employee_vacaciones_general_report" model="ir.actions.report">
+            <field name="name">Reporte Vacaciones General</field>
+            <field name="model">hr.employee</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">ing_licencias.template_report_vacaciones_general</field>
+            <field name="report_file">ing_licencias.template_report_vacaciones_general</field>
+             <field name="binding_model_id" ref="model_hr_employee"/>
+            <field name="binding_type">report</field>
+        </record>
+
+
+    </data>
+</odoo>

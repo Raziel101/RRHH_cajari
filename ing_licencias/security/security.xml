@@ -1,0 +1,210 @@
+<odoo>
+    <data noupdate="0">
+
+        <!-- ********************************PERMISOS DE LICENCIAS************************************-->
+
+        <record model="ir.module.category" id="module_rrhh_licencias_settings">
+            <field name="name">RRHH LICENCIAS</field>
+            <field name="description">Permisos de configuraciones.</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <!--PERMISOS ENCARGADO-->
+        <record id="group_ing_rrhh_licencias_encargado" model="res.groups">
+            <field name="name">"ENCARGADO DE AREA (DAR PERMISO A RRHH SOLICITUD)"</field>
+            <field name="category_id" ref="module_rrhh_licencias_settings"/>
+            <field name="comment">Encargado Area</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!--PERMISOS ADMIN RRHH-->
+        <record id="group_ing_rrhh_licencias_admin_rrhh" model="res.groups">
+            <field name="name">"ADMIN RRHH (DAR PERMISO A RRHH SOLICITUD)"</field>
+            <field name="category_id" ref="module_rrhh_licencias_settings"/>
+            <field name="comment">Admin RRHH</field>
+            <field name="implied_ids" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_encargado'))]"/>
+        </record>
+
+        <!--PERMISOS ADMIN-->
+        <record id="group_ing_rrhh_licencias_admin" model="res.groups">
+            <field name="name">ADMIN (DAR PERMISO A RRHH SOLICITUD)</field>
+            <field name="category_id" ref="module_rrhh_licencias_settings"/>
+            <field name="comment">tiene permitido Crear, Modificar Y Eliminar</field>
+            <field name="implied_ids" eval="[(4, ref('group_ing_rrhh_licencias_admin_rrhh'))]"/>
+        </record>
+
+        <!-- *****************************************RULES************************************************-->
+        <!-- hr_employee -->
+        <record id="rule_licencia_rrhh" model="ir.rule">
+            <field name="name">Licencias: Ver solo empleados del departamento</field>
+            <field name="model_id" ref="hr.model_hr_employee"/>
+            <field name="groups" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_encargado'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">[('department_id','!=',False),('department_id','in',[a.id for a in
+                user.areasgob_ids])]
+            </field>
+        </record>
+
+        <record id="rule_employee_admin_licencia" model="ir.rule">
+            <field name="name">Licencias: Administrar empleados</field>
+            <field name="model_id" ref="hr.model_hr_employee"/>
+            <field name="groups" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_admin_rrhh'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- hr_employee_public -->
+        <record id="rule_employee_public_licencia" model="ir.rule">
+            <field name="name">Licencias: Ver solo empleados del departamento</field>
+            <field name="model_id" ref="hr.model_hr_employee_public"/>
+            <field name="groups" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_encargado'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">[('department_id','!=',False),('department_id','in',[a.id for a in
+                user.areasgob_ids])]
+            </field>
+        </record>
+
+        <record id="rule_employee_public_admin_rrhh_licencia" model="ir.rule">
+            <field name="name">Licencias: Administrar empleados public</field>
+            <field name="model_id" ref="hr.model_hr_employee_public"/>
+            <field name="groups" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_admin_rrhh'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- department -->
+        <record id="rule_department_licencia" model="ir.rule">
+            <field name="name">Licencias: Ver solo los departamentos asignados en el usuario</field>
+            <field name="model_id" ref="hr.model_hr_department"/>
+            <field name="groups" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_encargado'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">[('id','in',[a.id for a in user.areasgob_ids])]
+            </field>
+        </record>
+
+        <record id="rule_department_admin_rrhh_licencia" model="ir.rule">
+            <field name="name">Licencias: Ver los departamentos</field>
+            <field name="model_id" ref="hr.model_hr_department"/>
+            <field name="groups" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_admin_rrhh'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- Form General -->
+        <record id="rule_licencias_rrhh_licencia" model="ir.rule">
+            <field name="name">Licencias: Solo puede ver o crear contratos de su area</field>
+            <field name="model_id" ref="model_ing_licencias_general"/>
+            <field name="groups" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_encargado'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">[('departament_id.id','in',[a.id for a in user.areasgob_ids])]
+            </field>
+        </record>
+
+        <!-- Form General -->
+        <record id="rule_licencias_admin_rrhh" model="ir.rule">
+            <field name="name">Licencias: Ver todos los contratos</field>
+            <field name="model_id" ref="model_ing_licencias_general"/>
+            <field name="groups" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_admin_rrhh'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <!-- Vacaciones -->
+        <record id="rule_vacaciones_rrhh_licencia" model="ir.rule">
+            <field name="name">Licencias: Solo puede ver o crear Vacaciones de su area</field>
+            <field name="model_id" ref="model_ing_alta_baja_licencia"/>
+            <field name="groups" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_encargado'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">[('departament_id.id','in',[a.id for a in user.areasgob_ids])]
+            </field>
+        </record>
+
+        <record id="rule_vacaciones_admin_rrhh" model="ir.rule">
+            <field name="name">Licencias: Ver todos las vacaciones</field>
+            <field name="model_id" ref="model_ing_alta_baja_licencia"/>
+            <field name="groups" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_admin_rrhh'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+<!--        licencias no remuneradas-->
+        <record id="rule_lic_no_remunerada_hr_manager" model="ir.rule">
+            <field name="name">Licencias: no_remunerada ver si es usuario admin de empleados</field>
+            <field name="model_id" ref="model_ing_licencias_tipo"/>
+            <field name="groups" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_admin_rrhh'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+        <record id="rule_lic_no_remunerada_hr_user" model="ir.rule">
+            <field name="name">Licencias: ver general si no es lic_no_remunerada</field>
+            <field name="model_id" ref="model_ing_licencias_tipo"/>
+            <field name="groups" eval="[(4, ref('hr.group_hr_user'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+            <field name="domain_force">[('name','!=','lic_no_remunerada')]
+            </field>
+        </record>
+
+<!--        horas sev-->
+        <record id="rule_horas_sev_rrhh" model="ir.rule">
+            <field name="name">Horas Sev: solo ver casos del area asignada</field>
+            <field name="model_id" ref="model_ing_hours_sev"/>
+            <field name="groups" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_encargado'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">[('employee_id.department_id.id','in',[a.id for a in user.areasgob_ids])]
+            </field>
+        </record>
+        <record id="rule_horas_sev_admin" model="ir.rule">
+            <field name="name">Horas Sev: sin restriccion para admin</field>
+            <field name="model_id" ref="model_ing_hours_sev"/>
+            <field name="groups" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_admin'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+
+        <!--   Importar vacaciones     -->
+        <record id="rule_import_vacaciones_admin_rrhh" model="ir.rule">
+            <field name="name">Licencias: Ver importar vacaciones</field>
+            <field name="model_id" ref="model_ing_importar_vacaciones"/>
+            <field name="groups" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_admin_rrhh'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+        </record>
+    </data>
+</odoo>

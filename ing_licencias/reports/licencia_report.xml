@@ -1,0 +1,298 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <template id="ing_licencia_report">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                <style>
+                    .text-center{
+                    text-align:center;
+                    }
+                    .w100{
+                    width: 100%;
+                    }
+                    .text-uppercase{
+                    text-transform: uppercase;
+                    }
+                    t-border{
+                    border:1px solid black;
+                    }
+                </style>
+                <t t-foreach="docs" t-as="o">
+                        <div style="width:100%;">
+                            <img src="/ing_licencias/static/img/LogoChajari.png"
+                                 style="max-height:100px; max-width:50%; margin:0 auto 25px auto; display:block;"/>
+                        </div>
+                        <h5 class="text-center">DIRECCION DE RECURSOS HUMANOS</h5>
+
+
+                            <div style="background: #4b74bb;color: white;margin-bottom: 10px;">
+                                <t t-if="o.tipo_lic_name == 'lic_hs_sev_franco'">
+                                    <h5 class="text-uppercase text-center" t-esc="o.tipo_lic_id.detalle"/>
+                                </t>
+                            </div>
+
+                            <table class="w100 text-center" style="margin-bottom:20px;">
+                                <tr style="background: #4b74bb; color: white;">
+                                    <td>
+                                        <strong>FECHA DE SOLICITUD:</strong><br/>
+                                        <span t-esc="o._get_datetime_create()"/>
+                                    </td>
+                                    <td>
+                                        <strong>EMPLEADO:</strong><br/>
+                                        <span t-esc="o.base_form_id.employee_id.name"/>
+                                    </td>
+                                    <td>
+                                        <strong>DEPARTAMENTO:</strong><br/>
+                                        <span t-esc="o.departament_id.name"/>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <t t-if="o.tipo_lic_name == 'lic_vacaciones'">
+                                    <table class="w100 table table-condensed">
+                                        <thead class="text-center">
+                                            <tr>
+                                                <th class="t-border">
+                                                    <strong>Dias Solicitados</strong>
+                                                </th>
+                                                <th class="t-border">
+                                                    <strong>Dia-Periodo</strong>
+                                                </th>
+                                                <th class="t-border">
+                                                    <strong>Fecha Inicio</strong>
+                                                </th>
+                                                <th class="t-border">
+                                                    <strong>Dias Disponibles</strong>
+                                                </th>
+                                                <th class="t-border">
+                                                    <strong>Descripcion</strong>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-center t-border">
+                                                    <span t-field="o.dias_solicitados"/>
+                                                </td>
+                                                <td class="text-center t-border">
+                                                    <t t-foreach="o.get_dias_periodo_usado()" t-as="dia_lic">
+                                                        <t t-if="dia_lic.get('dias') > 0">
+                                                            <span t-esc="dia_lic.get('dias')"/>
+                                                            (<span t-esc="dia_lic.get('periodo')"/>) <br/>
+                                                        </t>
+                                                    </t>
+                                                </td>
+                                                <td class="text-center t-border">
+                                                    <span t-field="o.fecha_inicio"/>
+                                                </td>
+                                                <td class="text-center t-border">
+                                                    <t t-foreach="o.get_days_available()" t-as="x">
+                                                        <t t-esc="str(x.get('days'))+' ('+x.get('period')+')'"/><br/>
+                                                    </t>
+                                                </td>
+                                                <td class="text-right t-border">
+                                                    <span t-field="o.descripcion"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                            </t>
+
+                            <t t-if="o.tipo_lic_name == 'lic_hs_sev_franco'">
+                                 <table class="w100 table table-condensed">
+                                        <thead class="text-center">
+                                            <tr>
+                                                <th class="t-border">
+                                                    <strong>Dias Solicitados</strong>
+                                                </th>
+                                                <th class="t-border">
+                                                    <strong>Fecha de Inicio</strong>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-center t-border">
+                                                    <span t-field="o.dias_solicitados"/>
+                                                </td>
+                                                <td class="text-center t-border">
+                                                    <span t-field="o.fecha_inicio"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                <!--Firma-->
+                                <div class="row" style="margin-top: 150px;">
+                                    <div class="col-sm-12 text-center">
+                                        <strong>____________________________________________________</strong>
+                                        <p>Firma del solicitante</p>
+                                    </div>
+                                </div>
+                            </t>
+
+                            <t t-if="o.tipo_lic_name == 'lic_uso_particular'">
+                                <div class="row">
+
+                                </div>
+                            </t>
+
+                            <t t-if="o.tipo_lic_name == 'lic_hs_sev'">
+                                <div class="row">
+
+                                </div>
+                            </t>
+
+                            <t t-if="o.tipo_lic_name in ['lic_adopcion','lic_capacitacion','lic_enf_acc_familiar_acargo','lic_evento_deportivo_nrentado','lic_examen','lic_enf_acc_familiar_acargo','lic_fallecimiento_fam','lic_maternidad','lic_matrimonio','lic_matrimonio_dehijos','lic_razon_salud','lic_estudio','lic_atencion_hijo','lic_embarazo','lic_incapacidad_parcial','lic_tramite_personal','lic_mesa_examen']">
+                                <div class="row">
+
+                                </div>
+                            </t>
+                </t></t>
+            </t>
+        </template>
+
+
+        <template id="ing_hours_sev_report">
+            <t t-call="web.html_container">
+                <t t-if="docs[0].check_cant_employee(docs)">
+                    <div class="alert alert-danger text-center mt-4" role="alert">
+                        DEBE SELECCIONAR SOLO UN EMPLEADO
+                    </div>
+                </t>
+                <t t-else="">
+                    <div class="page">
+                        <div class="text-center">
+                            <img src="/ing_licencias/static/LogoChajari.png" style="max-height: 100px;"/>
+                            <h5 class="py-2 mb-0">DIRECCION DE RECURSOS HUMANOS</h5>
+                        </div>
+
+                        <div class="container">
+                            <div class="row" style="background: #4b74bb;color: white;margin-bottom: 2px;">
+                                <div class="col-sm-12">
+                                    <h5 class="py-2 mb-0 text-uppercase text-center">
+                                        HORAS EXTRAS TRABAJADAS COMO HS SEV.
+                                    </h5>
+                                </div>
+                            </div>
+
+                            <div class="row" style="background: #4b74bb; color: white;">
+                                <div class="col-sm-4 encabezados">
+                                    <p style="margin-top: 5px; margin-bottom: 5px; padding-left: 10px;">
+                                        <strong class="colorenc">PERIODO:</strong>
+                                        <span class="colorenc" t-esc="docs[0].settlement_period_id.name"/>
+                                    </p>
+                                </div>
+
+                                <div class="col-sm-4 encabezados">
+                                    <p style="margin-top: 5px; margin-bottom: 5px; padding-left: 10px;">
+                                        <strong class="colorenc">EMPLEADO:</strong>
+                                        <span class="colorenc" t-esc="docs[0].employee_id.name"/>
+                                    </p>
+                                </div>
+
+                                <div class="col-sm-4 encabezados">
+                                    <p style="margin-top: 5px; margin-bottom: 5px; padding-left: 10px;">
+                                        <strong class="colorenc">DEPARTAMENTO:</strong>
+                                        <span class="colorenc" t-esc="docs[0].department_id.name"/>
+                                    </p>
+                                </div>
+                            </div>
+                            <t t-set="hours" t-value="0"/>
+                            <div class="row">
+                                <table class="table table-condensed text-center">
+                                    <thead>
+                                        <tr>
+                                            <th class="w-50">
+                                                <strong>Horas Solicitadas</strong>
+                                            </th>
+                                            <th class="w-50">
+                                                <strong>Fecha de Carga</strong>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <t t-foreach="docs" t-as="o">
+                                            <tr>
+                                                <td class="w-50">
+                                                    <span t-esc="o.hours" t-options="{'widget':'float_time'}"/>
+                                                    <t t-set="hours" t-value="hours + o.hours"/>
+                                                </td>
+                                                <td class="w-50">
+                                                    <span t-esc="o.create_date.strftime('%d-%m-%Y')"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr>
+                                            <td>
+                                                <strong>Total de Horas:
+                                                    <t t-esc="hours" t-options="{'widget':'float_time'}"/>
+                                                </strong>
+                                            </td>
+                                            <td/>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!--Firma-->
+                            <div class="row" style="margin-top: 150px;">
+                                <div class="col-sm-12 text-center">
+                                    <strong>____________________________________________________</strong>
+                                    <p>Firma del solicitante</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+
+        <template id="template_report_vacaciones_general">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <t t-set="docs" t-value="request.env.company"/>
+                    <t t-set="employees" t-value="request.env['hr.employee'].search([])"/>
+                    <t t-set="env_general" t-value="request.env['ing.licencias.general']"/>
+
+                    <t t-foreach="docs" t-as="company">
+                        <table class="w-100">
+                            <thead class="table-dark">
+                                <tr class="text-center">
+                                    <th>Nombre</th>
+                                    <th>DNI</th>
+                                    <th>Departamento</th>
+                                    <th>Vacaciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="employees" t-as="emp">
+                                    <t t-set="dic_vac" t-value="env_general.get_dias_vacaciones(employe_id=emp.id)"/>
+                                    <t t-set="vac" t-value="[('Periodo: %s. Dias: %s' % (x.get('Periodo'),x.get('Dias'))) for x in dic_vac]"/>
+                                    <tr t-if="vac">
+                                        <td>
+                                            <t t-esc="emp.name"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="emp.identification_id"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="emp.department_id.name"/>
+                                        </td>
+                                        <td>
+                                            <t t-foreach="vac" t-as="v">
+                                                <p class="m-0" t-esc="v"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

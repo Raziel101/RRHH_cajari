@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--  Tipo Licencia -->
+        <record id="lic_razones_gremiales" model="ing.licencias.tipo">
+            <field name="name">lic_razones_gremiales</field>
+            <field name="detalle">Licencia por razones gremiales</field>
+        </record>
+
+        <record id="lic_uso_particular" model="ing.licencias.tipo">
+            <field name="name">lic_uso_particular</field>
+            <field name="detalle">Licencia por razones particulares</field>
+        </record>
+
+        <record id="lic_vacaciones" model="ing.licencias.tipo">
+            <field name="name">lic_vacaciones</field>
+            <field name="detalle">Licencia anual ordinaria por vacaciones</field>
+        </record>
+
+        <record id="lic_acc_enf_trabajo" model="ing.licencias.tipo">
+            <field name="name">lic_acc_enf_trabajo</field>
+            <field name="detalle">Licencia por accidente de trabajo</field>
+        </record>
+
+        <record id="lic_adopcion" model="ing.licencias.tipo">
+            <field name="name">lic_adopcion</field>
+            <field name="detalle">Licencia por adopción</field>
+        </record>
+
+        <record id="lic_capacitacion" model="ing.licencias.tipo">
+            <field name="name">lic_capacitacion</field>
+            <field name="detalle">Licencia por capacitación</field>
+        </record>
+
+        <record id="lic_enf_acc_familiar_acargo" model="ing.licencias.tipo">
+            <field name="name">lic_enf_acc_familiar_acargo</field>
+            <field name="detalle">Licencia por accidente de familiares a cargo</field>
+        </record>
+
+        <record id="lic_evento_deportivo_nrentado" model="ing.licencias.tipo">
+            <field name="name">lic_evento_deportivo_nrentado</field>
+            <field name="detalle">Licencia por evento deportivo no rentado</field>
+        </record>
+
+        <record id="lic_examen" model="ing.licencias.tipo">
+            <field name="name">lic_examen</field>
+            <field name="detalle">Licencia por examen</field>
+        </record>
+
+        <record id="lic_fallecimiento_fam" model="ing.licencias.tipo">
+            <field name="name">lic_fallecimiento_fam</field>
+            <field name="detalle">Licencia por fallecimiento de familiares</field>
+        </record>
+
+        <record id="lic_maternidad" model="ing.licencias.tipo">
+            <field name="name">lic_maternidad</field>
+            <field name="detalle">Licencia por maternidad</field>
+        </record>
+
+        <record id="lic_matrimonio" model="ing.licencias.tipo">
+            <field name="name">lic_matrimonio</field>
+            <field name="detalle">Licencia por matrimonio</field>
+        </record>
+
+        <record id="lic_matrimonio_dehijos" model="ing.licencias.tipo">
+            <field name="name">lic_matrimonio_dehijos</field>
+            <field name="detalle">Licencia por matrimonio de hijos</field>
+        </record>
+
+        <record id="lic_razon_salud" model="ing.licencias.tipo">
+            <field name="name">lic_razon_salud</field>
+            <field name="detalle">Licencia por enfermedad</field>
+        </record>
+
+        <record id="lic_no_remunerada" model="ing.licencias.tipo">
+            <field name="name">lic_no_remunerada</field>
+            <field name="detalle">Licencia No Remunerada</field>
+        </record>
+
+        <!--Esto es Franquicias y otros-->
+
+        <record id="lic_estudio" model="ing.licencias.tipo">
+            <field name="name">lic_estudio</field>
+            <field name="detalle">Franquicia Por estudios</field>
+        </record>
+
+        <record id="lic_atencion_hijo" model="ing.licencias.tipo">
+            <field name="name">lic_atencion_hijo</field>
+            <field name="detalle">Franquicia Por guarda o atención del hijo propio o adoptivo</field>
+        </record>
+
+        <record id="lic_embarazo" model="ing.licencias.tipo">
+            <field name="name">lic_embarazo</field>
+            <field name="detalle">Franquicia Por embarazo</field>
+        </record>
+
+        <record id="lic_incapacidad_parcial" model="ing.licencias.tipo">
+            <field name="name">lic_incapacidad_parcial</field>
+            <field name="detalle">Franquicia Incapacidad parcial</field>
+        </record>
+
+        <record id="lic_tramite_personal" model="ing.licencias.tipo">
+            <field name="name">lic_tramite_personal</field>
+            <field name="detalle">Franquicia Por trámites oficiales de carácter personal</field>
+        </record>
+
+        <record id="lic_mesa_examen" model="ing.licencias.tipo">
+            <field name="name">lic_mesa_examen</field>
+            <field name="detalle">Franquicia Por integración de mesa examinadora</field>
+        </record>
+
+        <record id="lic_fr_razon_particular" model="ing.licencias.tipo">
+            <field name="name">lic_fr_razon_particular</field>
+            <field name="detalle">Franquicia por razones particulares</field>
+        </record>
+
+        <!--Horas Sev.-->
+        <record id="lic_hs_sev_franco" model="ing.licencias.tipo">
+            <field name="name">lic_hs_sev_franco</field>
+            <field name="detalle">Horas extras trabajadas como hs Sev.</field>
+        </record>
+
+
+        <record id="ing_channel_lic_no_remunerada" model="mail.channel">
+            <field name="name">Lic. No Remuneradas</field>
+            <field name="public">public</field>
+            <field name="active">true</field>
+            <field name="alias_model_id" ref="ing_licencias.model_ing_licencias_general"/>
+            <field name="channel_type">channel</field>
+            <field name="group_public_id" ref="hr.group_hr_manager"/>
+            <field name="group_ids" eval="[(4, ref('ing_rrhh_solicitudes.group_ing_rrhh_solicitud_admin_rrhh'))]"/>
+        </record>
+
+         <record id="ing_channel_activities_scheduler_action" model="mail.channel">
+            <field name="name">Vencimiento de Licencias de conducir</field>
+            <field name="public">public</field>
+            <field name="active">true</field>
+            <field name="alias_model_id" ref="hr.model_hr_employee"/>
+            <field name="channel_type">channel</field>
+            <field name="group_public_id" ref="hr.group_hr_manager"/>
+            <field name="group_ids" eval="[(4, ref('ing_rrhh_solicitudes.group_ing_rrhh_solicitud_admin_rrhh'))]"/>
+        </record>
+
+
+    </data>
+</odoo>

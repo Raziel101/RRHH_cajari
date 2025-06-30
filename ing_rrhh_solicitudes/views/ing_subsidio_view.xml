@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--SEARCH VIEW-->
+        <record id="view_subsidy_search" model="ir.ui.view">
+            <field name="name">ing.rrhh.solicitudes.subsidy.search</field>
+            <field name="model">ing.rrhh.solicitudes.subsidy</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="employee_id" string="Empleado"/>
+                    <field name="dni"/>
+                    <field name="department_id"/>
+                    <field name="tipo_contrato_id"/>
+                    <field name="state"/>
+                    <separator/>
+                    <group expand="0" string="Agrupar">
+                        <filter name="filter_state" string="Estado" domain="[]"
+                                context="{'group_by':'state'}"/>
+                        <filter name="filter_department" string="Departamento" domain="[]"
+                                context="{'group_by':'department_id'}"/>
+                        <filter name="filter_tipo_contrato" string="Tipo Contrato" domain="[]"
+                                context="{'group_by':'tipo_contrato_id'}"/>
+                        <filter name="filter_employee" string="Empleado" domain="[]"
+                                context="{'group_by':'employee_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_attach_min" model="ir.ui.view">
+            <field name="name">ing.rrhh.solicitudes.subsidy.form</field>
+            <field name="model">ing.rrhh.solicitudes.subsidy</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <field name="attach_ids"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- FORM VIEW -->
+        <record id="view_subsidy_form" model="ir.ui.view">
+            <field name="name">ing.rrhh.solicitudes.subsidy.form</field>
+            <field name="model">ing.rrhh.solicitudes.subsidy</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button string="A gestion de Sueldos" name="action_m_salary" type="object" class="btn-primary"
+                                attrs="{'invisible': [('state',  'in', ['confirmed','annulled','salary_management'])]}"/>
+
+                        <button string="A gestion de Gobierno" name="action_m_government" type="object" class="btn-primary"
+                                attrs="{'invisible': [('state',  'in', ['confirmed','government_management','annulled'])]}"/>
+
+                        <button string="Confirmar" name="action_confirmed" type="object" class="btn-primary"
+                                attrs="{'invisible': [('state', 'in', ['confirmed','annulled'])]}"/>
+
+                        <button string="Anular" name="action_annulled" type="object" class="btn-secondary"
+                                attrs="{'invisible': [('state', 'in', ['annulled','draft'])]}"/>
+
+                        <button string="A borrador" name="action_draft" type="object" class="btn-secondary"
+                                attrs="{'invisible': [('state',  'in', ['draft'])]}"/>
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                         <div class="oe_button_box" name="button_box">
+                             <button class="oe_stat_button" string="Historicos de Adjuntos" type="object"
+                                        name="view_history_attach" icon="fa-file"/>
+                         </div>
+                        <div class="row">
+                            <div class="col-md-6 backgr-rrhh-title">
+                                <h4>
+                                    <group>
+                                        <field name="employee_id" placeholder="Seleccione o ingrese el empleado"
+                                               options="{'no_create': True}"/>
+                                        <field name="dni" string="Dni"/>
+                                        <field name="phone"/>
+                                    </group>
+                                </h4>
+                            </div>
+                            <div class="col-md-6 backgr-rrhh-title">
+                                <h4>
+                                    <group>
+                                        <field name="address"/>
+                                        <field name="department_id"/>
+                                        <field name="tipo_contrato_id"/>
+                                    </group>
+                                </h4>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <group>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="amount" widget="monetary"/>
+                                    <field name="num_quot"/>
+                                </group>
+                            </div>
+                            <div class="col-md-6">
+                                <group>
+                                    <field name="create_date" widget="date"
+                                           readonly="1" string="Fecha de Emisión"/>
+                                </group>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <notebook>
+                                    <page string="Observaciones">
+                                        <field name="description"/>
+                                    </page>
+                                    <page string="Adjuntos">
+                                        <field name="attach_ids"  widget="many2many_binary" string="Adjuntar Archivo"/>
+                                    </page>
+                                </notebook>
+                            </div>
+                        </div>
+                    </sheet>
+
+                    <!-- MAIL THREAD -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+        <!--TREE VIEW-->
+        <record id="view_subsidy_tree" model="ir.ui.view">
+            <field name="name">ing.rrhh.solicitudes.subsidy.tree</field>
+            <field name="model">ing.rrhh.solicitudes.subsidy</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="state == 'confirmed'"
+                      decoration-muted="state=='annulled'"
+                      decoration-info="state == 'draft'">
+                    <header>
+                        <button name="action_draft" type="object" string="Borrador"/>
+                        <button name="action_confirmed" type="object" string="Confirmar"/>
+                        <button name="action_annulled" type="object" string="Anular"/>
+                    </header>
+                    <field name="create_date" string="Fecha de Emisión" widget="date"/>
+                    <field name="employee_id"/>
+                    <field name="department_id"/>
+                    <field name="tipo_contrato_id"/>
+                    <field name="amount" widget="monetary"/>
+                    <field name="num_quot"/>
+                    <field name="state"/>
+                    <field name="currency_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--         ACTION-->
+        <record model="ir.actions.act_window" id="ing_subsidy_list_action">
+            <field name="name">Subsidios</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ing.rrhh.solicitudes.subsidy</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Gestiónar <strong>Subsidios</strong>.
+                </p>
+            </field>
+        </record>
+
+        <!-- MENU -->
+        <menuitem id="ing_subsidy_submenu" name="Subsidios" action="ing_subsidy_list_action"
+                  groups="ing_rrhh_solicitudes.group_ing_rrhh_solicitud_admin_rrhh_subsidies"
+                  parent="ing_rrhh_solicitudes_admin_menu" sequence="20"/>
+
+    </data>
+</odoo>

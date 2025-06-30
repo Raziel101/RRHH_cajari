@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- FORM VIEW -->
+        <record id="ing_solicitudes_view_employee_form" model="ir.ui.view">
+            <field name="name">ing.solicitudes.hr.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//header" position="inside">
+                    <button name="get_historic_advances" string="Adelantos" type="object"
+                            groups="ing_rrhh_solicitudes.group_ing_rrhh_solicitud_admin_rrhh,ing_rrhh_solicitudes.group_ing_rrhh_solicitud_admin,ing_rrhh_solicitudes.group_ing_rrhh_solicitud_visor"/>
+
+                    <button name="get_subsidy_views" string="Subsidios" type="object"
+                            groups="ing_rrhh_solicitudes.group_ing_rrhh_solicitud_admin_rrhh"/>
+                </xpath>
+
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

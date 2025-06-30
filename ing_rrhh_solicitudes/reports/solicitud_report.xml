@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+
+<odoo>
+    <data>
+
+        <template id="ing_rrhh_solicitudes_solicitud_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+
+                            <div style="margin-bottom: 50px;"/>
+
+                            <div class="row">
+                                <div class="mx-auto">
+                                    <img src="/ing_rrhh_solicitudes/static/img/LogoChajari.png"
+                                         style="max-height: 100px;"/>
+                                </div>
+                            </div>
+
+                            <div class="row border-solicitud">
+                                <div class="col-12">
+                                    <h6 class="text-center">SOLICITUD DE ANTICIPO</h6>
+                                </div>
+                            </div>
+
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div>
+                                            <strong>Nombre y Apellido</strong>
+                                            <p t-field="o.employee_id.name"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div>
+                                            <strong>Dni</strong>
+                                            <p t-field="o.employee_id.identification_id"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div>
+                                            <strong>Dependencia</strong>
+                                            <p t-field="o.departament_id.name"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div>
+                                            <strong>Tipo de Contrato</strong>
+                                            <p t-field="o.tipo_contrato_id.name"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="container">
+
+                                <table class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td>Monto Solicitado</td>
+                                            <td class="info text-right">
+                                                <strong>
+                                                    <span t-field="o.monto"/>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                            <div class="row justify-content-around margen">
+                                <div class="col-4 text-center">
+                                    <hr class="report-hr"></hr>
+                                    <strong>Firma</strong>
+                                </div>
+                                <div class="col-4 text-center">
+                                    <hr class="report-hr"></hr>
+                                    <strong>Autorización</strong>
+                                </div>
+                            </div>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

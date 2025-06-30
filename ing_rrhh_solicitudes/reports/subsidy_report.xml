@@ -1,0 +1,144 @@
+<?xml version="1.0"?>
+
+<odoo>
+    <data>
+
+        <template id="ing_rrhh_solicitudes_subsidy_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.basic_layout">
+                        <div class="page">
+                            <style>
+                                .margen{
+                                    padding-top: 120px;
+                                }
+                                mx5{
+                                    margin-right:5%;
+                                    margin-left:5%;
+                                }
+                                px-2{
+                                    padding-right: 0.5rem;
+                                    padding-left: 0.5rem;
+                                }
+                                table tr td{
+                                    border: 1px solid black;
+                                    padding-left: 0.5rem;
+                                    padding-right: 0.5rem;
+                                }
+                                text-center{
+                                    text-align:center;
+                                }
+                            </style>
+                            <div style="width:100%">
+                                <img src="/ing_rrhh_solicitudes/static/img/LogoChajari.png"
+                                     style="max-height:100px; max-width:50%; margin:0 auto 25px auto; display:block;"/>
+                            </div>
+
+                            <h4 class="text-center">DIRECCION DE PERSONAL</h4>
+                            <h6 class="text-center">SOLICITUD DE SUBSIDIO REINTEGRABLE PARA EMPLEADO MUNICIPAL
+                            REGULADO POR ORDENANZA NUMERO 610 H.C.D. ARTICULO 5 Inc. A, Y ORD. 703 H.C.D.</h6>
+
+                            <p style="text-align:center;">FECHA: <t t-esc="o.create_date" t-options="{'widget': 'date'}"/></p>
+                            <table style="width:100%; margin-bottom:2rem;">
+                                <tr>
+                                    <td style="width:30%;">
+                                        <strong>Apellido y Nombre del Solicitante</strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.employee_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">
+                                        <strong>Número de Documento</strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.dni"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">
+                                        <strong>Domicilio</strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.address"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">
+                                        <strong>Telefono</strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.phone"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">
+                                        <strong>Lugar donde presta servicio</strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.department_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;">
+                                        <strong>Tipo de Revista</strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.tipo_contrato_id.detalle"/>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <table style="width:100%; margin-bottom:2rem;">
+                                <tr>
+                                    <td style="width:30%;"><strong>Monto Solicitado</strong></td>
+                                    <td>
+                                        <span t-field="o.amount"
+                                              t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;"><strong>En cuotas</strong></td>
+                                    <td><span t-field="o.num_quot"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="width:30%;"><strong>Obs.:</strong></td>
+                                    <td><span t-field="o.description"/></td>
+                                </tr>
+                            </table>
+
+                            <div class="px-2" style="border:1px solid; margin-bottom:0;">
+                                <p>RAZONES QUE MOTIVAN ESTA SOLICITUD Y DESTINO DEL SUBSIDIO (ART. 7, ORD. 610 H.C.)</p>
+                                Adjunto. +
+                            </div>
+                            <p style="font-size:12px;">EN ESTE TRAMITE SE DEBE ADJUNTAR COPIA DEL DNI DEL SOLICITANTE
+                                DONDE CONSTE DOMICILIO ACTUALIZADO</p>
+
+                            <div class="margen">
+                                <div class="text-center" style="margin:0 auto; width:40%; border-top:1px solid black;">
+                                    Firma de Solicitante</div>
+                            </div>
+
+                            <div class="px-2" style="border:1px solid;">
+                                <span>EN ESTE CASILLERO LA SECCION SUELDOS DEBERA INFORMAR LA FECHA QUE CULMINO EL ULTIMO
+                                BENEFICIO DE ESTE TIPO OTORGADO AL INTERESADO Y ADJUNTAR UNA COPIA DEL ULTIMO RECIBO DE HABERES</span>
+                                <table style="width:100%; margin-top:70px;">
+                                    <tr>
+                                        <td style="width:5%;border:none !important;"/>
+                                        <td style="width:25%;border:none !important; border-bottom:1px solid !important;">FECHA:</td>
+                                        <td style="width:10%;border:none !important;"/>
+                                        <td style="width:55%;border:none !important; border-bottom:1px solid !important;"/>
+                                        <td style="width:5%;border:none !important;"/>
+                                    </tr>
+                                </table>
+                                <div class="margen text-center">FIRMA Y SELLO DEL ENC. DE SUELDOS</div>
+                            </div>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

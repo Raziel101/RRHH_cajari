@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="ing_licencias_view_employee_filter" model="ir.ui.view">
+            <field name="name">ing.licencias.hr.employee.filter</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_filter"/>
+            <field name="arch" type="xml">
+                <field name="job_id" position="after">
+                     <field name="license_class" string="Licencia de Conducir" filter_domain="[('license_class.name','ilike',self)]"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- FORM VIEW -->
+        <record id="ing_licencias_view_employee_form" model="ir.ui.view">
+            <field name="name">ing.licencias.hr.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//header" position="inside">
+                    <button name="get_licencias" string="Licencia" type="object"
+                            groups="ing_licencias.group_ing_rrhh_licencias_encargado,ing_licencias.group_ing_rrhh_licencias_admin_rrhh,ing_licencias.group_ing_rrhh_licencias_admin"/>
+                    <button name="get_horas_sev" string="Horas Sev" type="object"
+                            groups="ing_licencias.group_ing_rrhh_licencias_encargado,ing_licencias.group_ing_rrhh_licencias_admin_rrhh,ing_licencias.group_ing_rrhh_licencias_admin"/>
+                    <button name="query_hours_sev" string="Horas Sev Disponibles" type="object"
+                            groups="ing_licencias.group_ing_rrhh_licencias_encargado,ing_licencias.group_ing_rrhh_licencias_admin_rrhh,ing_licencias.group_ing_rrhh_licencias_admin"/>
+                    <button name="get_vacaciones" string="Vacaciones" type="object"
+                            groups="ing_licencias.group_ing_rrhh_licencias_encargado,ing_licencias.group_ing_rrhh_licencias_admin_rrhh,ing_licencias.group_ing_rrhh_licencias_admin"/>
+                </xpath>
+
+                <xpath expr="//notebook" position="inside">
+                    <page string="Licencia de Conducir">
+                        <group>
+                            <field name="driver_license_expiration" string="Fecha de vencimiento"/>
+                            <field name="driven_vehicles" widget="many2many_tags"/>
+                            <field name="license_class" widget="many2many_tags"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="ing_vehicle_tree" model="ir.ui.view">
+            <field name="name">ing_vehicle_tree</field>
+            <field name="model">ing.vehicle</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="department_id"/>
+                    <field name="patent"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_vehicles">
+            <field name="name">Vehiculos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ing.vehicle</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+            <record model="ir.actions.act_window" id="action_ing_type_lic">
+            <field name="name">Clase de Licencias</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ing.type.lic</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Vehiculos" id="hr_configuration_vehicles" sequence="2"
+                  parent="hr.menu_human_resources_configuration" action="action_vehicles"/>
+
+        <menuitem name="Clase de Licencias" id="hr_configuration_ing_type_lic" sequence="2"
+                  parent="hr.menu_human_resources_configuration" action="action_ing_type_lic"/>
+
+        <record id="hr_employee_wz_form" model="ir.ui.view">
+            <field name="name">hr.employee.wz.form</field>
+            <field name="model">hr.employee.wz</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="employee_id"/>
+                        <field name="date_expired"/>
+                        <field name="driven_vehicles" widget="many2many_tags"/>
+                        <field name="license_class" widget="many2many_tags"/>
+                        <field name="attach_ids" widget="many2many_binary"/>
+                    </group>
+                    <footer>
+                        <button type="object" name="action_confirm" string="Confirmar" class="btn-primary"/>
+                        <button special="cancel" string="Cancelar"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_vehicles_add_user">
+            <field name="name">Añadir informacion de licencia de conducir</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.employee.wz</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Info Licencia Conducir" id="hr_configuration_vehicles_add_user_info"
+                  sequence="20" parent="hr.menu_hr_root" action="action_vehicles_add_user"/>
+
+
+    </data>
+</odoo>

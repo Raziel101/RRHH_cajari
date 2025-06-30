@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <template id="report_assets_solicitud" name="Css solicitud report" inherit_id="web.report_assets_common">
+        <xpath expr="." position="inside">
+            <link href="/ing_rrhh_solicitudes/static/src/css/style.css" rel="stylesheet"/>
+        </xpath>
+    </template>
+</odoo>

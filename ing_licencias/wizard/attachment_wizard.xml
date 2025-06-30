@@ -1,0 +1,78 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="attach_contratos_wizard_form_view">
+            <field name="name">attachment.licencia.wizard.form</field>
+            <field name="model">attachment.licencia.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Adjuntar">
+
+                    <div class="row">
+                        <div class="col-md-12 backgr-rrhh-title">
+                            <h1>
+                                <field name="ing_form_general_id"/>
+                            </h1>
+                        </div>
+                    </div>
+
+                    <notebook>
+                        <page string="Adjuntar">
+                            <field name="attachment_ids" widget="many2many_binary" string="Seleccionar Archivo"/>
+                        </page>
+                    </notebook>
+
+                    <footer>
+                        <button special="cancel" string="Cancelar"/>
+                        <button name='attach_file' string="Guardar" type="object"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_attach_contratos_wizard"
+                model="ir.actions.act_window">
+            <field name="name">Generar Horarios</field>
+            <field name="res_model">attachment.licencia.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+
+        <!-- Wizard Vacaciones -->
+        <record model="ir.ui.view" id="attach_vacaciones_wizard_form_view">
+            <field name="name">attachment.vacaciones.wizard.form</field>
+            <field name="model">attachment.vacaciones.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Adjuntar">
+
+                    <div class="row">
+                        <div class="col-md-12 backgr-rrhh-title">
+                            <h1>
+                                <field name="ing_vacaciones_id"/>
+                            </h1>
+                        </div>
+                    </div>
+
+                    <notebook>
+                        <page string="Adjuntar">
+                            <field name="attachment_ids" widget="many2many_binary" string="Seleccionar Archivo"/>
+                        </page>
+                    </notebook>
+
+                    <footer>
+                        <button special="cancel" string="Cancelar"/>
+                        <button name='attach_file' string="Guardar" type="object"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_attach_vacaciones_wizard"
+                model="ir.actions.act_window">
+            <field name="name">Adjuntar</field>
+            <field name="res_model">attachment.vacaciones.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

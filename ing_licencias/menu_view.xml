@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Licencias y Franquicias-->
+        <menuitem id="ing_rrhh_licencias_admin_menu"
+                  name="Licencias y Franquicias"
+                  sequence="10"
+                  parent="ing_rrhh_solicitudes.ing_rrhh_solicitudes_admin_menu"
+                  groups="ing_licencias.group_ing_rrhh_licencias_encargado,ing_licencias.group_ing_rrhh_licencias_admin_rrhh,ing_licencias.group_ing_rrhh_licencias_admin"/>
+
+        <menuitem
+                id="menu_ing_rrhh_licencias_config"
+                name="Configuracion"
+                parent="ing_rrhh_licencias_admin_menu"
+                sequence="10"/>
+
+        <!--Horas Sev-->
+        <menuitem id="ing_rrhh_horas_sev_admin_menu"
+                  name="Horas Sev"
+                  sequence="20"
+                  parent="ing_rrhh_solicitudes.ing_rrhh_solicitudes_admin_menu"
+                  groups="ing_licencias.group_ing_rrhh_licencias_encargado,ing_licencias.group_ing_rrhh_licencias_admin_rrhh,ing_licencias.group_ing_rrhh_licencias_admin"/>
+
+        <!--Vacaciones-->
+        <menuitem id="ing_rrhh_vacaciones_admin_menu"
+                  name="Vacaciones"
+                  sequence="30"
+                  parent="ing_rrhh_solicitudes.ing_rrhh_solicitudes_admin_menu"
+                  groups="ing_licencias.group_ing_rrhh_licencias_admin_rrhh,ing_licencias.group_ing_rrhh_licencias_admin"/>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--TREE VIEW-->
+        <record id="view_tipolic_tree" model="ir.ui.view">
+            <field name="name">ing.licencias.tipo.tree</field>
+            <field name="model">ing.licencias.tipo</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="create_date"/>
+                    <field name="detalle"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- FORM VIEW -->
+        <record id="view_tipolic_form" model="ir.ui.view">
+            <field name="name">ing.licencias.tipo.form</field>
+            <field name="model">ing.licencias.tipo</field>
+            <field name="arch" type="xml">
+                <form string="Tipo de Licencia">
+                    <sheet>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <group>
+                                    <field name="name" placeholder="Nombre Interno"/>
+                                    <field name="detalle" placeholder="ingrese el tipo de licencia"/>
+                                    <field name="active"/>
+                                </group>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <notebook>
+                                    <page string="Configuracion" groups="ing_licencias.group_ing_rrhh_licencias_admin">
+                                        <div class="col-md-6">
+                                            <group>
+                                                <field name="dias_permitidos_año" placeholder="Dias permitidos por año" groups="ing_licencias.group_ing_rrhh_licencias_admin"/>
+                                                <field name="dias_permitidos_mes" placeholder="Dias permitidos por Mes" groups="ing_licencias.group_ing_rrhh_licencias_admin"/>
+                                            </group>
+                                        </div>
+                                    </page>
+                                </notebook>
+                            </div>
+                        </div>
+                    </sheet>
+
+                    <!-- MAIL THREAD -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!--         ACTION-->
+        <record model="ir.actions.act_window" id="ing_tipolic_list_action">
+            <field name="name">Tipo Licencia</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ing.licencias.tipo</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Gestiónar <strong>Tipo de Licencia</strong>.
+                </p>
+            </field>
+        </record>
+
+        <!-- MENU -->
+        <menuitem id="ing_tipolic_submenu" name="Tipo de Licencias" action="ing_tipolic_list_action"
+                  parent="menu_ing_rrhh_licencias_config" sequence="11"/>
+
+    </data>
+</odoo>

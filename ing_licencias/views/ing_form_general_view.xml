@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--SEARCH VIEW-->
+        <record id="view_formgeneral_search" model="ir.ui.view">
+            <field name="name">ing.licencias.general.search</field>
+            <field name="model">ing.licencias.general</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <search string="Licencias y Franquicias">
+                    <field name="tipo_lic_id"/>
+                    <field name="base_form_id" string="Empleado"/>
+                    <field name="state"/>
+                    <separator/>
+                    <group expand="0" string="Agrupar">
+                        <filter name="filter_estado" string="Estado" domain="[]"
+                                context="{'group_by':'state'}"/>
+                        <filter name="filter_empleado" string="Empleado" domain="[]"
+                                context="{'group_by':'base_form_id'}"/>
+                        <filter name="filter_tipo_licencia" string="Tipo Licencia" domain="[]"
+                                context="{'group_by':'tipo_lic_id'}"/>
+                    </group>
+                    <searchpanel>
+                        <field name="tipo_lic_id" icon="fa fa-list"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <!--TREE VIEW-->
+        <record id="view_formgeneral_tree" model="ir.ui.view">
+            <field name="name">ing.licencias.general.tree</field>
+            <field name="model">ing.licencias.general</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="state == 'confirmada'"
+                      decoration-muted="state=='cancelada'"
+                      decoration-success="revisar == True">
+                    <field name="create_date"/>
+                    <field name="tipo_lic_id"/>
+                    <field name="base_form_id" string="Empleado"/>
+                    <field name="revisar"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- FORM VIEW -->
+        <record id="view_formgeneral_form" model="ir.ui.view">
+            <field name="name">ing.licencias.general.form</field>
+            <field name="model">ing.licencias.general</field>
+            <field name="arch" type="xml">
+                <form string="Licencias y Franquicias">
+                    <header>
+                        <button string="Confirmar" name="confirmar" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'in', ['confirmada','cancelada'])]}"
+                                groups="ing_licencias.group_ing_rrhh_licencias_admin_rrhh"/>
+
+                        <button string="Cancelar" name="cancelar" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'in', ['cancelada','borrador','revisar'])]}"
+                                groups="ing_licencias.group_ing_rrhh_licencias_admin_rrhh"/>
+
+                        <button string="Volver a borrador" name="volver_borrador" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state',  'in', ['confirmada','borrador'])]}"
+                                groups="ing_licencias.group_ing_rrhh_licencias_admin_rrhh"/>
+
+                        <button string="A revisar" name="a_revisar" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state',  'in', ['revisar','confirmada'])]}"
+                                groups="ing_licencias.group_ing_rrhh_licencias_admin_rrhh"/>
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" string="Adjuntar" type="object"
+                                    name="call_wizard_attach" icon="fa-paperclip"
+                                    attrs="{'invisible': ['|',('state', 'in', ['confirmada','cancelada']), ('id', '=', False)]}">
+                            </button>
+                            <button class="oe_stat_button" string="Correccion" type="object"
+                                    name="call_wizard_correccion" icon="fa-comments"
+                                    attrs="{'invisible': ['|',('state', 'in', ['confirmada','cancelada']), ('id', '=', False)]}">
+                            </button>
+                            <button class="oe_stat_button" string="Historicos de Adjuntos" type="object"
+                                    name="view_history_attach" icon="fa-file"/>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 backgr-rrhh-title">
+                                <h4>
+                                    <group>
+                                        <field name="base_form_id" placeholder="Seleccione o ingrese el empleado"/>
+                                        <field name="company_id" invisible="1"/>
+                                        <field name="departament_id" placeholder="Ingrese el Departamento"/>
+                                    </group>
+                                </h4>
+                            </div>
+                            <div class="col-md-6 backgr-rrhh-title">
+                                <h4>
+                                    <group>
+                                        <field name="tipo_lic_id" placeholder="Seleccione el Tipo de Licencia"
+                                               options="{'no_create': True}"/>
+                                    </group>
+                                </h4>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <notebook>
+                                    <page name="info_adicional" string="Informacion Adicional">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <group>
+                                                    <field name="create_date" string="Fecha de creacion"/>
+                                                </group>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <group>
+                                                    <field name="tipo_lic_no_remunerada"
+                                                           attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_no_remunerada'])], 'required' : [('tipo_lic_name', 'in', ['lic_no_remunerada'])]}"/>
+                                                    <field name="tipo_lic_name" invisible="1"/>
+                                                    <field name="dias_solicitados"
+                                                           attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_vacaciones','lic_no_remunerada'])], 'required' : [('tipo_lic_name', 'in', ['lic_vacaciones','lic_no_remunerada'])]}"/>
+                                                    <field name="fecha_inicio"
+                                                           attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_no_remunerada','nac_hijo','lic_vacaciones','lic_uso_particular'])], 'required' : [('tipo_lic_name', 'in', ['lic_no_remunerada','lic_vacaciones','lic_uso_particular'])]}"/>
+                                                    <field name="fecha_reingreso" readonly="1"
+                                                           attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_no_remunerada'])]}"/>
+                                                    <field name="hs_del_mes"
+                                                           attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_hs_sev'])], 'required' : [('tipo_lic_name', 'in', ['lic_hs_sev'])]}"/>
+                                                    <field name="cantidad_hs"
+                                                           attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_hs_sev'])], 'required' : [('tipo_lic_name', 'in', ['lic_hs_sev'])]}"/>
+                                                    <field name="dia_periodo_lic_ids"
+                                                           attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_vacaciones'])], 'required' : [('tipo_lic_name', 'in', ['lic_vacaciones'])]}"
+                                                           groups="ing_licencias.group_ing_rrhh_licencias_admin_rrhh"/>
+                                                    <field name="descripcion"
+                                                           attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_vacaciones','lic_uso_particular'])]}"/>
+                                                    <!--                         DATOS FORM 3 RRHH                           -->
+                                                    <field name="ing_medio_aviso_id"
+                                                           placeholder="Seleccione el medio de aviso"
+                                                           attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_adopcion','lic_capacitacion','lic_enf_acc_familiar_acargo','lic_evento_deportivo_nrentado','lic_examen','lic_enf_acc_familiar_acargo','lic_fallecimiento_fam','lic_maternidad','lic_matrimonio','lic_matrimonio_dehijos','lic_razon_salud','lic_estudio','lic_atencion_hijo','lic_embarazo','lic_incapacidad_parcial','lic_tramite_personal','lic_mesa_examen'])], 'required' : [('tipo_lic_name', 'in', ['lic_adopcion','lic_capacitacion','lic_enf_acc_familiar_acargo','lic_evento_deportivo_nrentado','lic_examen','lic_enf_acc_familiar_acargo','lic_fallecimiento_fam','lic_maternidad','lic_matrimonio','lic_matrimonio_dehijos','lic_razon_salud','lic_estudio','lic_atencion_hijo','lic_embarazo','lic_incapacidad_parcial','lic_tramite_personal','lic_mesa_examen'])], }"/>
+
+                                                    <field name="aviso"
+                                                           placeholder="aviso?"
+                                                           attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_adopcion','lic_capacitacion','lic_enf_acc_familiar_acargo','lic_evento_deportivo_nrentado','lic_examen','lic_enf_acc_familiar_acargo','lic_fallecimiento_fam','lic_maternidad','lic_matrimonio','lic_matrimonio_dehijos','lic_razon_salud','lic_estudio','lic_atencion_hijo','lic_embarazo','lic_incapacidad_parcial','lic_tramite_personal','lic_mesa_examen'])], }"/>
+
+                                                </group>
+                                            </div>
+                                        </div>
+                                        <label for="observaciones"
+                                               attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_no_remunerada'])]}"/>
+                                        <field name="observaciones"
+                                               attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_no_remunerada'])]}"/>
+                                        <div class="row"
+                                             attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_acc_enf_trabajo'])]}">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success" role="alert">
+                                                    <h4 class="alert-heading">Documentación a presentar:</h4>
+                                                    <p>• Copia de la denuncia policial (en caso de accidente)
+                                                        Esta denuncia es presentada en caso de que el accidente suceda
+                                                        en la vía pública.-
+                                                    </p>
+                                                    <hr></hr>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row"
+                                             attrs="{'invisible': [('tipo_lic_name', 'not in', ['nac_hijo'])]}">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success" role="alert">
+                                                    <p>• CORRESPONDEN A UNA LICENCIA DE 2 (DOS) DÍAS HÁBILES, QUE PODRÁN SER
+                                                        UTILIZADOS DENTRO DE LOS 15 (QUINCE) DÍAS SIGUIENTES A LA FECHA DE
+                                                        NACIMIENTO.-
+                                                    </p>
+                                                    <hr/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row"
+                                             attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_adopcion'])]}">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success" role="alert">
+                                                    <h4 class="alert-heading">Documentación a presentar:</h4>
+                                                    <p>• Copia de la sentencia de adopción
+                                                    </p>
+                                                    <hr></hr>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row"
+                                             attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_capacitacion'])]}">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success" role="alert">
+                                                    <h4 class="alert-heading">Documentación a presentar:</h4>
+                                                    <p>• Constancias y/o certificados de haber participado de la
+                                                        capacitación (esto debería servirse a posteriori de la licencia
+                                                        solicitada)
+                                                    </p>
+                                                    <hr></hr>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row"
+                                             attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_enf_acc_familiar_acargo'])]}">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success" role="alert">
+                                                    <h4 class="alert-heading">Documentación a presentar:</h4>
+                                                    <p>• Copia del certificado médico, el certificado debe ser por días
+                                                        hábiles y únicamente son 20 días al año, EL ORIGINAL SE DEBE
+                                                        TRAER A LA DIRECCIÓN DE PERSONAL
+                                                    </p>
+                                                    <hr></hr>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row"
+                                             attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_evento_deportivo_nrentado'])]}">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success" role="alert">
+                                                    <h4 class="alert-heading">Documentación a presentar:</h4>
+                                                    <p>• Copia de la documentación que acredite lo solicitado
+                                                    </p>
+                                                    <hr></hr>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row"
+                                             attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_examen'])]}">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success" role="alert">
+                                                    <h4 class="alert-heading">Documentación a presentar:</h4>
+                                                    <p>• Constancias y/o certificados de haber rendido el examen (esto
+                                                        debería servirse a posteriori de la licencia solicitada)
+                                                    </p>
+                                                    <hr></hr>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row"
+                                             attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_fallecimiento_fam'])]}">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success" role="alert">
+                                                    <h4 class="alert-heading">Documentación a presentar:</h4>
+                                                    <p>Copia del CERTIFICADO DE LA CASA FUNERARIA.
+                                                    </p>
+                                                    <hr></hr>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row"
+                                             attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_maternidad'])]}">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success" role="alert">
+                                                    <h4 class="alert-heading">Documentación a presentar:</h4>
+                                                    <p>• Certificado médico con fecha probable de parto, con 20 días de
+                                                        anticipación.
+                                                    </p>
+                                                    <hr></hr>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row"
+                                             attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_matrimonio'])]}">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success" role="alert">
+                                                    <h4 class="alert-heading">Documentación a presentar:</h4>
+                                                    <p>• Certificación expedida por el Registro de Estado Civil ACTA DE
+                                                        MATRIMONIO
+                                                    </p>
+                                                    <hr></hr>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row"
+                                             attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_matrimonio_dehijos'])]}">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success" role="alert">
+                                                    <h4 class="alert-heading">Documentación a presentar:</h4>
+                                                    <p>• Certificación expedida por el Registro de Estado Civil
+                                                    </p>
+                                                    <hr></hr>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row"
+                                             attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_razon_salud'])]}">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success" role="alert">
+                                                    <h4 class="alert-heading">Documentación a presentar:</h4>
+                                                    <p>• Certificado médico, (EL ORIGINAL DEBE SER PRESENTADO EN LA
+                                                        DIRECCIÓN DE PERSONAL)
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row"
+                                             attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_estudio'])]}">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success" role="alert">
+                                                    <h4 class="alert-heading">Documentación a presentar:</h4>
+                                                    <p>• Se debe presentar certificado de alumno regular y certificado
+                                                        de asistencia, ambos expedidos por la entidad educativa.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row"
+                                             attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_atencion_hijo'])]}">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success" role="alert">
+                                                    <h4 class="alert-heading">Documentación a presentar:</h4>
+                                                    <p>• En caso de adopción se debe presentar certificado elevado por
+                                                        la autoridad judicial competente
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row"
+                                             attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_embarazo'])]}">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success" role="alert">
+                                                    <h4 class="alert-heading">Documentación a presentar:</h4>
+                                                    <p>• Si se utilizan los dos francos mensuales, se presentarán
+                                                        certificados médicos.
+                                                        Y para corroborar el embarazo, se deberá presentar certificado
+                                                        de embarazo.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row"
+                                             attrs="{'invisible': [('tipo_lic_name', 'not in', ['lic_incapacidad_parcial'])]}">
+                                            <div class="col-md-12">
+                                                <div class="alert alert-success" role="alert">
+                                                    <h4 class="alert-heading">Documentación a presentar:</h4>
+                                                    <p>• Queda a criterio de la junta médica
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h3>Documentacion Adjunta:</h3>
+                                                <hr/>
+                                                <field name="attach_ids"  widget="many2many_binary"
+                                                       string="Seleccionar Archivo"/>
+                                            </div>
+                                        </div>
+
+                                    </page>
+                                </notebook>
+                            </div>
+                        </div>
+                    </sheet>
+
+                    <!-- MAIL THREAD -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="ing_formgeneral_list_action" model="ir.actions.server">
+            <field name="name">Licencias y Franquicias</field>
+            <field name="model_id" ref="model_ing_licencias_general"/>
+            <field name="binding_model_id" ref="model_ing_licencias_general"/>
+            <field name="binding_view_types">list</field>
+            <field name="groups_id" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_encargado'), 0)]"/>
+            <field name="state">code</field>
+            <field name="code">
+                action = model.get_template_licencia_franquicia()
+            </field>
+        </record>
+
+        <!-- MENU -->
+        <menuitem id="ing_fgeneral_submenu" name="Licencias y Franquicias" action="ing_formgeneral_list_action"
+                  parent="ing_rrhh_licencias_admin_menu" sequence="5"/>
+
+        <record id="view_attach_min" model="ir.ui.view">
+            <field name="name">ing.licencias.general.form</field>
+            <field name="model">ing.licencias.general</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <field name="attach_ids"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- HORAS SEV Form-->
+        <record id="view_formgeneral_horas_sev_form" model="ir.ui.view">
+            <field name="name">ing.licencias.general.hssev.form</field>
+            <field name="model">ing.licencias.general</field>
+            <field name="arch" type="xml">
+                <form string="Horas Sev.">
+                    <header>
+                        <button string="Confirmar" name="confirmar" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'in', ['confirmada','cancelada'])]}"
+                                groups="ing_licencias.group_ing_rrhh_licencias_admin_rrhh"/>
+
+                        <button string="Cancelar" name="cancelar" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'in', ['cancelada','borrador'])]}"
+                                groups="ing_licencias.group_ing_rrhh_licencias_admin_rrhh"/>
+
+                        <button string="Volver a borrador" name="volver_borrador" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state',  'in', ['confirmada','borrador'])]}"
+                                groups="ing_licencias.group_ing_rrhh_licencias_admin_rrhh"/>
+
+                        <button string="A revisar" name="a_revisar" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state',  'in', ['borrador','cancelada'])]}"
+                                groups="ing_licencias.group_ing_rrhh_licencias_admin_rrhh"/>
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" string="Adjuntar" type="object"
+                                    name="call_wizard_attach" icon="fa-paperclip"
+                                    attrs="{'invisible': ['|',('state', 'in', ['confirmada','cancelada']), ('id', '=', False)]}">
+                            </button>
+                            <button class="oe_stat_button" string="Correccion" type="object"
+                                    name="call_wizard_correccion" icon="fa-comments"
+                                    attrs="{'invisible': ['|',('state', 'in', ['confirmada','cancelada']), ('id', '=', False)]}">
+                            </button>
+                             <button class="oe_stat_button" string="Historicos de Adjuntos" type="object"
+                                    name="view_history_attach" icon="fa-file"/>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 backgr-rrhh-title">
+                                <h4>
+                                    <group>
+                                        <field name="base_form_id" placeholder="Seleccione o ingrese el empleado"/>
+                                        <field name="company_id" invisible="1"/>
+                                        <field name="departament_id" placeholder="Ingrese el Departamento"/>
+                                    </group>
+                                </h4>
+                            </div>
+                            <div class="col-md-6 backgr-rrhh-title">
+                                <h4>
+                                    <group>
+                                        <field name="tipo_lic_id" placeholder="Seleccione el Tipo de Licencia"
+                                               options="{'no_create': True}" readonly="1"/>
+                                    </group>
+                                </h4>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <notebook>
+                                    <page name="info_adicional" string="Informacion Adicional">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <group>
+                                                    <field name="create_date" string="Fecha de creacion"/>
+                                                </group>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <group>
+                                                    <field name="tipo_lic_name" invisible="1"/>
+                                                    <field name="dias_solicitados" required="True"/>
+                                                    <field name="fecha_inicio" required="True"/>
+                                                </group>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h3>Documentacion Adjunta:</h3>
+                                                <hr/>
+                                                <field name="attach_ids"  widget="many2many_binary"
+                                                       string="Seleccionar Archivo"/>
+                                            </div>
+                                        </div>
+
+                                    </page>
+                                </notebook>
+                            </div>
+                        </div>
+                    </sheet>
+                    <!-- MAIL THREAD -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="ing_horas_sev_list_action" model="ir.actions.server">
+            <field name="name">Horas Sev. - Consumo de HS</field>
+            <field name="model_id" ref="model_ing_licencias_general"/>
+            <field name="state">code</field>
+            <field name="binding_model_id" ref="model_ing_licencias_general"/>
+            <field name="binding_view_types">list</field>
+            <field name="groups_id" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_encargado'), 0)]"/>
+            <field name="code">
+                action = model.get_template_hs_sev()
+            </field>
+        </record>
+
+        <menuitem id="ing_horas_sev_general_submenu" name="Horas Sev. (Planilla 2)" action="ing_horas_sev_list_action"
+                  parent="ing_rrhh_horas_sev_admin_menu" sequence="10"/>
+
+    </data>
+</odoo>

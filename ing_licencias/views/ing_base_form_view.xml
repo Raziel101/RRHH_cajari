@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--TREE VIEW-->
+        <record id="view_baseform_tree" model="ir.ui.view">
+            <field name="name">ing.licencias.base.tree</field>
+            <field name="model">ing.licencias.base</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="create_date"/>
+                    <field name="employee_id"/>
+                    <field name="dni"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- FORM VIEW -->
+        <record id="view_baseform_form" model="ir.ui.view">
+            <field name="name">ing.licencias.base.form</field>
+            <field name="model">ing.licencias.base</field>
+            <field name="arch" type="xml">
+                <form string="Base">
+                    <sheet>
+                        <div class="row">
+                            <div class="col-md-12 backgr-rrhh-title">
+                                <h4>
+                                    <group>
+                                        <field name="employee_id" placeholder="Seleccione o ingrese el empleado"/>
+                                    </group>
+                                </h4>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <group>
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="tipo_contrato_id" placeholder="Tipo de contrato" options="{'no_create': True}"/>
+                                    <field name="departament_id" placeholder="Departamento" options="{'no_create': True}"/>
+                                    <field name="categoria_ids" placeholder="Categoria" widget="many2many_tags"/>
+                                </group>
+
+                            </div>
+                            <div class="col-md-6">
+                                <group>
+                                    <field name="dni" string="Dni" placeholder="Dni"/>
+                                    <field name="cuit" placeholder="Cuit"/>
+                                    <field name="fecha_nac" string="Fecha Nac." placeholder="Ingrese fecha de nac."/>
+                                    <field name="telefono" placeholder="Tel."/>
+                                    <field name="domic_real" placeholder="Dom. real"/>
+                                    <field name="domic_legal" placeholder="Dom. Legal"/>
+                                </group>
+                            </div>
+                        </div>
+                    </sheet>
+
+                    <!-- MAIL THREAD -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!--         ACTION-->
+        <record model="ir.actions.act_window" id="ing_baseform_list_action">
+            <field name="name">Base</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ing.licencias.base</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Gestiónar <strong> Base</strong>.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>
