@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="view_formgeneral_form_inherit" model="ir.ui.view">
+            <field name="name">ing.licencias.general.form_inherit</field>
+            <field name="model">ing.licencias.general</field>
+            <field name="inherit_id" ref="ing_licencias.view_formgeneral_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="after">
+                    <field name="view_alert_create_portal" invisible="1"/>
+                    <div class="alert alert-info text-center" role="alert"
+                         attrs="{'invisible': [('view_alert_create_portal',  '=', False)]}">
+                        <strong>IMPORTANTE!</strong> esta persona tiene licencias 'Por autorizar'.
+                    </div>
+                </xpath>
+
+                <xpath expr="//header" position="replace">
+                    <header>
+                        <field name="view_request_admin" invisible="1"/>
+                        <button string="Autorizar" name="action_to_draft" type="object" class="btn-primary"
+                                attrs="{'invisible': ['|',('state',  'not in', ['create_portal']),('view_request_admin','=',False)]}"
+                                groups="ing_licencias.group_ing_rrhh_licencias_encargado"/>
+
+                        <button string="Confirmar" name="confirmar" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'in', ['confirmada','cancelada','create_portal'])]}"
+                                groups="ing_licencias.group_ing_rrhh_licencias_admin_rrhh"/>
+
+                        <button string="Cancelar" name="cancelar" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'in', ['cancelada','borrador','revisar','create_portal'])]}"
+                                groups="ing_licencias.group_ing_rrhh_licencias_admin_rrhh"/>
+
+                        <button string="Volver a borrador" name="volver_borrador" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state',  'in', ['confirmada','borrador','create_portal'])]}"
+                                groups="ing_licencias.group_ing_rrhh_licencias_admin_rrhh"/>
+
+                        <button string="A revisar" name="a_revisar" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state',  'in', ['revisar','confirmada','create_portal'])]}"
+                                groups="ing_licencias.group_ing_rrhh_licencias_admin_rrhh"/>
+
+                        <field name="state" invisible="0" widget="statusbar" statusbar_visible="borrador,confirmada,revisar,cancelada"/>
+                    </header>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="ing_form_general_create_portal_list_action" model="ir.actions.act_window">
+            <field name="name">Licencias y Franquicias (Por Autorizar)</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ing.licencias.general</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state','=','create_portal')]</field>
+            <field name="context">{'create':0}</field>
+        </record>
+
+        <menuitem id="ing_form_general_create_portal_submenu" name="Licencias y Franquicias (Por Autorizar)"
+                  action="ing_form_general_create_portal_list_action"
+                  groups="ing_licencias.group_ing_rrhh_licencias_encargado"
+                  parent="ing_licencias.ing_rrhh_licencias_admin_menu" sequence="2"/>
+
+    </data>
+</odoo>

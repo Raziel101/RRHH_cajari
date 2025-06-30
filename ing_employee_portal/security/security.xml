@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="rule_encargado_licencias_edit" model="ir.rule">
+            <field name="name">Encargado de area solo edita si esta 'Por autorizar'</field>
+            <field name="model_id" ref="ing_licencias.model_ing_licencias_general"/>
+            <field name="groups" eval="[(4, ref('ing_licencias.group_ing_rrhh_licencias_encargado'))]"/>
+            <field name="perm_read" eval="0"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">[('state','=','create_portal')]</field>
+        </record>
+
+    </data>
+</odoo>

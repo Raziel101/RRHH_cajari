@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <template id="license_new" name="Crear Licencia">
+            <t t-call="portal.portal_layout">
+                <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Licencias</t>
+                    <t t-set="page_name">my_licenses</t>
+                </t>
+
+                <script>
+                    fields = ['date_resolution','age','date_birth','date_certificate','date_marriage','date_death','date_event','days_requested','date_nac','date_init','attach'];
+                    function p_remove_d_block(list_p){
+                        list_p.forEach((p) => {
+                          p.classList.replace('d-block', 'd-none');
+                        });
+                    }
+                    function reset_fields(){
+                        document.getElementById('btn_submit').classList.replace("d-none", "d-block");
+                        fields.forEach((f) => {
+                            document.getElementById(f).required = false;
+                            document.getElementById('div_'+f).classList.replace("d-block", "d-none");
+                        });
+                    }
+
+                    function changeTypeLic(value_type_lic){
+                        reset_fields();
+                        elem_div = document.getElementById('div-alert');
+                        find_p = document.getElementById(value_type_lic);
+                        if (find_p){
+                            p_remove_d_block(elem_div.querySelectorAll("p"));
+                            elem_div.classList.replace("d-none", "d-block");
+                            find_p.classList.replace("d-none", "d-block");
+                        }else{
+                            elem_div.classList.replace("d-block", "d-none");
+                        }
+
+                        if (['nac_hijo'].includes(value_type_lic)){
+                            document.getElementById('div_date_init').classList.replace("d-none", "d-block");
+                            document.getElementById('div_date_nac').classList.replace("d-none", "d-block");
+                            document.getElementById('div_attach').classList.replace("d-none", "d-block");
+                            document.getElementById('attach').required = true;
+                            document.getElementById('date_init').required = true;
+                            document.getElementById('date_nac').required = true;
+                        }else if (['lic_evento_deportivo_nrentado'].includes(value_type_lic)){
+                            document.getElementById('div_attach').classList.replace("d-none", "d-block");
+                            document.getElementById('attach').required = true;
+                            document.getElementById('div_date_event').classList.replace("d-none", "d-block");
+                            document.getElementById('date_event').required = true;
+                        }else if (['lic_fallecimiento_fam'].includes(value_type_lic)){
+                            document.getElementById('div_attach').classList.replace("d-none", "d-block");
+                            document.getElementById('attach').required = true;
+                            document.getElementById('div_date_death').classList.replace("d-none", "d-block");
+                            document.getElementById('date_death').required = true;
+                        }else if (['lic_matrimonio'].includes(value_type_lic)){
+                            document.getElementById('div_date_marriage').classList.replace("d-none", "d-block");
+                            document.getElementById('date_marriage').required = true;
+                        }else if (['lic_razon_salud'].includes(value_type_lic)){
+                            document.getElementById('div_attach').classList.replace("d-none", "d-block");
+                            document.getElementById('attach').required = true;
+                            document.getElementById('div_days_requested').classList.replace("d-none", "d-block");
+                            document.getElementById('days_requested').required = true;
+                            document.getElementById('days_requested').value = false;
+                            document.getElementById('days_requested').readOnly = false;
+                            document.getElementById('div_date_certificate').classList.replace("d-none", "d-block");
+                            document.getElementById('date_certificate').required = true;
+                        }else if (['lic_uso_particular','lic_matrimonio_dehijos'].includes(value_type_lic)){
+                            document.getElementById('div_date_init').classList.replace("d-none", "d-block");
+                            document.getElementById('date_init').required = true;
+                        }else if (['lic_enf_acc_familiar_acargo','lic_razones_gremiales','lic_examen','lic_capacitacion'].includes(value_type_lic)){
+                            document.getElementById('div_date_init').classList.replace("d-none", "d-block");
+                            document.getElementById('date_init').required = true;
+                            document.getElementById('div_attach').classList.replace("d-none", "d-block");
+                            document.getElementById('attach').required = true;
+                        }else if (['lic_maternidad'].includes(value_type_lic)){
+                            document.getElementById('div_date_init').classList.replace("d-none", "d-block");
+                            document.getElementById('date_init').required = true;
+                            document.getElementById('div_date_birth').classList.replace("d-none", "d-block");
+                            document.getElementById('date_birth').required = true;
+                            document.getElementById('div_attach').classList.replace("d-none", "d-block");
+                            document.getElementById('attach').required = true;
+                        }else if (['lic_vacaciones'].includes(value_type_lic)){
+                            document.getElementById('div_date_init').classList.replace("d-none", "d-block");
+                            document.getElementById('date_init').required = true;
+                            document.getElementById('div_days_requested').classList.replace("d-none", "d-block");
+                            document.getElementById('days_requested').required = true;
+                            _days_value = document.getElementById('input_days_available').value;
+                            document.getElementById('days_requested').value = _days_value;
+                            document.getElementById('days_requested').readOnly = true;
+                        }else if (['lic_adopcion'].includes(value_type_lic)){
+                            document.getElementById('div_attach').classList.replace("d-none", "d-block");
+                            document.getElementById('attach').required = true;
+                            document.getElementById('div_date_resolution').classList.replace("d-none", "d-block");
+                            document.getElementById('date_resolution').required = true;
+                            document.getElementById('div_age').classList.replace("d-none", "d-block");
+                            document.getElementById('age').required = true;
+                        }
+                    }
+
+                    function changeDateMarriage(){
+                        _marriageDate = document.getElementById('date_marriage');
+                        const dateOneValue = new Date(_marriageDate.value);
+                        _date = calculateBusinessDays(dateOneValue, 10);
+                        const dateTwoValue = _date.toISOString().slice(0,10);
+                        document.getElementById('span_lic_mat').innerHTML = ' ' + dateTwoValue.split('-').reverse().join('/');
+                    }
+                    function changeDateResolution(){
+                        _resolutionDate = document.getElementById('date_resolution');
+                        const dateOneValue = new Date(_resolutionDate.value);
+                        dateOneValue.setDate(dateOneValue.getDate() + 100);
+                        if(dateOneValue.getDay()==5){
+                            dateOneValue.setDate(dateOneValue.getDate() + 2);
+                        }else if(dateOneValue.getDay()==6){
+                            dateOneValue.setDate(dateOneValue.getDate() + 1);
+                        }
+                        const dateTwoValue = dateOneValue.toISOString().slice(0,10);
+                        document.getElementById('span_lic_ado').innerHTML = ' ' + dateTwoValue.split('-').reverse().join('/');
+                    }
+                    const businessDays = [0, 1, 2, 3, 4];
+                    function calculateBusinessDays(startDate, numDays) {
+                        let date = new Date(startDate);
+                        let businessDaysCount = 0;
+                        while (businessDaysCount &lt; numDays) {
+                            date.setDate(date.getDate() + 1);
+                            if (businessDays.includes(date.getDay())) {
+                                businessDaysCount++;
+                            }
+                        }
+                        return date;
+                    }
+                </script>
+
+                <form action="/my/license/create" method="post" enctype="multipart/form-data"
+                      data-success_page="/thanks">
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="type_lic">Tipo de Licencia</label>
+                            <select name="type_lic" class="form-control mb-3 col-sm-12 col-md-6 col-lg-4"
+                                    id="type_lic" required="true" onchange="changeTypeLic(this.value)">
+                                <option value="">Seleccione un tipo...</option>
+                                <t t-foreach="list_type_lic" t-as="lic_t">
+                                    <option t-att-value="lic_t['name']">
+                                        <t t-esc="lic_t['det']"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+
+
+                        <div id="div_days_requested" class="d-none col-sm-12 col-md-6 col-lg-4">
+                            <label for="days_requested">Dias solicitados</label>
+                            <input class="form-control mb-3" name="days_requested"
+                                   id="days_requested" type="number"/>
+                        </div>
+                        <div id="div_date_resolution" class="d-none col-sm-12 col-md-6 col-lg-4">
+                            <label for="date_resolution">Fecha de la Resolución</label>
+                            <input class="form-control mb-3" name="date_resolution"
+                                   id="date_resolution" type="date" onchange="changeDateResolution()"/>
+                        </div>
+                        <div id="div_age" class="d-none col-sm-12 col-md-6 col-lg-4">
+                            <label for="age">Edad del niño/a</label>
+                            <input class="form-control mb-3" name="age" id="age" type="number"/>
+                        </div>
+                        <div id="div_date_nac" class="d-none col-sm-12 col-md-6 col-lg-4">
+                            <label for="date_nac">Fecha de Nacimiento</label>
+                            <input class="form-control mb-3" name="date_nac"
+                                   id="date_nac" type="date"/>
+                        </div>
+                        <div id="div_date_init" class="d-none col-sm-12 col-md-6 col-lg-4">
+                            <label for="date_init">Fecha de Inicio</label>
+                            <input class="form-control mb-3" name="date_init"
+                                   id="date_init" type="date"/>
+                        </div>
+                        <div id="div_date_birth" class="d-none col-sm-12 col-md-6 col-lg-4">
+                            <label for="date_birth">Fecha probable de Parto</label>
+                            <input class="form-control mb-3" name="date_birth"
+                                   id="date_birth" type="date"/>
+                        </div>
+                        <div id="div_date_event" class="d-none col-sm-12 col-md-6 col-lg-4">
+                            <label for="date_event">Fecha del Evento</label>
+                            <input class="form-control mb-3" name="date_event"
+                                   id="date_event" type="date"/>
+                        </div>
+                        <div id="div_date_death" class="d-none col-sm-12 col-md-6 col-lg-4">
+                            <label for="date_death">Fecha del Fallecimiento</label>
+                            <input class="form-control mb-3" name="date_death"
+                                   id="date_death" type="date"/>
+                        </div>
+                        <div id="div_date_marriage" class="d-none col-sm-12 col-md-6 col-lg-4">
+                            <label for="date_marriage">Fecha de Matrimonio por Civil o Iglesia</label>
+                            <input class="form-control mb-3" name="date_marriage"
+                                   id="date_marriage" type="date" onchange="changeDateMarriage()"/>
+                        </div>
+                        <div id="div_date_certificate" class="d-none col-sm-12 col-md-6 col-lg-4">
+                            <label for="date_certificate">Fecha del Certificado</label>
+                            <input class="form-control mb-3" name="date_certificate"
+                                   id="date_certificate" type="date"/>
+                        </div>
+
+
+                        <div class="col-12 ml-3 alert alert-info mt-3 d-none" role="alert" id="div-alert">
+                            <h4 class="alert-heading">Atención!</h4>
+                            <hr/>
+                            <p class="mb-0 d-none" id="lic_razones_gremiales">
+                                Documentación a presentar:<br/>
+                                • DESIGNACIÓN GREMIAL
+                            </p>
+                            <p class="mb-0 d-none" id="lic_examen">
+                                Documentación a presentar:<br/>
+                                • CONSTANCIA O CERTIFICADO QUE ACREDITE LA SOLICITUD
+                            </p>
+                            <p class="mb-0 d-none" id="lic_capacitacion">
+                                Documentación a presentar:<br/>
+                                • DOCUMENTACIÓN QUE ACREDITE LO SOLICITADO
+                            </p>
+                            <p class="mb-0 d-none" id="lic_enf_acc_familiar_acargo">
+                                Documentación a presentar:<br/>
+                                • CERTIFICADO MÉDICO DEL FAMILIAR ACREDITANDO LA NECESIDAD DEL CUIDADO DEL MISMO
+                            </p>
+                            <p class="mb-0 d-none" id="lic_matrimonio_dehijos">
+                                Documentación a presentar en la oficina de RRHH:<br/>
+                                • CERTIFICACIÓN EXPEDIDA POR EL REGISTRO DE ESTADO CIVIL
+                            </p>
+                            <p class="mb-0 d-none" id="lic_adopcion">
+                                Documentación a presentar:<br/>
+                                • RESOLUCIÓN JUDICIAL. <br/><br/>
+                                USTED DEBE VOLVER AL TRABAJO EL DÍA: <span id="span_lic_ado" class="font-weight-bold"/>
+                                (100 días después de la fecha de resolución)
+                            </p>
+                            <p class="mb-0 d-none" id="lic_maternidad">
+                                Documentación a presentar:<br/>
+                                • CERTIFICADO MÉDICO CON FECHA DE PROBABLE PARTO.
+                            </p>
+                            <p class="mb-0 d-none" id="nac_hijo">
+                                • CORRESPONDEN A UNA LICENCIA DE 2 (DOS) DÍAS HÁBILES, QUE PODRÁN SER UTILIZADOS DENTRO
+                                DE LOS 15 (QUINCE) DÍAS SIGUIENTES A LA FECHA DE NACIMIENTO.
+                            </p>
+                            <p class="mb-0 d-none" id="lic_evento_deportivo_nrentado">
+                                Documentación a presentar:
+                                <br/>
+                                • COPIA DE LA DOCUMENTACIÓN QUE ACREDITE LO SOLICITADO
+                            </p>
+                            <p class="mb-0 d-none" id="lic_fallecimiento_fam">
+                                Documentación a presentar:
+                                <br/>
+                                • COPIA DEL CERTIFICADO DE LA CASA FUNERARIA<br/><br/>
+                                DIAS CORRIDOS DE LICENCIA POR PARENTEZCO: <br/>
+                                • 6 DIAS CORRIDOS POR CÓNYUGE, PADRES E HIJOS <br/>
+                                • 4 DIAS CORRIDOS POR HERMANOS E HIJOS POLÍTICOS <br/>
+                                • 2 DIAS CORRIDOS POR ABUELOS, PADRES, HERMANOS E HIJOS POLÍTICOS <br/>
+                                • 1 DIA CORRIDOS POR TÍOS Y SOBRINOS
+
+                            </p>
+                            <p class="mb-0 d-none" id="lic_matrimonio">
+                                Documentación a presentar en la oficina de RRHH:<br/>
+                                • COMPROBANTE QUE ACREDITE SU SOLICITUD
+                                <br/><br/>
+                                USTED DEBE VOLVER AL TRABAJO EL DÍA: <span id="span_lic_mat" class="font-weight-bold"/>
+                            </p>
+                            <p class="mb-0 d-none" id="lic_razon_salud">
+                                Documentación a presentar:
+                                <br/>
+                                • CERTIFICADO MÉDICO
+                            </p>
+                        </div>
+
+                        <div id="div_attach" class="d-none col-12">
+                            <label for="attach">Adjunto</label>
+                            <input class="d-block p-0 h-auto col-sm-12 col-md-6 col-lg-4 mb-3" name="attach"
+                                   id="attach" type="file"/>
+                        </div>
+
+                        <input type="hidden" name="employee_id" id="employee_id"
+                               t-att-value="request.env.user.get_employee().id"/>
+                        <input type="hidden" name="input_days_available" id="input_days_available"
+                               t-att-value="days_available"/>
+                        <div class="col-12">
+                            <input class="d-none btn btn-success" type="submit" id="btn_submit"
+                                   name="submit" value="Solicitar"/>
+                        </div>
+
+                    </div>
+                </form>
+            </t>
+        </template>
+
+
+        <template id="licenses" name="Licencias">
+            <t t-call="portal.portal_layout">
+                <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Licencias</t>
+                </t>
+                <a class="btn btn-primary mb-2" href="/my/license/new">
+                    <i class="fa fa-plus mr-2"/>Solicitar Nueva
+                </a>
+                <t t-if="not licenses">
+                    <p>No existen licencias ni franquicias.</p>
+                </t>
+                <t t-if="licenses" t-call="portal.portal_table">
+                    <thead>
+                        <tr class="active">
+                            <th>Solicitada el dia</th>
+                            <th>Fecha de Inicio</th>
+                            <th>Tipo de licencia</th>
+                            <th>Estado</th>
+                            <th/>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="licenses" t-as="license">
+                            <tr>
+                                <td>
+                                    <t t-esc="license.create_date.strftime('%d/%m/%Y')"/>
+                                </td>
+                                <td>
+                                    <t t-if="license.fecha_inicio" t-esc="license.fecha_inicio.strftime('%d/%m/%Y')"/>
+                                </td>
+                                <td>
+                                    <t t-esc="license.tipo_lic_id.detalle"/>
+                                </td>
+                                <td>
+                                    <t t-set="t_badge"
+                                       t-value="'secondary' if license.state == 'borrador' else 'success' if license.state == 'revisar' else 'danger' if license.state == 'confirmada' else 'warning'"/>
+                                    <span t-att-class="'badge badge-'+t_badge" t-field="license.state"/>
+                                </td>
+                                <td>
+                                    <a t-att-href="'/my/license/'+str(license.id)" class="btn btn-info"
+                                       style="font-size:12px;">Ver
+                                    </a>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </t>
+            </t>
+        </template>
+
+
+        <template id="license" name="Licencia" inherit_id="portal.portal_sidebar" primary="True">
+            <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+                <table class="table mt-4" style="background-color: #fff;">
+                    <tr>
+                        <td class="font-weight-bold" style="width:15%;">Empleado:</td>
+                        <td style="width:35%;">
+                            <t t-esc="license.base_form_id.employee_id.name"/>
+                        </td>
+                        <td class="font-weight-bold" style="width:15%;">Departamento:</td>
+                        <td style="width:35%;">
+                            <t t-esc="license.departament_id.name"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-weight-bold" style="width:15%;">Tipo de licencia:</td>
+                        <td style="width:35%;">
+                            <t t-esc="license.tipo_lic_id.detalle"/>
+                        </td>
+                        <td class="font-weight-bold" style="width:15%;">Estado:</td>
+                        <td style="width:35%;">
+                            <t t-set="t_badge"
+                               t-value="'secondary' if license.state == 'borrador' else 'success' if license.state == 'revisar' else 'danger' if license.state == 'confirmada' else 'warning'"/>
+                            <span t-att-class="'badge badge-'+t_badge" t-field="license.state"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-weight-bold" style="width:15%;">Fecha de Creación:</td>
+                        <td style="width:35%;">
+                            <t t-esc="license.create_date.strftime('%d/%m/%Y')"/>
+                        </td>
+                        <td class="font-weight-bold" style="width:15%;">Fecha de Inicio:</td>
+                        <td style="width:35%;">
+                            <t t-if="license.fecha_inicio" t-esc="license.fecha_inicio.strftime('%d/%m/%Y')"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-weight-bold" style="width:15%;">Dias solicitados:</td>
+                        <td style="width:35%;">
+                            <t t-esc="license.dias_solicitados"/>
+                        </td>
+                        <td class="font-weight-bold" style="width:15%;">Adjunto:</td>
+                        <td style="width:35%;">
+                            <t t-foreach="license.attach_ids" t-as="attach">
+                                 <a t-att-href="'/web/content/'+str(attach.id)+'?download=true'">
+                                     <t t-esc="attach.name"/>
+                                 </a><br/>
+                            </t>
+                        </td>
+                    </tr>
+                    <tr t-if="license.fecha_reingreso">
+                        <td class="font-weight-bold" style="width:15%;">Fecha de Fin de Licencia:</td>
+                        <td colspan="3">
+                            <t t-if="license.fecha_reingreso" t-esc="license.fecha_reingreso.strftime('%d/%m/%Y')"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-weight-bold" style="width:15%;">Observaciones:</td>
+                        <td colspan="3">
+                            <t t-esc="license.descripcion or license.observaciones"/>
+                        </td>
+                    </tr>
+                </table>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

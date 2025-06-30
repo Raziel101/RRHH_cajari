@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+
+        <template id="holidays" name="Ausencias">
+            <t t-call="portal.portal_layout">
+                <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Ausencias</t>
+                </t>
+                <t t-if="not holidays">
+                    <p>No existen ausencias.</p>
+                </t>
+                <t t-if="holidays" t-call="portal.portal_table">
+                    <thead>
+                        <tr class="active">
+                            <th>Fecha</th>
+                            <th>¿Aviso?</th>
+                            <th>Motivo</th>
+                            <th>Estado</th>
+                            <th/>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="holidays" t-as="holiday">
+                            <tr>
+                                <td>
+                                    <t t-esc="holiday.create_date.strftime('%d/%m/%Y')"/>
+                                </td>
+                                <td>
+                                    <t t-esc="'Si' if holiday.aviso else 'No'"/>
+                                </td>
+                                <td>
+                                    <span t-field="holiday.name"/>
+                                </td>
+                                <td>
+                                    <t t-set="t_badge" t-value="'secondary' if holiday.state == 'borrador' else 'success' if holiday.state == 'revisar' else 'danger' if holiday.state == 'confirmada' else 'warning'"/>
+                                    <span t-att-class="'badge badge-'+t_badge" t-field="holiday.state"/>
+                                </td>
+                                <td>
+                                    <a t-att-href="'/my/holiday/'+str(holiday.id)" class="btn btn-info"
+                                       style="font-size:12px;">Ver</a>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </t>
+            </t>
+        </template>
+
+
+        <template id="holiday" name="Ausencia" inherit_id="portal.portal_sidebar" primary="True">
+            <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+                <table class="table mt-4" style="background-color: #fff;">
+                    <tr>
+                        <td class="font-weight-bold" style="width:15%;">Empleado:</td>
+                        <td style="width:35%;"><t t-esc="holiday.employee_id.name"/></td>
+                        <td class="font-weight-bold" style="width:15%;">Departamento:</td>
+                        <td style="width:35%;"><t t-esc="holiday.area_id.name"/></td>
+                    </tr>
+                    <tr>
+                        <td class="font-weight-bold" style="width:15%;">Tipo de contrato:</td>
+                        <td style="width:35%;"><t t-esc="holiday.tipo_contrato_id.detalle"/></td>
+                        <td/><td/>
+                    </tr>
+                    <tr>
+                        <td class="font-weight-bold" style="width:15%;">Fecha de ausencia:</td>
+                        <td style="width:35%;"><t t-if="holiday.fecha_inicio" t-esc="holiday.fecha_inicio.strftime('%d/%m/%Y')"/></td>
+                        <td class="font-weight-bold" style="width:15%;">Aviso:</td>
+                        <td style="width:35%;"><t t-esc="'Si' if holiday.aviso else 'No'"/></td>
+                    </tr>
+                    <tr>
+                        <td class="font-weight-bold" style="width:15%;">Medio de aviso:</td>
+                        <td style="width:35%;"><t t-esc="holiday.ing_medio_aviso_id.name"/></td>
+                        <td class="font-weight-bold" style="width:15%;">Estado:</td>
+                        <td style="width:35%;">
+                             <t t-set="t_badge" t-value="'secondary' if holiday.state == 'borrador' else 'success' if holiday.state == 'revisar' else 'danger' if holiday.state == 'confirmada' else 'warning'"/>
+                            <span t-att-class="'badge badge-'+t_badge" t-field="holiday.state"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-weight-bold" style="width:15%;">Tipo de ausencia:</td>
+                        <td style="width:35%;"><t t-esc="holiday.motivo_ausencia_id.name"/></td>
+                        <td class="font-weight-bold" style="width:15%;">Motivo/Descripción:</td>
+                        <td style="width:35%;"><t t-esc="holiday.name"/></td>
+                    </tr>
+                </table>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_solicitud_form" model="ir.ui.view">
+            <field name="name">ing.rrhh.solicitudes.solicitud.form</field>
+            <field name="model">ing.rrhh.solicitudes.solicitud</field>
+            <field name="inherit_id" ref="ing_rrhh_solicitudes.view_solicitud_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="after">
+                    <field name="view_alert_create_portal" invisible="1"/>
+                    <div class="alert alert-info text-center" role="alert"
+                         attrs="{'invisible': [('view_alert_create_portal',  '=', False)]}">
+                        <strong>IMPORTANTE!</strong> esta persona tiene adelantos 'Por autorizar'.
+                    </div>
+                </xpath>
+
+                <xpath expr="//header" position="replace">
+                    <header>
+                        <field name="view_request_admin" invisible="1"/>
+                        <button string="Autorizar" name="action_to_draft" type="object" class="btn-primary"
+                                attrs="{'invisible': ['|',('state',  'not in', ['create_portal']),('view_request_admin','=',False)]}"
+                                groups="ing_rrhh_solicitudes.group_ing_rrhh_solicitud_admin"/>
+
+                        <button string="Confirmar" name="confirmar" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'in', ['create_portal','confirmada','cancelada'])]}"
+                                groups="ing_rrhh_solicitudes.group_ing_rrhh_solicitud_admin_rrhh"/>
+
+                        <button string="Cancelar" name="cancelar" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'in', ['create_portal','cancelada','borrador'])]}"
+                                groups="ing_rrhh_solicitudes.group_ing_rrhh_solicitud_admin_rrhh"/>
+
+                        <button string="Volver a borrador" name="volver_borrador" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state',  'in', ['create_portal','confirmada','borrador'])]}"
+                                groups="ing_rrhh_solicitudes.group_ing_rrhh_solicitud_admin_rrhh"/>
+
+                        <button string="A revisar" name="a_revisar" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state',  'in', ['create_portal','borrador','cancelada'])]}"
+                                groups="ing_rrhh_solicitudes.group_ing_rrhh_solicitud_admin_rrhh"/>
+
+                        <field name="state"  invisible="0" widget="statusbar" statusbar_visible="borrador,confirmada,revisar,cancelada"/>
+                    </header>
+                </xpath>
+            </field>
+        </record>
+
+        <!--         ACTION-->
+        <record model="ir.actions.act_window" id="ing_solicitud_create_portal_list_action">
+            <field name="name">Adelantos (Por Autorizar)</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ing.rrhh.solicitudes.solicitud</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{"search_default_filter_fecha":1, "create":0}</field>
+            <field name="domain">[('state','in',['create_portal'])]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Gestiónar <strong>Adelantos</strong>.
+                </p>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="ing_rrhh_solicitudes.ing_solicitud_list_action">
+            <field name="domain">[('state','not in',['create_portal'])]</field>
+        </record>
+
+        <!-- MENU -->
+        <menuitem id="ing_solicitud_create_portal_submenu" name="Adelantos (Por Autorizar)"
+                  action="ing_solicitud_create_portal_list_action" sequence="5"
+                  groups="ing_rrhh_solicitudes.group_ing_rrhh_solicitud_admin"
+                  parent="ing_rrhh_solicitudes.ing_rrhh_adelantos_admin_submenu"/>
+
+    </data>
+</odoo>

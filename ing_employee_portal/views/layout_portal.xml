@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <template id="portal_main_menus" inherit_id="portal.portal_my_home">
+            <xpath expr="//h3" position="replace">
+                <h3>Menú</h3>
+            </xpath>
+
+            <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Datos Personales</t>
+                    <t t-set="url" t-value="'/my/personal-data'"/>
+                    <t t-set="link_follow" t-value="true"/>
+                    <t t-set="icon_class" t-value="'fa fa-user'"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Ausencias</t>
+                    <t t-set="url" t-value="'/my/holidays'"/>
+                    <t t-set="count" t-value="holidays_count or '0'"/>
+                    <t t-set="icon_class" t-value="'fa fa-user-times'"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Adelantos</t>
+                    <t t-set="url" t-value="'/my/advances'"/>
+                    <t t-set="count" t-value="advances_count or '0'"/>
+                    <t t-set="icon_class" t-value="'fa fa-handshake-o'"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Subsidios</t>
+                    <t t-set="url" t-value="'/my/subsidies'"/>
+                    <t t-set="count" t-value="subsidies_count or '0'"/>
+                    <t t-set="icon_class" t-value="'fa fa-usd'"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Licencias</t>
+                    <t t-set="url" t-value="'/my/licenses'"/>
+                    <t t-set="count" t-value="licenses_count or '0'"/>
+                    <t t-set="icon_class" t-value="'fa fa-id-card-o'"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Horas Sev.</t>
+                    <t t-set="url" t-value="'/my/hours'"/>
+                    <t t-set="count" t-value="hours_count or '0'"/>
+                    <t t-set="icon_class" t-value="'fa fa-clock-o'"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Recibo de Haberes</t>
+                    <t t-set="url" t-value="'https://sueldos.chajari.gob.ar/web/login?debug=1redirect=http%3A%2F%2F200.58.105.161%3A8074%2Fweb%3F'"/>
+                    <t t-set="link_follow" t-value="true"/>
+                    <t t-set="target" t-value="'_blank'"/>
+                    <t t-set="icon_class" t-value="'fa fa-envelope-open-o'"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Escala Salarial</t>
+                    <t t-set="url" t-value="'/my/scales'"/>
+                    <t t-set="count" t-value="scales_count or '0'"/>
+                    <t t-set="icon_class" t-value="'fa fa-balance-scale'"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="title">Correo Electronico</t>
+                    <t t-set="url" t-value="'https://webmail.chajari.gob.ar/'"/>
+                    <t t-set="link_follow" t-value="true"/>
+                    <t t-set="target" t-value="'_blank'"/>
+                    <t t-set="icon_class" t-value="'fa fa-envelope-o'"/>
+                </t>
+                <t t-call="portal.portal_docs_entry">
+                        <t t-set="title">Guía de Trámites</t>
+                        <t t-set="url" t-value="'/my/guides'"/>
+                        <t t-set="count" t-value="guides_count or '0'"/>
+                        <t t-set="icon_class" t-value="'fa fa-address-book-o'"/>
+                    </t>
+            </xpath>
+        </template>
+
+        <template id="inherit_portal_breadcrumbs" inherit_id="portal.portal_breadcrumbs">
+            <xpath expr="//ol" position="inside">
+                <li t-if="page_name == 'my_holidays'" class="breadcrumb-item ml-1"><a href="/my/holidays">Ausencias</a></li>
+                <li t-if="page_name == 'my_advances'" class="breadcrumb-item ml-1"><a href="/my/advances">Adelantos</a></li>
+                <li t-if="page_name == 'my_subsidies'" class="breadcrumb-item ml-1"><a href="/my/subsidies">Subsidios</a></li>
+                <li t-if="page_name == 'my_licenses'" class="breadcrumb-item ml-1"><a href="/my/licenses">Licencias</a></li>
+                <li t-if="page_name == 'my_hours'" class="breadcrumb-item ml-1"><a href="/my/hours">Horas Sev.</a></li>
+                <li t-if="page_name == 'my_scales'" class="breadcrumb-item ml-1"><a href="/my/scales">Escala Salarial</a></li>
+                <li t-if="page_name == 'my_guides'" class="breadcrumb-item ml-1"><a href="/my/guides">Guía de Trámites</a></li>
+            </xpath>
+        </template>
+
+        <template id="portal_icons_menus" inherit_id="portal.portal_docs_entry">
+            <xpath expr="//a" position="inside">
+                <t t-elif="link_follow">
+                    <i style="font-size: 20px;" class="fa fa-angle-right"/>
+                </t>
+            </xpath>
+            <xpath expr="//a/t[1]" position="replace">
+                <div class="">
+                    <div class="d-inline-block" style="width:20px;"><i t-att-class="icon_class"/></div>
+                    <div class="d-inline"><t t-esc="title"/></div>
+                </div>
+            </xpath>
+            <xpath expr="//a" position="attributes">
+                <attribute name="t-att-target">target or '_self'</attribute>
+            </xpath>
+        </template>
+
+        <!--<template id="web_frontend_layout" inherit_id="web.frontend_layout">
+            <xpath expr="//img" position="replace">
+                <img src="/ing_employee_portal/static/src/img/logo_portal.png" alt="Logo"
+                     style="height:60px; margin-left:58px;"/>
+            </xpath>
+        </template>-->
+
+        <template id="portal_table_inherit" inherit_id="portal.portal_table">
+            <xpath expr="//div[hasclass('o_portal_pager')]" position="attributes">
+                <attribute name="class" separator=" " add="mt-3"/>
+            </xpath>
+        </template>
+
+        <template id="portal_pager_inherit" inherit_id="portal.pager">
+            <xpath expr="//ul" position="attributes">
+                <attribute name="t-attf-class" separator=" " add="justify-content-center"/>
+            </xpath>
+        </template>
+
+        <template id="portal_frontend_layout" inherit_id="portal.frontend_layout">
+            <xpath expr="//footer" position="replace">
+                <footer class="o_footer bc-blue">
+                    <div class="container mt16 mb16" id="footer">
+                        <div class="px-0 row justify-content-between align-items-center"
+                             style="margin: auto;">
+                            <div class="col-md-1 col-lg-1 col-sm-4 p-0" id="img-footer">
+                                <img src="/ing_employee_portal/static/src/img/Escudo.png" width="60" alt=""/>
+                            </div>
+                            <div class="col-md-6 col-lg-8 col-sm-8 px-0 text-light" style="font-size:12px;"
+                                 id="description-footer">
+                                <strong class="footer-p f-div-p1" style="letter-spacing: 2px;">MUNICIPALIDAD DE CHAJARÍ
+                                </strong>
+                                <p class="footer-p mb-0 f-div-p1">Salvarredy 1430 (3228) Chajarí, Entre Rios</p>
+                                <p class="footer-p mb-0 f-div-p1">+54 (03456) 420150 / 420135</p>
+                            </div>
+                            <div class="col-md-4 col-lg-3 col-sm-12 px-0 text-end div_iconos d-flex justify-content-between"
+                                 id="div-redes-icons">
+                                <div class="w-25 d-flex align-items-center justify-content-center">
+                                    <a class="w-25 text-decoration-none"
+                                       href="https://www.facebook.com/gobiernodechajari/" target="_blank">
+                                        <svg class="d-block" style="height:35px; width:35px;">
+                                            <defs>
+                                                <style>.cls-1{fill:#fff;}</style>
+                                            </defs>
+                                            <g id="Capa_2">
+                                                <g id="Capa_1-2">
+                                                    <path class="cls-1"
+                                                          d="M3.07,11.51H.55c-.4,0-.54-.12-.54-.51C0,10,0,8.91,0,7.86c0-.39.14-.51.55-.51H3.07V7c0-.94,0-1.89.06-2.83A4.5,4.5,0,0,1,7.54,0c1,0,2,0,3,0,.33,0,.47.14.47.47q0,1.49,0,3c0,.34-.14.47-.5.48l-2,0C7.7,4,7.39,4.26,7.38,5s0,1.48,0,2.24l.28,0h2.56c.56,0,.68.12.68.67v2.94c0,.46-.11.57-.57.57H7.38v8.14c0,.7-.08.78-.79.78H3.72c-.53,0-.65-.12-.65-.64V11.51Z"/>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </a>
+                                </div>
+
+                               <div class="w-25 d-flex align-items-center justify-content-center">
+                                <a class="w-25 text-decoration-none"
+                                   href="https://www.instagram.com/gobiernodechajari/" target="_blank">
+                                    <svg class="d-block" style="height:35px; width:35px;">
+                                        <defs>
+                                            <style>.cls-1{fill:#fff;}</style>
+                                        </defs>
+                                        <g id="Capa_2">
+                                            <g id="Capa_1-2">
+                                                <path class="cls-1"
+                                                      d="M15.35,20.52H5.18l-.2,0a5,5,0,0,1-1.6-.41A5.44,5.44,0,0,1,0,14.92C0,11.81,0,8.71,0,5.6A5.27,5.27,0,0,1,.72,2.86,5.45,5.45,0,0,1,5.67,0c3.06,0,6.13,0,9.19,0a5.56,5.56,0,0,1,5.49,4.22c.09.31.11.63.17.94V15.35c0,.22-.05.43-.1.65a5.51,5.51,0,0,1-4.13,4.35C16,20.43,15.67,20.46,15.35,20.52ZM4.66,10.24a5.61,5.61,0,1,0,5.62-5.59A5.63,5.63,0,0,0,4.66,10.24ZM16,6a1.66,1.66,0,1,0-1.66-1.65A1.66,1.66,0,0,0,16,6Z"/>
+                                                <path class="cls-1"
+                                                      d="M10.27,14.67a4.41,4.41,0,1,1,4.4-4.41A4.42,4.42,0,0,1,10.27,14.67Z"/>
+                                                <path class="cls-1"
+                                                      d="M16.46,4.31a.47.47,0,0,1-.44.46.46.46,0,0,1-.46-.45A.46.46,0,0,1,16,3.87.47.47,0,0,1,16.46,4.31Z"/>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                </a></div>
+                                <div class="w-25 d-flex align-items-center justify-content-center">
+                                <a class="w-25 text-decoration-none" target="_blank"
+                                   href="https://twitter.com/gobiernochajari">
+                                    <svg class="d-block" style="height:35px; width:35px;">
+                                        <defs>
+                                            <style>.cls-1{fill:#fff;}</style>
+                                        </defs>
+                                        <g id="Capa_2">
+                                            <g id="Capa_1-2">
+                                                <path class="cls-1"
+                                                      d="M0,17.2a10.18,10.18,0,0,0,7.07-2.06,5,5,0,0,1-4.54-3.42H4.64v-.09A4.91,4.91,0,0,1,1.44,9.12a4.62,4.62,0,0,1-.57-2.3A5.12,5.12,0,0,0,3,7.39C.92,5.58.28,3.47,1.55.89A13.84,13.84,0,0,0,11.55,6c0-.26-.05-.47-.07-.69a4.86,4.86,0,0,1,8.2-3.94.46.46,0,0,0,.5.14,11,11,0,0,0,2.51-1L23,.38A5.21,5.21,0,0,1,21,3l.85-.16c.29-.07.58-.15.86-.24s.56-.2.84-.3l.06.06c-.36.44-.7.89-1.09,1.29a13.26,13.26,0,0,1-1.12,1,.48.48,0,0,0-.21.43,13.83,13.83,0,0,1-6.63,12.26,13.17,13.17,0,0,1-8,1.91,13.62,13.62,0,0,1-6.35-2Z"/>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                </a></div>
+                                <div class="w-25 d-flex align-items-center justify-content-center">
+                                <a class="w-25 text-decoration-none" target="_blank"
+                                   href="https://www.tiktok.com/@gobiernodechajari">
+                                    <svg class="d-block" style="height:35px; width:35px;">
+                                        <defs>
+                                            <style>.cls-1{fill:#fff;}</style>
+                                        </defs>
+                                        <g id="Capa_2">
+                                            <g id="Capa_1-2">
+                                                <path class="cls-1"
+                                                      d="M5.3,17.46c-.39-.06-.78-.09-1.16-.18A5.38,5.38,0,0,1,4.56,6.72a5.09,5.09,0,0,1,1.71,0V9.59l-.42-.08A2.57,2.57,0,1,0,8,12.56a3.67,3.67,0,0,0,0-.66C8,8,8.05,4.14,8.05.25c0-.08,0-.17,0-.25h2.83a4.39,4.39,0,0,0,4.26,4.37c.15,0,.16.06.16.18V7.21a7.31,7.31,0,0,1-4.42-1.49v.21c0,2,0,4,0,6a7.55,7.55,0,0,1-.05.83,5.4,5.4,0,0,1-4.25,4.58c-.32.06-.65.09-1,.14Z"/>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                </a></div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </xpath>
+        </template>
+
+        <template id="portal_layout_inherit" inherit_id="portal.portal_layout">
+            <xpath expr="//div[hasclass('o_portal_wrap')]/div/t/div/div[1]" position="attributes">
+                <attribute name="t-attf-class">col-sm-12 col-md-5 col-lg-4</attribute>
+            </xpath>
+
+            <xpath expr="//div[@id='o_my_sidebar']" position="before">
+                <div class="o_portal_docs_info col-sm-12 col-md-4 col-lg-3 mt-3" style="">
+                    <t t-set="employee" t-value="request.env.user.get_employee()"/>
+                    <div class="col">
+                        <div class="row text-center">
+                            <div class="col-sm-12">
+                                <div style="margin:0 auto; border-radius:50%; overflow:hidden; width:100px; height:100px;">
+                                    <img id="image_element" alt="" style="width: 100%;"
+                                         t-att-src="'' if employee.image_1920 else '/ing_employee_portal/static/src/img/sin_photo.jpg'"/>
+                                    <span style="display:none;" t-if="employee.image_1920" id="photo"
+                                          t-esc="employee.image_1920"/>
+                                    <script>
+                                        var binary_signature = document.getElementById('photo');
+                                        var _image = document.getElementById('image_element');
+                                        if (binary_signature){
+                                            _image.src = 'data:image/jpeg;base64,' + binary_signature.innerHTML;
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <h4>
+                                    <t t-esc="employee.name"/>
+                                </h4>
+                                <h6>
+                                    <t t-esc="employee.get_job()"/>
+                                </h6>
+                                <h6>
+                                    <span t-if="employee.category_ids" t-field="employee.category_ids[0].name"
+                                          class="badge badge-primary"/>
+                                    <t t-esc="employee.tipo_contrato_id.detalle"/>
+                                </h6>
+                                <h6>
+                                    <t t-esc="employee.department_id.name"/>
+                                </h6>
+                                <h6>
+                                    <t t-esc="employee.work_email"/>
+                                </h6>
+                                <h6>
+                                    <t t-esc="employee.work_phone"/>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+
+            <xpath expr="//div[@id='o_my_sidebar']" position="replace">
+                <div class="o_portal_my_security mt-3 col-sm-12 col-md-3">
+                    <h4>Seguridad de la Cuenta</h4>
+                    <hr class="mt-1 mb-1"/>
+                    <a href="/my/security"><i class="fa fa-pencil mx-1"/>Cambiar contraseña</a>
+                </div>
+            </xpath>
+        </template>
+
+
+        <template id="error_template">
+            <t t-call="web.basic_layout">
+                <div class="alert alert-danger mt-5" role="alert">
+                    <h4 class="alert-heading">Error!</h4>
+                    <hr/>
+                    <p class="mb-0"><span t-esc="message"/></p><br/>
+                    <a t-if="a_href" t-att-href="a_href" class="btn btn-danger"><t t-esc="a_name or 'Click aca'"/></a>
+                </div>
+            </t>
+        </template>
+
+
+        <template id="portal_my_security" inherit_id="portal.portal_my_security">
+            <xpath expr="//label[@for='current']" position="replace">
+                <label for="current">Contraseña:</label>
+            </xpath>
+            <xpath expr="//label[@for='new']" position="replace">
+                <label for="new">Nueva Contraseña:</label>
+            </xpath>
+            <xpath expr="//label[@for='new2']" position="replace">
+                <label for="new2">Verificar Nueva Contraseña:</label>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

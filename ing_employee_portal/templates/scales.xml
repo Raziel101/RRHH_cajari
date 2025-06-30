@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+
+        <template id="scales" name="Escala salarial">
+            <t t-call="portal.portal_layout">
+                <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Escala Salarial</t>
+                </t>
+                <t t-if="not scales">
+                    <p>No existen escalas salariales.</p>
+                </t>
+                <t t-foreach="scales" t-as="scale">
+                     <span class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
+                        <a t-att-href="'/my/scale/'+str(scale.id)" class="" style="color:black;">
+                            <t t-esc="scale.name"/>
+                        </a>
+                    </span>
+                </t>
+                <div t-if="pager" class="o_portal_pager text-center mt-3">
+                    <t t-call="portal.pager"/>
+                </div>
+            </t>
+        </template>
+
+
+        <template id="scale" name="Escala" inherit_id="portal.portal_sidebar" primary="True">
+            <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+                <table class="table mt-4" style="background-color: #fff;">
+                    <tr>
+                        <td class="font-weight-bold" style="width:15%;">Titulo:</td>
+                        <td style="">
+                            <t t-esc="scale.name"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="" style="">
+                            <span t-field="scale.description"/>
+                        </td>
+                    </tr>
+                </table>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

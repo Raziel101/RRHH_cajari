@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="ing_procedure_search" model="ir.ui.view">
+            <field name="name">ing.procedure.tree</field>
+            <field name="model">ing.procedure</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="area_id"/>
+                    <field name="description"/>
+                    <group expand="0" string="Agrupar por">
+                        <filter name="area_id" string="Area" context="{'group_by':'area_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="ing_procedure_tree" model="ir.ui.view">
+            <field name="name">ing.procedure.tree</field>
+            <field name="model">ing.procedure</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="area_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="ing_procedure_form" model="ir.ui.view">
+            <field name="name">ing.procedure.form</field>
+            <field name="model">ing.procedure</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                            </group>
+                            <group>
+                                <field name="area_id"/>
+                            </group>
+                        </group>
+                        <label for="description"/>
+                        <field name="description"/>
+                        <notebook>
+                            <page string="Adjuntos">
+                                <field name="attach_ids"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="ing_procedure_action">
+            <field name="name">Guias de Personal</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ing.procedure</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <record id="area_wages" model="ing.area">
+            <field name="name">Salarios</field>
+        </record>
+        <record id="area_staff" model="ing.area">
+            <field name="name">Personal</field>
+        </record>
+
+    </data>
+</odoo>

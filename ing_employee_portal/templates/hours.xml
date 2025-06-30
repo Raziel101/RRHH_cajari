@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+
+        <template id="hours" name="Horas Sev.">
+            <t t-call="portal.portal_layout">
+                <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Horas Sev.</t>
+                </t>
+                <t t-if="not hours">
+                    <p>No existen horas sev..</p>
+                </t>
+                <p class="alert alert-primary" style="padding-left:12px;">
+                    Cantidad de Horas Sev Disponibles:
+                    <span class="font-weight-bold" t-esc="available_hours" t-options="{'widget': 'float_time'}"/>
+                </p>
+                <t t-if="hours" t-call="portal.portal_table">
+                    <thead>
+                        <tr class="active">
+                            <th>Solicitada el dia</th>
+                            <th>Dias Solicitados</th>
+                            <th>Tipo de licencia</th>
+                            <th>Estado</th>
+                            <th/>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="hours" t-as="hour">
+                            <tr>
+                                <td>
+                                    <t t-esc="hour.create_date.strftime('%d/%m/%Y')"/>
+                                </td>
+                                <td>
+                                    <t t-esc="hour.dias_solicitados"/>
+                                </td>
+                                <td>
+                                    <span t-field="hour.tipo_lic_id.detalle"/>
+                                </td>
+                                <td>
+                                    <t t-set="t_badge" t-value="'secondary' if hour.state == 'borrador' else 'success' if hour.state == 'revisar' else 'danger' if hour.state == 'confirmada' else 'warning'"/>
+                                    <span t-att-class="'badge badge-'+t_badge" t-field="hour.state"/>
+                                </td>
+                                <td>
+                                    <a t-att-href="'/my/hour/'+str(hour.id)" class="btn btn-info"
+                                       style="font-size:12px;">Ver</a>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </t>
+            </t>
+        </template>
+
+
+        <template id="hour" name="Hora Sev." inherit_id="portal.portal_sidebar" primary="True">
+            <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+                <table class="table mt-4" style="background-color: #fff;">
+                    <tr>
+                        <td class="font-weight-bold" style="width:15%;">Empleado:</td>
+                        <td style="width:35%;"><t t-esc="hour.base_form_id.employee_id.name"/></td>
+                        <td class="font-weight-bold" style="width:15%;">Departamento:</td>
+                        <td style="width:35%;"><t t-esc="hour.departament_id.name"/></td>
+                    </tr>
+                    <tr>
+                        <td class="font-weight-bold" style="width:15%;">Tipo de licencia:</td>
+                        <td style="width:35%;"><t t-esc="hour.tipo_lic_id.detalle"/></td>
+                        <td/><td/>
+                    </tr>
+                    <tr>
+                        <td class="font-weight-bold" style="width:15%;">Fecha de creación:</td>
+                        <td style="width:35%;"><t t-esc="hour.create_date.strftime('%d/%m/%Y')"/></td>
+                        <td class="font-weight-bold" style="width:15%;">Dias solicitados:</td>
+                        <td style="width:35%;"><t t-esc="hour.dias_solicitados"/></td>
+                    </tr>
+                    <tr>
+                        <td class="font-weight-bold" style="width:15%;">Fecha de inicio:</td>
+                        <td style="width:35%;"><t t-if="hour.fecha_inicio" t-esc="hour.fecha_inicio.strftime('%d/%m/%Y')"/></td>
+                        <td class="font-weight-bold" style="width:15%;">Estado:</td>
+                        <td style="width:35%;">
+                             <t t-set="t_badge" t-value="'secondary' if hour.state == 'borrador' else 'success' if hour.state == 'revisar' else 'danger' if hour.state == 'confirmada' else 'warning'"/>
+                            <span t-att-class="'badge badge-'+t_badge" t-field="hour.state"/>
+                        </td>
+                    </tr>
+                </table>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

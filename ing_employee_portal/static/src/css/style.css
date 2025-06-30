@@ -1,0 +1,55 @@
+body {
+    font-family: 'Encode Sans';
+}
+
+.bc-orange {
+    background-color: #F07D00;
+    border-color: #F07D00;
+}
+
+#span_portal {
+    color: #273476;
+    font-size: 45px;
+    font-weight: bold;
+}
+
+#span_workers {
+    color: #F07D00;
+    font-size: 45px;
+    font-weight: bold;
+}
+
+#btn-submit:hover {
+    background-color: #273476;
+}
+
+.bc-blue {
+    background-color: #273476;
+    border-color: #273476;
+}
+
+@media (width < 768px){
+    #div-redes-icons {
+        margin-top: 2rem;
+    }
+    #img-footer img{
+        margin: 0 auto;
+        display: block;
+    }
+}
+
+
+@media (width < 576px){
+    #img-footer {
+        display: flex;
+        justify-content: center;
+    }
+    #description-footer {
+        text-align: center;
+        margin-top: 1rem;
+    }
+    .o_portal_my_security {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}

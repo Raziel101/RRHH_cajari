@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+ing_area_user,IngAreaUser,model_ing_area,base.group_user,1,0,0,0
+ing_licencias_encargado,IngLicenciasEncargado,ing_licencias.model_ing_licencias_general,base.group_user,0,1,0,0
+ing_procedure_user,IngProcedureUser,model_ing_procedure,base.group_user,1,0,0,0
+ing_procedure_admin,IngProcedureAdmin,model_ing_procedure,ing_ausencias.group_ing_rrhh_ausencias_admin_rrhh,1,1,1,1

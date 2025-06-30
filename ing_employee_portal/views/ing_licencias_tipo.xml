@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="view_tipolic_tree_inherit" model="ir.ui.view">
+            <field name="name">ing.licencias.tipo.tree</field>
+            <field name="model">ing.licencias.tipo</field>
+            <field name="inherit_id" ref="ing_licencias.view_tipolic_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="inside">
+                    <field name="view_in_portal" widget="boolean_toggle"
+                           groups="ing_licencias.group_ing_rrhh_licencias_admin_rrhh"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_tipolic_form_inherit" model="ir.ui.view">
+            <field name="name">ing.licencias.tipo.form</field>
+            <field name="model">ing.licencias.tipo</field>
+            <field name="inherit_id" ref="ing_licencias.view_tipolic_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='dias_permitidos_mes']" position="after">
+                    <field name="view_in_portal" widget="boolean_toggle"
+                           groups="ing_licencias.group_ing_rrhh_licencias_admin_rrhh"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

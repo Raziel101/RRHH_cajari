@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+
+        <template id="personal_data" inherit_id="portal.portal_my_details">
+            <xpath expr="//div[@class='row o_portal_details']" position="replace">
+                <div class="row o_portal_details">
+                    <t t-set="employee" t-value="request.env.user.get_employee()"/>
+                    <div class="col">
+                        <div class="row mt-5 mb-5">
+                            <div class="col-sm-12 col-md-4">
+                                <div style="border-radius: 50%; overflow: hidden; width: 150px; height: 150px;">
+                                    <img id="image_element" alt="" style="width: 100%;"
+                                         t-att-src="'' if employee.image_1920 else '/ing_employee_portal/static/src/img/sin_photo.jpg'"/>
+                                    <span style="display:none;" t-if="employee.image_1920" id="photo"
+                                          t-esc="employee.image_1920"/>
+                                    <script>
+                                        var binary_signature = document.getElementById('photo').innerHTML;
+                                        var _image = document.getElementById('image_element');
+                                        _image.src = 'data:image/jpeg;base64,' + binary_signature
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-8">
+                                <h2><t t-esc="employee.name"/></h2>
+                                <h4><t t-esc="employee.get_job()"/></h4>
+                                 <h6>
+                                     <span t-if="employee.category_ids" t-field="employee.category_ids[0].name"
+                                        class="badge badge-primary"/>
+                                     <t t-esc="employee.tipo_contrato_id.detalle"/>
+                                 </h6>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pl-5 pr-5">
+                                <div t-attf-class="form-group">
+                                    <label class="col-form-label" for="birthday">Fecha de Nacimiento</label>
+                                    <input type="date" name="birthday" t-att-value="employee.birthday"
+                                           t-attf-class="form-control" readonly="1"/>
+                                </div>
+                                <div t-attf-class="form-group">
+                                    <label class="col-form-label" for="cuit">Cuit</label>
+                                    <input type="text" name="cuit" t-att-value="employee.cuit"
+                                           t-attf-class="form-control" readonly="1"/>
+                                </div>
+                                <div t-attf-class="form-group">
+                                    <label class="col-form-label" for="work_phone">Teléfono</label>
+                                    <input type="text" name="work_phone" t-att-value="employee.work_phone"
+                                           t-attf-class="form-control" title="Cargar sin 0 y sin 15"/>
+                                </div>
+                            </div>
+                            <div class="col pl-5 pr-5" style="border-left:1px solid gray; border-right:1px solid gray;">
+                                <div t-attf-class="form-group">
+                                    <label class="col-form-label" for="domic_real">Direccion Real</label>
+                                    <input type="text" name="domic_real" t-att-value="employee.domic_real"
+                                           t-attf-class="form-control"/>
+                                </div>
+                                <div t-attf-class="form-group">
+                                    <label class="col-form-label" for="domic_legal">Direccion Fiscal</label>
+                                    <input type="text" name="domic_legal" t-att-value="employee.domic_legal"
+                                           t-attf-class="form-control"/>
+                                </div>
+                                <div t-attf-class="form-group">
+                                    <label class="col-form-label" for="work_email">Correo Electronico</label>
+                                    <input type="text" name="work_email" t-att-value="employee.work_email"
+                                           t-attf-class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col pl-5 pr-5">
+                                <div t-attf-class="form-group">
+                                    <label class="col-form-label" for="department_id">Departamento</label>
+                                    <input type="text" name="department_id" t-att-value="employee.department_id.name"
+                                           t-attf-class="form-control" readonly="1"/>
+                                </div>
+                                <div t-attf-class="form-group">
+                                    <label class="col-form-label" for="parent_id">Responsable</label>
+                                    <input type="text" name="parent_id" t-att-value="employee.parent_id.name"
+                                           t-attf-class="form-control" readonly="1"/>
+                                </div>
+                                <div t-attf-class="form-group">
+                                    <label class="col-form-label" for="coach_id">Monitor</label>
+                                    <input type="text" name="coach_id" t-att-value="employee.coach_id.name"
+                                           t-attf-class="form-control" readonly="1"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="clearfix">
+                            <button type="submit" class="btn btn-primary float-right mb32 ">
+                                Confirmar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </template>
+
+
+    </data>
+</odoo>

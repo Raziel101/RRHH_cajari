@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+
+        <template id="login_page" name="Iniciar sesión" inherit_id="web.login">
+
+            <xpath expr="//label[@for='login']" position="replace">
+              <label for="login">Usuario</label>
+            </xpath>
+            <xpath expr="//input[@name='login']" position="attributes">
+              <attribute name="placeholder">Usuario</attribute>
+            </xpath>
+
+            <xpath expr="//button[@type='submit']" position="attributes">
+                <attribute name="class" separator=" " add="bc-orange"/>
+                <attribute name="id">btn-submit</attribute>
+            </xpath>
+
+        </template>
+
+    </data>
+</odoo>
