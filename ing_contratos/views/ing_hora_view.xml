@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--TREE VIEW-->
+        <record id="view_hora_tree" model="ir.ui.view">
+            <field name="name">ing.contratos.hora.tree</field>
+            <field name="model">ing.contratos.hora</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="create_date"/>
+                    <field name="name"/>
+                    <field name="hora_inicio" widget="float_time"/>
+                    <field name="hora_fin" widget="float_time"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- FORM VIEW -->
+        <record id="view_hora_form" model="ir.ui.view">
+            <field name="name">ing.contratos.hora.form</field>
+            <field name="model">ing.contratos.hora</field>
+            <field name="arch" type="xml">
+                <form string="Hora">
+                    <sheet>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <group>
+                                    <field name="name" placeholder="Seleccione o ingrese el dia"/>
+                                </group>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <group>
+                                    <field name="hora_inicio" widget="float_time"/>
+                                </group>
+                            </div>
+                            <div class="col-md-6">
+                                <group>
+                                    <field name="hora_fin" widget="float_time"/>
+                                </group>
+                            </div>
+                        </div>
+                    </sheet>
+
+                    <!-- MAIL THREAD -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- ACTION -->
+        <record model="ir.actions.act_window" id="ing_hora_list_action">
+            <field name="name">Horas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ing.contratos.hora</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Gestiónar <strong>Horas</strong>.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

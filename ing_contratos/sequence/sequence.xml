@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record model="ir.sequence" id="ing_seq_contrato">
+            <field name="name">Sec. Contrato</field>
+            <field name="code">ing.sec.contratos.contratos</field>
+            <field name="prefix">C</field>
+            <field name="padding">8</field>
+        </record>
+    </data>
+</odoo>

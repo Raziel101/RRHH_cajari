@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_ausencia_tree_inherit" model="ir.ui.view">
+            <field name="name">ing.ausencias.ausencias.tree.inherit</field>
+            <field name="model">ing.ausencias.ausencias</field>
+            <field name="inherit_id" ref="ing_ausencias.view_ausencia_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='create_date']" position="before">
+                     <header>
+                        <button name="check_departments" type="object" string="Actualizar departamentos"
+                                groups="base.group_system"/>
+                    </header>
+                </xpath>
+            </field></record>
+
+        <!--SEARCH VIEW-->
+        <record id="view_contrato_search" model="ir.ui.view">
+            <field name="name">ing.contratos.contratos.search</field>
+            <field name="model">ing.contratos.contratos</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <search string="Contratos">
+                    <field name="employee_id" string="Empleado"/>
+                    <field name="tipo_contrato_id"/>
+                    <field name="departament_id"/>
+                    <field name="ing_solicitante_id"/>
+                    <field name="state"/>
+                    <field name="secuencia" string="Nº de seguimiento"/>
+                    <field name="dni" string="DNI"/>
+                    <separator/>
+                    <group expand="0" string="Agrupar">
+                        <filter name="filter_tipo_contrato" string="Tipo Contrato" domain="[]"
+                                context="{'group_by':'tipo_contrato_id'}"/>
+                        <filter name="filter_departamento" string="Departamento" domain="[]"
+                                context="{'group_by':'departament_id'}"/>
+                        <filter name="filter_state" string="Estado" domain="[]"
+                                context="{'group_by':'state'}"/>
+
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!--TREE VIEW-->
+        <record id="view_contrato_tree" model="ir.ui.view">
+            <field name="name">ing.contratos.contratos.tree</field>
+            <field name="model">ing.contratos.contratos</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="state == 'confirmada'"
+                      decoration-muted="state=='cancelada'"
+                      decoration-success="revisar == True">
+
+                    <header>
+                        <button name="volver_borrador" type="object" string="Borrador"
+                                groups="ing_contratos.group_ing_rrhh_contratos_admin_rrhh"/>
+                        <button name="a_revisar" type="object" string="A Revisar"
+                                groups="ing_contratos.group_ing_rrhh_contratos_admin_rrhh"/>
+                        <button name="confirmar" type="object" string="Confirmar"
+                                groups="ing_contratos.group_ing_rrhh_contratos_admin_rrhh"/>
+                    </header>
+
+                    <field name="create_date"/>
+                    <field name="secuencia" string="Nº de seguimiento"/>
+                    <field name="employee_id"/>
+                    <field name="dni" string="DNI"/>
+                    <field name="tipo_contrato_id"/>
+                    <field name="secretaria_id"/>
+                    <field name="departament_id"/>
+                    <field name="ing_solicitante_id"/>
+                    <field name="fecha_inicio"/>
+                    <field name="fecha_fin"/>
+                    <field name="monto"/>
+                    <field name="monto_hs_adicionales" groups="ing_contratos.group_ing_rrhh_contratos_admin_rrhh"/>
+                    <field name="revisar"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_attach_min" model="ir.ui.view">
+            <field name="name">ing.contratos.contratos.form</field>
+            <field name="model">ing.contratos.contratos</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <field name="attach_ids"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- FORM VIEW -->
+        <record id="view_contrato_form" model="ir.ui.view">
+            <field name="name">ing.contratos.contratos.form</field>
+            <field name="model">ing.contratos.contratos</field>
+            <field name="arch" type="xml">
+                <form string="Contrato">
+                    <header>
+                        <button string="Confirmar" name="confirmar" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'in', ['confirmada','cancelada'])]}"
+                                groups="ing_contratos.group_ing_rrhh_contratos_admin_rrhh"/>
+
+                        <button string="Cancelar" name="cancelar" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'in', ['cancelada','borrador'])]}"
+                                groups="ing_contratos.group_ing_rrhh_contratos_admin_rrhh"/>
+
+                        <button string="Volver a borrador" name="volver_borrador" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state',  'in', ['confirmada','borrador'])]}"
+                                groups="ing_contratos.group_ing_rrhh_contratos_admin_rrhh"/>
+
+                        <button string="A revisar" name="a_revisar" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state',  'in', ['borrador','cancelada'])]}"
+                                groups="ing_contratos.group_ing_rrhh_contratos_admin_rrhh"/>
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" string="Generar Horarios" type="object"
+                                    name="call_wizard_horarios" icon="fa-calendar"
+                                    attrs="{'invisible': ['|',('state', 'in', ['confirmada','cancelada']), ('id', '=', False)]}"
+                                    groups="ing_contratos.group_ing_rrhh_contratos_admin_rrhh">
+                            </button>
+
+                            <button class="oe_stat_button" string="Adjuntar" type="object"
+                                    name="call_wizard_attach" icon="fa-paperclip"
+                                    attrs="{'invisible': ['|',('state', 'in', ['confirmada','cancelada']), ('id', '=', False)]}">
+                            </button>
+                            <button class="oe_stat_button" string="Correccion" type="object"
+                                    name="call_wizard_correccion" icon="fa-comments"
+                                    attrs="{'invisible': ['|',('state', 'in', ['confirmada','cancelada']), ('id', '=', False)]}">
+                            </button>
+                             <button class="oe_stat_button" string="Historicos de Adjuntos" type="object"
+                                    name="view_history_attach" icon="fa-file"/>
+                        </div>
+                        <div class="row">
+                            <field name="x_css" invisible="0"/>
+                            <div class="col-md-12">
+                                <h2>
+                                    <group>
+                                        <field name="secuencia"/>
+                                    </group>
+                                </h2>
+                            </div>
+                            <div class="col-md-6 backgr-rrhh-title">
+                                <h4>
+                                    <group>
+                                        <field name="employee_id" placeholder="Seleccione o ingrese el empleado"
+                                               options="{'no_create': True}"/>
+                                        <field name="departament_id" placeholder="Seleccione el Departamento"
+                                               options="{'no_create': True}"/>
+                                        <field name="ing_solicitante_id"
+                                               placeholder="Seleccione o ingrese el Solicitante"
+                                               options="{'no_create': True}"/>
+
+                                    </group>
+                                </h4>
+                            </div>
+                            <div class="col-md-6 backgr-rrhh-title">
+                                <h4>
+                                    <group>
+                                        <field name="tipo_contrato_id" options="{'no_create': True}"
+                                               placeholder="Seleccione el tipo de contrato" string="Relación laboral"/>
+                                        <field name="secretaria_id" placeholder="Seleccione la secretaria"
+                                               options="{'no_create': True}"/>
+                                        <field name="categoria_id" placeholder="Seleccione la Categoria"
+                                               options="{'no_create': True}"
+                                               attrs="{'invisible': [('tipo_contrato', '!=', 'temporario')]}"/>
+                                        <field name="tipo_contrato" invisible="1"/>
+                                    </group>
+                                </h4>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <group string="Fecha">
+                                    <field name="fecha_inicio"/>
+                                    <field name="fecha_fin"/>
+                                </group>
+                            </div>
+                            <div class="col-md-6">
+                                <group string="Monto">
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="monto" widget="monetary"/>
+                                    <field name="monto_hs_adicionales" placeholder="Monto de Hs. adicionales"
+                                           groups="ing_contratos.group_ing_rrhh_contratos_admin_rrhh"/>
+                                </group>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <group string="Funcion que desarrolla">
+                                    <field name="funcion_desarrolla" placeholder="Ingrese la funcion que desarrolla"
+                                    />
+                                </group>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <notebook>
+                                    <page string="Datos Personales">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <group>
+                                                    <group>
+                                                        <field name="dni" string="DNI" placeholder="Ingrese Dni"/>
+                                                        <field name="cuit" string="Cuit" placeholder="Ingrese cuit"/>
+                                                        <field name="fecha_nac" string="Fecha Nacimiento"/>
+                                                    </group>
+                                                    <group>
+                                                        <field name="telefono" string="Telefono"
+                                                               placeholder="Ingrese num. de telefono"/>
+                                                        <field name="domic_real" string="Domicilio Real"
+                                                               placeholder="ingrese dom. real"/>
+                                                        <field name="domic_legal" string="Domicilio Legal"
+                                                               placeholder="Ingrese dom. legal"/>
+                                                    </group>
+                                                </group>
+                                            </div>
+                                        </div>
+                                    </page>
+                                    <page string="Horarios">
+                                        <field name="ing_hora_ids"/>
+                                        <group>
+                                            <field name="hs_semanales" placeholder="Cantidad de Hs. semanales. etc.."/>
+                                        </group>
+                                    </page>
+                                    <page string="Adjuntos">
+                                        <field name="attach_ids"  readonly="1"  widget="many2many_binary"
+                                               string="Seleccionar Archivo"/>
+                                    </page>
+                                </notebook>
+                            </div>
+                        </div>
+                    </sheet>
+
+                    <!-- MAIL THREAD -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!--         ACTION-->
+        <record model="ir.actions.act_window" id="ing_contrato_list_action">
+            <field name="name">Contrato</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ing.contratos.contratos</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Gestión de<strong>Contratos</strong>.
+                </p>
+            </field>
+        </record>
+
+        <!-- MENU -->
+        <menuitem id="ing_contrato_cntrato_submenu" name="Contratos" action="ing_contrato_list_action"
+                  parent="ing_contratos_admin_submenu" sequence="0"/>
+
+
+    </data>
+</odoo>

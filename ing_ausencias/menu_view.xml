@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- MENU GENERAL-->
+        <menuitem id="ing_ausencias_admin_menu" name="Ausencias" sequence="1" groups="ing_ausencias.group_ing_rrhh_ausencias_encargado,ing_ausencias.group_ing_rrhh_ausencias_admin_rrhh,ing_ausencias.group_ing_rrhh_ausencias_admin"/>
+
+        <menuitem id="ing_ausencias_admin_submenu" name="Administracion"
+                  parent="ing_ausencias_admin_menu" sequence="0"/>
+
+        <menuitem id="ing_ausencias_config_submenu" name="Configuracion"
+                  parent="ing_ausencias_admin_menu" sequence="1"/>
+
+    </data>
+</odoo>

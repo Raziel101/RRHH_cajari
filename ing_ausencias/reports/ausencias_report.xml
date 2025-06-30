@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <template id="ing_ausencias_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <div class="full-a4-vert-height">
+                                <div class="row" style="border-bottom: 1px solid black;">
+                                    <center>
+                                        <h3>
+                                            <br/>
+                                            <strong>Ausencias #
+                                                <spam>test</spam>
+                                            </strong>
+                                        </h3>
+                                    </center>
+                                </div>
+
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

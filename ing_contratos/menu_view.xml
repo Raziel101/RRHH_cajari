@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- MENU GENERAL-->
+        <menuitem id="ing_contratos_admin_menu" name="Contratos" sequence="1" groups="ing_contratos.group_ing_rrhh_contratos_encargado,ing_contratos.group_ing_rrhh_contratos_admin_rrhh,ing_contratos.group_ing_rrhh_contratos_admin"/>
+
+        <menuitem id="ing_contratos_admin_submenu" name="Administracion"
+                  parent="ing_contratos_admin_menu" sequence="0"/>
+
+        <menuitem id="ing_contratos_config_submenu" name="Configuracion"
+                  parent="ing_contratos_admin_menu" sequence="1"/>
+
+    </data>
+</odoo>

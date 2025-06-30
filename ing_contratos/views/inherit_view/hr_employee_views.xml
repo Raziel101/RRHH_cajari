@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="ing_print_employee_badge_custom2" inherit_id="ing_ausencias.ing_print_employee_badge_custom">
+            <xpath expr="//t[@t-if='job']" position="replace">
+                <t t-if="job">
+                    <tr>
+                        <td style="padding-left: 5px;" colspan="2">Funcion:
+                            <t t-if="employee.view_job_title" t-esc="employee.job_title"/>
+                            <t t-if="not employee.view_job_title" t-esc="employee.job_title_for"/>
+                        </td>
+                    </tr>
+                </t>
+            </xpath>
+        </template>
+
+        <!-- FORM VIEW -->
+        <record id="ing_contratos_view_employee_form" model="ir.ui.view">
+            <field name="name">ing.contratos.hr.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//header" position="inside">
+                    <button name="get_contrato" string="Contrato" type="object"
+                            groups="ing_contratos.group_ing_rrhh_contratos_encargado,ing_contratos.group_ing_rrhh_contratos_admin_rrhh,ing_contratos.group_ing_rrhh_contratos_admin"/>
+                </xpath>
+
+                <xpath expr="/form/sheet/div[@class='oe_title']" position="replace">
+                    <div class="oe_title">
+                        <h1 class="d-flex">
+                            <field name="name" placeholder="Employee's Name" required="True"/>
+                            <a title="Chat" icon="fa-comments" href="#" class="ml8 o_employee_chat_btn"
+                               invisible="not context.get('chat_icon')" attrs="{'invisible': [('user_id','=', False)]}"
+                               role="button">
+                                <i class="fa fa-comments"/>
+                            </a>
+                        </h1>
+                        <field name="view_job_title" invisible="1"/>
+                        <h2>
+                            <field name="job_title" placeholder="Puesto de trabajo"
+                                   attrs="{'invisible': [('view_job_title','=',False)]}"/>
+                            <field name="job_title_for" placeholder="Puesto de trabajo"
+                                   attrs="{'invisible': [('view_job_title','=',True)]}"/>
+                        </h2>
+                        <field name="category_ids" widget="many2many_tags"
+                               options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Tags"/>
+                        <field name="tipo_contrato_id" placeholder="Tipo de contrato"
+                               options="{'no_create_edit': True}"/>
+                    </div>
+                </xpath>
+
+                <xpath expr="//field[@name='visa_expire']" position="after">
+                    <field name="date_first_contract"/>
+                    <field name="date_init_plant"/>
+                </xpath>
+
+            </field>
+        </record>
+
+
+        <!-- kanban VIEW -->
+        <record id="hr_kanban_view_employees_contratos" model="ir.ui.view">
+            <field name="name">ing.contratos.hr.employee.kanban</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.hr_kanban_view_employees"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="/kanban/templates//div/div/div/span" position="replace">
+                    <field name="view_job_title" invisible="1"/>
+                    <span t-if="record.job_title.raw_value" class="o_kanban_record_subtitle">
+                        <field name="job_title" attrs="{'invisible': [('view_job_title','=',False)]}"/>
+                    </span>
+                    <span t-if="record.job_title_for.raw_value" class="o_kanban_record_subtitle">
+                        <field name="job_title_for"
+                              attrs="{'invisible': [('view_job_title','=',True)]}"/>
+                    </span>
+                </xpath>
+
+                <xpath expr="/kanban/templates//div/field[@name='category_ids']" position="replace">
+                    <field name="category_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                    <field name="tipo_contrato_id"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <!--VISTA SEARCH-->
+        <record model="ir.ui.view" id="ing_gob_rrhh_contratos_view_employee_filter">
+            <field name="name">ing.gob.rrhh.hr.contrato.employee.search</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="/search" position="inside">
+                    <field name="identification_id" string="DNI" placeholder="DNI"/>
+                    <field name="tipo_contrato_id" string="Tipo de contrato"/>
+                </xpath>
+                <xpath expr="/search/group" position="inside">
+                    <filter name="group_tipo_contrato_id" string="Tipo de contrato" domain="[]"
+                            context="{'group_by': 'tipo_contrato_id'}"/>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

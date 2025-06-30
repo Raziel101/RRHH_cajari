@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--TREE VIEW-->
+        <record id="view_tipo_contrato_tree" model="ir.ui.view">
+            <field name="name">ing.ausencias.tipo.contrato.tree</field>
+            <field name="model">ing.ausencias.tipo.contrato</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="create_date"/>
+                    <field name="detalle"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- FORM VIEW -->
+        <record id="view_tipo_contrato_form" model="ir.ui.view">
+            <field name="name">ing.ausencias.tipo.contrato.form</field>
+            <field name="model">ing.ausencias.tipo.contrato</field>
+            <field name="arch" type="xml">
+                <form string="Tipo de contrato">
+                    <sheet>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <group>
+                                    <field name="name" placeholder="Tipo de contrato"/>
+                                    <field name="detalle" placeholder="Detalle"/>
+                                </group>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <notebook>
+                                    <page string="Texto">
+                                        <div class="alert alert-success" role="alert">
+                                            <h4 class="alert-heading">Variables</h4>
+                                            <p>Las siguientes son variables que debera reemplazar en donde sea necesario.
+                                                {FECHA_CONTRATO}    -  Fecha inicio Contrato    |    {CUIT}              -  Cuit
+                                                {FECHA_FINCONTRATO} -  Fecha fin contrato       |    {TEL}               -  Telefono
+                                                {NOMBRE}            -  Apellido y Nombre        |    {DOM_LEGAL}         - Dom. Legal
+                                                {DNI}               -  Dni                      |    {DOM_REAL}          - Dom. Real
+                                                {FECHA_NAC}         -  Fecha de Nac.            |    {FUNCION}           - Funcion que desarrolla
+                                                {MONTO}             -  Monto en Nº              |    {SECRETARIA}        - Secretaría
+                                                {DNI_DE_SEC}        -  Dni del secrerio/a       |    {RESPONSABLE}       - Responsable del Deparamento
+
+                                            </p>
+                                        </div>
+                                        <field name="texto_contrato"/>
+                                    </page>
+                                </notebook>
+                            </div>
+                        </div>
+
+                    </sheet>
+
+                    <!-- MAIL THREAD -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- ACTION -->
+        <record model="ir.actions.act_window" id="ing_tipo_contrato_list_action">
+            <field name="name">Tipo de contrato</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ing.ausencias.tipo.contrato</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Gestiónar <strong>Tipo de contrato</strong>.
+                </p>
+            </field>
+        </record>
+
+        <!-- MENU -->
+        <menuitem id="ing_tipo_contrato_submenu" name="Tipo de contrato" action="ing_tipo_contrato_list_action"
+                  parent="ing_ausencias_config_submenu" sequence="3"/>
+    </data>
+</odoo>

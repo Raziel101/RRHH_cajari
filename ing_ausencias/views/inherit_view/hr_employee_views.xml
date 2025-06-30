@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--VISTA SEARCH-->
+        <record model="ir.ui.view" id="ing_gob_rrhh_gestion_view_employee_filter">
+            <field name="name">ing.gob.rrhh.hr.employee.search</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="/search" position="inside">
+                    <field name="identification_id" string="DNI" placeholder="DNI"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--VISTA TREE-->
+        <record id="ing_gob_rrhh_gestion_view_employee_tree" model="ir.ui.view">
+            <field name="name">ing.gob.rrhh.hr.employee.tree</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="identification_id" string="DNI"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- FORM VIEW -->
+        <record id="ing_gob_rrhh_gestion_view_employee_form" model="ir.ui.view">
+            <field name="name">ing.gob.rrhh.hr.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//page[@name='public']//div/group[@name='managers']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//header" position="inside">
+                    <button name="get_ausencias" string="Ausencias" type="object" groups="ing_ausencias.group_ing_rrhh_ausencias_encargado,ing_ausencias.group_ing_rrhh_ausencias_admin_rrhh,ing_ausencias.group_ing_rrhh_ausencias_admin"/>
+                </xpath>
+
+                <xpath expr="//page[@name='public']//div/group[4]" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='personal_information']//group[2]/field[@name='identification_id']"
+                       position="replace">
+
+                </xpath>
+
+                <xpath expr="//page[@name='personal_information']//group[2]/field[@name='gender']" position="after">
+                    <field name="identification_id" placeholder="Ingrese el DNI" string="DNI" required="1"/>
+                    <field name="cuit" placeholder="Ingrese el Cuit"/>
+                </xpath>
+
+                <xpath expr="//page[@name='personal_information']//group[2]/field[@name='birthday']"
+                       position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='personal_information']//group/field[@name='address_home_id']"
+                       position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='personal_information']//group/field[@name='phone']"
+                       position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='personal_information']//group/field[@name='private_email']"
+                       position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='personal_information']//group/field[@name='phone']" position="after">
+                    <field name="telefono" placeholder="Telefono"/>
+                    <field name="domic_real" placeholder="Domic. real"/>
+                    <field name="domic_legal" placeholder="Domic. legal"/>
+                </xpath>
+
+                <xpath expr="//page[@name='personal_information']//group[@name='work_permit']" position="inside">
+                    <field name="clock_one" options="{'no_open': True, 'no_create': True}"/>
+                    <field name="clock_two" options="{'no_open': True, 'no_create': True}"/>
+                    <field name="clock_three" options="{'no_open': True, 'no_create': True}"/>
+                </xpath>
+
+                <notebook>
+                    <page string="Adjuntos">
+                        <field name="attach_ids"  widget="many2many_binary"
+                               string="Seleccionar Archivo"/>
+                    </page>
+                </notebook>
+
+            </field>
+        </record>
+
+
+        <template id="ing_print_employee_badge_custom" inherit_id="hr.print_employee_badge">
+            <xpath expr="//div[1]" position="before">
+                <style>
+                    table tr td{
+                        border:none;
+                    }
+                </style>
+                <t t-set="docs" t-value="docs.browse(context['active_ids'])"/>
+            </xpath>
+
+            <xpath expr="//table" position="inside">
+                <t t-if="dni">
+                    <tr>
+                        <td style="padding-left: 5px;" colspan="2">DNI:
+                            <t t-esc="employee.identification_id"/>
+                        </td>
+                    </tr>
+                </t>
+                <t t-if="cuit">
+                    <tr>
+                        <td style="padding-left: 5px;" colspan="2">Cuit:
+                            <t t-esc="employee.cuit"/>
+                        </td>
+                    </tr>
+                </t>
+                <t t-if="job">
+                    <tr>
+                        <td style="padding-left: 5px;" colspan="2">Funcion:
+                            <t t-esc="employee.job_title"/>
+                            <t t-esc="employee.job_title_for"/>
+                        </td>
+                    </tr>
+                </t>
+                <t t-if="type_contract">
+                    <tr>
+                        <td style="padding-left: 5px;" colspan="2">Tipo de Contrato:
+                            <t t-esc="employee.tipo_contrato_id.detalle"/>
+                        </td>
+                    </tr>
+                </t>
+                <t t-if="department">
+                    <tr>
+                        <td style="padding-left: 5px;" colspan="2">Departamento:
+                            <t t-esc="employee.department_id.name"/>
+                        </td>
+                    </tr>
+                </t>
+                <t t-if="birthdate">
+                    <tr>
+                        <td style="padding-left: 5px;" colspan="2">Fecha de Nacimiento:
+                            <t t-esc="employee.birthday.strftime('%d/%m/%Y')"/>
+                        </td>
+                    </tr>
+                </t>
+                <t t-if="phone">
+                    <tr>
+                        <td style="padding-left: 5px;" colspan="2">Telefono:
+                            <t t-esc="employee.telefono"/>
+                        </td>
+                    </tr>
+                </t>
+                <t t-if="address">
+                    <tr>
+                        <td style="padding-left: 5px;" colspan="2">Domicilio:
+                            <t t-esc="employee.domic_real"/>
+                        </td>
+                    </tr>
+                </t>
+            </xpath>
+        </template>
+
+
+        <record id="ing_print_credential_action" model="ir.actions.server">
+            <field name="name">Imprimir Credencial</field>
+            <field name="model_id" ref="model_hr_employee"/>
+            <field name="binding_model_id" ref="model_hr_employee"/>
+            <field name="state">code</field>
+            <field name="code">
+                action = record.print_credential()
+            </field>
+        </record>
+
+
+         <record id="hr.hr_employee_print_badge" model="ir.actions.report">
+            <field name="binding_model_id" eval="False"/>
+        </record>
+
+
+    </data>
+</odoo>

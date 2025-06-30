@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.actions.act_window" id="tipo_contrato_contrato_list_action">
+            <field name="name">Tipo de Contrato</field>
+            <field name="res_model">ing.ausencias.tipo.contrato</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="ing_contrato_tipo_contrato_submenu" name="Tipo de Contrato"
+                  action="tipo_contrato_contrato_list_action"
+                  parent="ing_contratos_config_submenu" sequence="4"
+                  groups=""/>
+    </data>
+</odoo>

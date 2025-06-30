@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <menuitem parent="hr.menu_human_resources_configuration" action="ing_procedure_action"
+                  name="Guias de Personal" sequence="50" id="menu_guides"/>
+
+    </data>
+</odoo>

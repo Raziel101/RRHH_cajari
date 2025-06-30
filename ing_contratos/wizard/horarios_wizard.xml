@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="horarios_contratos_wizard_form_view">
+            <field name="name">horarios.contratos.wizard.form</field>
+            <field name="model">horarios.contratos.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Horarios">
+
+                    <div class="row">
+                        <div class="col-md-12 backgr-rrhh-title">
+                            <h1>
+                                <field name="ing_contrato_id"/>
+                            </h1>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-6">
+                                <group>
+                                    <field name="hora_inicio" widget="float_time"/>
+                                </group>
+                            </div>
+                            <div class="col-6">
+                                <group>
+                                    <field name="hora_fin" widget="float_time"/>
+                                </group>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <group>
+                                    <field name="lunes"/>
+                                    <field name="martes"/>
+                                    <field name="miercoles"/>
+                                    <field name="jueves"/>
+                                    <field name="viernes"/>
+                                    <field name="sabado"/>
+                                    <field name="domingo"/>
+                                </group>
+                            </div>
+                        </div>
+                    </div>
+
+                    <footer>
+                        <button special="cancel" string="Cancelar"/>
+                        <button name='generar_horarios' string="Generar" type="object"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_horarios_contratos_wizard"
+                model="ir.actions.act_window">
+            <field name="name">Generar Horarios</field>
+            <field name="res_model">horarios.contratos.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

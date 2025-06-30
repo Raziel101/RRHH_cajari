@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--  Tipo de contrato-->
+        <record id="voluntariado" model="ing.ausencias.tipo.contrato">
+            <field name="name">voluntariado</field>
+            <field name="detalle">Contrato de Voluntariado</field>
+        </record>
+
+        <record id="planta_permanente" model="ing.ausencias.tipo.contrato">
+            <field name="name">planta_permanente</field>
+            <field name="detalle">Planta Permanente</field>
+        </record>
+
+        <record id="planta_temporaria" model="ing.ausencias.tipo.contrato">
+            <field name="name">planta_temporaria</field>
+            <field name="detalle">Planta Temporaria</field>
+        </record>
+
+        <record id="contratado" model="ing.ausencias.tipo.contrato">
+            <field name="name">contratado</field>
+            <field name="detalle">Contrato de locación</field>
+        </record>
+
+        <record id="contratado_facturacion" model="ing.ausencias.tipo.contrato">
+            <field name="name">contrato_facturacion</field>
+            <field name="detalle">Contrato de facturación</field>
+        </record>
+
+        <record id="locacion_servicios" model="ing.ausencias.tipo.contrato">
+            <field name="name">locacion</field>
+            <field name="detalle">Locación de Servicios</field>
+        </record>
+
+        <record id="contrato_temporario" model="ing.ausencias.tipo.contrato">
+            <field name="name">temporario</field>
+            <field name="detalle">Contrato temporarios</field>
+        </record>
+
+        <record id="contrato_pago_unico" model="ing.ausencias.tipo.contrato">
+            <field name="name">pago_unico</field>
+            <field name="detalle">Contrato de pago único</field>
+        </record>
+
+        <record id="clausula_contrato_locacion" model="ing.ausencias.tipo.contrato">
+            <field name="name">clausula</field>
+            <field name="detalle">Clausula de contrato de locación</field>
+        </record>
+
+        <record id="clausula_contrato" model="ing.ausencias.tipo.contrato">
+            <field name="name">clausula_facturacion</field>
+            <field name="detalle">Clausula de contrato de facturacion</field>
+        </record>
+
+        <record id="facturacion" model="ing.ausencias.tipo.contrato">
+            <field name="name">facturacion</field>
+            <field name="detalle">Facturación</field>
+        </record>
+
+        <!-- Motivo Ausencia -->
+        <record id="motivo_accidente" model="ing.motivo.ausencia">
+            <field name="name">Accidente</field>
+        </record>
+
+        <record id="motivo_citado_judicial" model="ing.motivo.ausencia">
+            <field name="name">Citación Judicial</field>
+        </record>
+
+        <record id="motivo_donacion_sangre" model="ing.motivo.ausencia">
+            <field name="name">Donación de sangre</field>
+        </record>
+
+        <record id="motivo_duelo" model="ing.motivo.ausencia">
+            <field name="name">Duelo</field>
+        </record>
+
+        <record id="motivo_enfermedad" model="ing.motivo.ausencia">
+            <field name="name">Enfermedad</field>
+        </record>
+
+        <record id="motivo_examen_estudio" model="ing.motivo.ausencia">
+            <field name="name">Examen - Estudio</field>
+        </record>
+
+        <record id="motivo_familiar_enfermo" model="ing.motivo.ausencia">
+            <field name="name">Familiar Enfermo</field>
+        </record>
+
+        <record id="motivo_matrimonio" model="ing.motivo.ausencia">
+            <field name="name">Matrimonio</field>
+        </record>
+
+        <record id="motivo_accidente" model="ing.motivo.ausencia">
+            <field name="name">Accidente</field>
+        </record>
+    </data>
+</odoo>

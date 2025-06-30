@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="correccion_ausencias_wizard_form_view">
+            <field name="name">ausencias.nota.correccion.wizard.form</field>
+            <field name="model">ausencias.nota.correccion.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Correccion">
+
+                    <div class="row">
+                        <div class="col-md-12 backgr-rrhh-title">
+                            <h1>
+                                <field name="ing_ausencia_id"/>
+                            </h1>
+                        </div>
+                    </div>
+
+                    <notebook>
+                        <page string="Correccion">
+                           <field name="correccion" placeholder="Describe corrección"/>
+                        </page>
+                    </notebook>
+
+                    <footer>
+                        <button special="cancel" string="Cancelar"/>
+                        <button name='crear_nota_correccion' string="Agregar correccion" type="object"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_correccion_ausencias_wizard"
+                model="ir.actions.act_window">
+            <field name="name">Correccion</field>
+            <field name="res_model">ausencias.nota.correccion.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

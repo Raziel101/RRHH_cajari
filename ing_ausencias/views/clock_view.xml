@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ACTION -->
+        <record model="ir.actions.act_window" id="ing_clock_list_action">
+            <field name="name">Relojes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">ing.clock</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Gestiónar <strong>relojes</strong>.
+                </p>
+            </field>
+        </record>
+
+        <!-- MENU -->
+        <menuitem id="ing_clock_submenu" name="Relojes" action="ing_clock_list_action"
+                  parent="ing_ausencias_config_submenu" sequence="10"/>
+
+    </data>
+</odoo>

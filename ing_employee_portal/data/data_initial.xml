@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="1">
+
+
+        <record id="param_amount_max_advance" model="ir.config_parameter">
+            <field name="key">amount_max_advances</field>
+            <field name="value">1</field>
+        </record>
+
+        <record id="medio_aviso_default" model="ing.ausencias.medio.aviso">
+            <field name="name">Cargado desde el Portal</field>
+        </record>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+
+        <template id="freight_website_assets" name="Freight Website Assets" inherit_id="web.assets_frontend">
+            <xpath expr="." position="inside">
+
+                <link rel="preconnect" href="https://fonts.googleapis.com"/>
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+                <link href="https://fonts.googleapis.com/css2?family=Encode+Sans:wght@400;500&amp;family=Montserrat:ital,wght@0,900;1,500&amp;display=swap"
+                      rel="stylesheet"/>
+
+                <link href="/ing_employee_portal/static/src/css/style.css" rel="stylesheet"/>
+            </xpath>
+        </template>
+
+
+    </data>
+</odoo>

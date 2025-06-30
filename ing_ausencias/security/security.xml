@@ -1,0 +1,164 @@
+<odoo>
+    <data noupdate="0">
+
+        <!-- ********************************PERMISOS DE AUSENCIAS************************************-->
+
+        <record model="ir.module.category" id="module_rrhh_ausencias_settings">
+            <field name="name">RRHH AUSENCIAS</field>
+            <field name="description">Permisos de configuraciones.</field>
+            <field name="sequence">5</field>
+        </record>
+
+        <!--PERMISOS ENCARGADO-->
+        <record id="group_ing_rrhh_ausencias_encargado" model="res.groups">
+            <field name="name">"ENCARGADO DE AREA"</field>
+            <field name="category_id" ref="module_rrhh_ausencias_settings"/>
+            <field name="comment">Encargado Area</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!--PERMISOS ADMIN RRHH-->
+        <record id="group_ing_rrhh_ausencias_admin_rrhh" model="res.groups">
+            <field name="name">"ADMIN RRHH"</field>
+            <field name="category_id" ref="module_rrhh_ausencias_settings"/>
+            <field name="comment">Admin RRHH</field>
+            <field name="implied_ids" eval="[(4, ref('ing_ausencias.group_ing_rrhh_ausencias_encargado'))]"/>
+        </record>
+
+        <!--PERMISOS ADMIN-->
+        <record id="group_ing_rrhh_ausencias_admin" model="res.groups">
+            <field name="name">ADMIN</field>
+            <field name="category_id" ref="module_rrhh_ausencias_settings"/>
+            <field name="comment">tiene permitido Crear, Modificar Y Eliminar</field>
+            <field name="implied_ids" eval="[(4, ref('group_ing_rrhh_ausencias_admin_rrhh'))]"/>
+        </record>
+
+        <!-- *****************************************RULES************************************************-->
+        <!-- hr_employee -->
+        <record id="rule_encargado_rrhh" model="ir.rule">
+            <field name="name">Ver solo empleados del departamento</field>
+            <field name="model_id" ref="hr.model_hr_employee"/>
+            <field name="groups" eval="[(4, ref('ing_ausencias.group_ing_rrhh_ausencias_encargado'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">[('department_id','!=',False),('department_id','in',[a.id for a in user.areasgob_ids])]
+            </field>
+        </record>
+
+        <record id="rule_contrato_voluntariado" model="ir.rule">
+            <field name="name">Contrato Voluntariado no lo ven los usuarios normales</field>
+            <field name="model_id" ref="ing_ausencias.model_ing_ausencias_tipo_contrato"/>
+            <field name="groups" eval="[(4, ref('hr.group_hr_user'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+            <field name="domain_force">[('name','!=','voluntariado')]</field>
+        </record>
+        <record id="rule_contrato_voluntariado_for_rrhh" model="ir.rule">
+            <field name="name">Tipos de contrato para admin de rrhh</field>
+            <field name="model_id" ref="ing_ausencias.model_ing_ausencias_tipo_contrato"/>
+            <field name="groups" eval="[(4, ref('ing_ausencias.group_ing_rrhh_ausencias_admin_rrhh'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+            <field name="domain_force">[]</field>
+        </record>
+
+        <record id="rule_employee_admin_rrhh_ausencia" model="ir.rule">
+            <field name="name">Ausencia: Administrar empleados</field>
+            <field name="model_id" ref="hr.model_hr_employee"/>
+            <field name="groups" eval="[(4, ref('ing_ausencias.group_ing_rrhh_ausencias_admin_rrhh'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- hr_employee_public -->
+        <record id="rule_employee_public_encargado_rrhh" model="ir.rule">
+            <field name="name">Ver solo empleados del departamento</field>
+            <field name="model_id" ref="hr.model_hr_employee_public"/>
+            <field name="groups" eval="[(4, ref('ing_ausencias.group_ing_rrhh_ausencias_encargado'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">[('department_id','!=',False),('department_id','in',[a.id for a in user.areasgob_ids])]
+            </field>
+        </record>
+
+        <record id="rule_employee_public_admin_rrhh_ausencia" model="ir.rule">
+            <field name="name">Ausencia: Administrar empleados public</field>
+            <field name="model_id" ref="hr.model_hr_employee_public"/>
+            <field name="groups" eval="[(4, ref('ing_ausencias.group_ing_rrhh_ausencias_admin_rrhh'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- department -->
+        <record id="rule_department_encargado_rrhh" model="ir.rule">
+            <field name="name">Ver solo los departamentos asignados en el usuario</field>
+            <field name="model_id" ref="hr.model_hr_department"/>
+            <field name="groups" eval="[(4, ref('ing_ausencias.group_ing_rrhh_ausencias_encargado'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">[('id','in',[a.id for a in user.areasgob_ids])]
+            </field>
+        </record>
+
+        <record id="rule_department_admin_rrhh" model="ir.rule">
+            <field name="name">Ausencias: Administrar departamentos</field>
+            <field name="model_id" ref="hr.model_hr_department"/>
+            <field name="groups" eval="[(4, ref('ing_ausencias.group_ing_rrhh_ausencias_admin_rrhh'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- ing_ausencias -->
+        <record id="rule_ausencias_encargado_rrhh" model="ir.rule">
+            <field name="name">Solo puede ver o crear ausencias de su area</field>
+            <field name="model_id" ref="model_ing_ausencias_ausencias"/>
+            <field name="groups" eval="[(4, ref('ing_ausencias.group_ing_rrhh_ausencias_encargado'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+            <field name="domain_force">[('area_id.id','in',[a.id for a in user.areasgob_ids])]
+            </field>
+        </record>
+
+        <record id="rule_ausencias_admin_rrhh" model="ir.rule">
+            <field name="name">Ausencias: Administrar ausencias</field>
+            <field name="model_id" ref="model_ing_ausencias_ausencias"/>
+            <field name="groups" eval="[(4, ref('ing_ausencias.group_ing_rrhh_ausencias_admin_rrhh'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+
+         <record id="rule_activity_view_by_create_assigned" model="ir.rule">
+            <field name="name">Que solo vean la actividad el usuario asignado y el que la creo</field>
+            <field name="model_id" ref="mail.model_mail_activity"/>
+            <field name="domain_force">['|', ('user_id', '=', user.id), ('create_uid', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="perm_unlink" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_create" eval="1"/>
+        </record>
+
+
+    </data>
+</odoo>
