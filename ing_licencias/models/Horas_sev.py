@@ -35,7 +35,7 @@ class HorasSev(models.Model):
     employee_id     = fields.Many2one('hr.employee', string='Empleado', required=True, domain=_get_domain_employee,
                                       tracking=True)
     hours           = fields.Float('Horas', digits=(3, 1), required=True, tracking=True)
-    department_id   = fields.Many2one('hr.department', related='employee_id.department_id', string='Departamento')
+    department_id   = fields.Many2one('hr.department', related='employee_id.department_id', string='Departamento', tracking=True)
     tipo_contrato_id= fields.Many2one('ing.ausencias.tipo.contrato', related='employee_id.tipo_contrato_id',
                                       string='Tipo de Contrato')
     state           = fields.Selection([('draft', 'Borrador'), ('confirmed', 'Confirmada'), ('to_review', 'A revisar')],

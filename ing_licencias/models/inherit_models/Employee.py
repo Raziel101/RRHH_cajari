@@ -104,10 +104,10 @@ class EmployeeWz(models.TransientModel):
     _name = 'hr.employee.wz'
 
     employee_id = fields.Many2one(comodel_name='hr.employee', string='Empleado')
-    date_expired = fields.Date('Fecha de vencimiento de la licencia')
+    date_expired = fields.Date('Fecha de vencimiento de la licencia',tracking=True)
     attach_ids = fields.Many2many('ir.attachment', string='Adjuntos')
-    driven_vehicles = fields.Many2many('ing.vehicle', string='Vehiculos que maneja')
-    license_class = fields.Many2many('ing.type.lic', string='Clases de licencias de conducir')
+    driven_vehicles = fields.Many2many('ing.vehicle', string='Vehiculos que maneja',tracking=True)
+    license_class = fields.Many2many('ing.type.lic', string='Clases de licencias de conducir',tracking=True)
 
     def action_confirm(self):
         self.employee_id.sudo().write({

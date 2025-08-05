@@ -71,7 +71,7 @@ class FormGeneral(models.Model):
 
     tipo_lic_name = fields.Char(related="tipo_lic_id.name", store=True, readonly=True)
     departament_id = fields.Many2one(related="base_form_id.employee_id.department_id", string="Departamento",
-                                     store=True, readonly=False, required=True)
+                                     store=True, readonly=False, required=True, tracking=True)
 
     def _employee_not_in_planta(self, vals=None):
         _contracts = [self.env.ref('ing_ausencias.planta_temporaria').id, self.env.ref('ing_ausencias.planta_permanente').id]

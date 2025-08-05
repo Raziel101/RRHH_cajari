@@ -4,6 +4,9 @@ from odoo import fields, models
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
+    department_id = fields.Many2one(string='Departamento', tracking=True)
+    job_title = fields.Char(string='Título del trabajo', tracking=True)
+
     def get_job(self):
         return self.job_title if self.view_job_title else self.job_title_for
 

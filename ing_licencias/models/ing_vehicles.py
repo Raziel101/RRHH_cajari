@@ -12,7 +12,7 @@ class IngVehicle(models.Model):
 
     name = fields.Char('Nombre', required=True)
     patent = fields.Char('Patente', required=True)
-    department_id = fields.Many2one(comodel_name='hr.department', string='Departamento')
+    department_id = fields.Many2one(comodel_name='hr.department', string='Departamento',tracking=True)
 
 
 class IngTypeLic(models.Model):
