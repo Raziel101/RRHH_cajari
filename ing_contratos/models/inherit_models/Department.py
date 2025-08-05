@@ -11,4 +11,4 @@ class Department(models.Model):
     # Relaciones
     secretaria_ids  = fields.Many2many('ing.contratos.secretaria', relation='secretaria_departamento_rel',
                                       column1='departamento_id',
-                                      column2='secretaria_id', string="Secretaria",tracking=True)
+                                      column2='secretaria_id', string="Secretaria", tracking=True)

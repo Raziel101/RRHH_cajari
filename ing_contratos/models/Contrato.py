@@ -30,7 +30,7 @@ class Contrato(models.Model):
                              default='borrador', string="Estado", states=_READONLYSTATES)
     x_css = fields.Html(string='CSS', sanitize=False, compute='_compute_css', store=False)
     # Relaciones
-    categoria_id = fields.Many2one('ing.contratos.categoria', string='Categoria', states=_READONLYSTATES, copy=True)
+    categoria_id = fields.Many2one('ing.contratos.categoria', string='Categoria', states=_READONLYSTATES, copy=True,  tracking=True)
 
     def _get_domain_t_contract(self):
         names = ['clausula', 'facturacion', 'pago_unico', 'temporario', 'locacion', 'clausula_facturacion']
@@ -39,7 +39,7 @@ class Contrato(models.Model):
         return [('name', 'in', names)]
 
     tipo_contrato_id = fields.Many2one('ing.ausencias.tipo.contrato', string='Relación laboral', required=True,
-                                       copy=True, states=_READONLYSTATES,
+                                       copy=True, tracking=True, states=_READONLYSTATES,
                                        domain=lambda self: self._get_domain_t_contract())
     employee_id = fields.Many2one('hr.employee', string='Empleado', required=True, index=True, states=_READONLYSTATES,
                                   copy=True)

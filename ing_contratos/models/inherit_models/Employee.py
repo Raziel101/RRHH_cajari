@@ -10,8 +10,8 @@ class Employee(models.Model):
     _inherit = ['hr.employee']
 
     # Atributos
-    funcion = fields.Char(string=u"Funcion", compute='_get_funcion_desempenia')
-    date_first_contract = fields.Date(string=u'Fecha de 1er Contrato')
+    funcion = fields.Char(string=u"Funcion", compute='_get_funcion_desempenia', tracking=True)
+    date_first_contract = fields.Date(string=u'Fecha de 1er Contrato', tracking=True)
     date_init_plant = fields.Date(string=u'Fecha de inicio de planta', tracking=True)
 
     def _get_domain_t_contract(self):
@@ -31,11 +31,11 @@ class Employee(models.Model):
         groups="hr.group_hr_manager,ing_contratos.group_ing_rrhh_contratos_admin_rrhh,ing_contratos.group_ing_rrhh_contratos_encargado,ing_contratos.group_ing_rrhh_contratos_admin",
         string='Tags', tracking=True)
 
-    contrato_ids = fields.One2many('ing.contratos.contratos', 'employee_id', string='Contratos')
-    job_title_for = fields.Char('Funcion', compute="_compute_job_title", store=False, readonly=False)
+    contrato_ids = fields.One2many('ing.contratos.contratos', 'employee_id', string='Contratos', tracking=True)
+    job_title_for = fields.Char('Funcion', compute="_compute_job_title", store=False, readonly=False, tracking=True)
 
     """ El campo 'view_job_title' lo uso para mostrar el 'job_title' o el 'job_title_for' dependiendo de 'tipo_contrato_id'"""
-    view_job_title = fields.Boolean(compute="_compute_view_job_title", store=False)
+    view_job_title = fields.Boolean(compute="_compute_view_job_title", store=False, tracking=True)
 
     @api.depends('contrato_ids.fecha_inicio')
     def _compute_job_title(self):

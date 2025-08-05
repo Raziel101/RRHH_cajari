@@ -11,4 +11,4 @@ class User(models.Model):
     # Relaciones
     areasgob_ids        = fields.Many2many('hr.department',relation='usuarios_areagob',
                                             column1='user_id',
-                                            column2='areagob_id',string=u"Áreas asignadas")
+                                            column2='areagob_id',string=u"Áreas asignadas", tracking=True)
