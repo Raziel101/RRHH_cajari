@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import fields, models, api
+from odoo import fields, models
 
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
@@ -27,18 +27,17 @@ class HrEmployee(models.Model):
             vals['tz'] = user.tz
         return vals
 
-    @api.model
     def write(self, vals):
         res = super(HrEmployee, self).write(vals)
         for record in self:
             if 'license_class' in vals:
                 new_vals = record.license_class.mapped('name')
                 record.message_post(
-                    body=f"Clases de licencia modificadas: {', '.join(new_vals)}"
+                    body="Clases de licencia modificadas: %s" % ", ".join(new_vals)
                 )
             if 'category_ids' in vals:
                 new_vals = record.category_ids.mapped('name')
                 record.message_post(
-                    body=f"Categorías modificadas: {', '.join(new_vals)}"
+                    body="Categorías modificadas: %s" % ", ".join(new_vals)
                 )
         return res
