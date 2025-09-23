@@ -1,0 +1,20 @@
+<odoo>
+    <record id="view_hr_employee_form_li" model="ir.ui.view">
+        <field name="name">hr.employee.form.li</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <!-- Pestaña Psicofísicos -->
+            <xpath expr="//sheet/notebook" position="inside">
+                <page string="Psicofísicos">
+                    <group>
+                        <field name="fecha_examen_li"/>
+                        <field name="fecha_dictamen_li"/>
+                        <field name="fecha_vigencia_li"/>
+                        <field name="dictamen"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

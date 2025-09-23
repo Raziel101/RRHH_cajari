@@ -17,6 +17,7 @@
                 "ing_ausencias", 'web'],
     'data': [
         'data/data_initial.xml',
+        'data/cron.xml',
 
         'views/login.xml',
         'views/layout_portal.xml',
@@ -25,6 +26,7 @@
         'views/ing_licencias_tipo.xml',
         'views/form_general_views.xml',
         'views/ing_solicitud_view.xml',
+        'views/hr_employee_li_view.xml',
 
         'assets.xml',
 

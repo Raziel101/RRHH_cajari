@@ -1,0 +1,11 @@
+<odoo>
+    <record id="ir_cron_check_vigencia" model="ir.cron">
+        <field name="name">Check vigencia examen médico</field>
+        <field name="model_id" ref="hr.model_hr_employee"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_check_vigencia()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

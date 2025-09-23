@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from odoo import fields, models
+from odoo import fields, models,api
+from datetime import date, timedelta
 
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
@@ -41,3 +42,43 @@ class HrEmployee(models.Model):
                     body="Categorías modificadas: %s" % ", ".join(new_vals)
                 )
         return res
+
+    fecha_examen_li = fields.Date(string='Fecha de Examen', tracking=True)
+    fecha_dictamen_li = fields.Date(string='Fecha de Dictamen', tracking=True)
+    fecha_vigencia_li = fields.Date(string='Fecha de Vigencia', tracking=True)
+    dictamen = fields.Selection(
+        [
+            ('APTO', 'Apto'),
+            ('RETENIDO', 'Retenido'),
+        ],
+        string="Dictamen",
+    )
+
+    vigencia_alertada = fields.Boolean(string="Alerta enviada", default=False)
+
+    @api.model
+    def cron_check_vigencia(self):
+        """
+        Verifica empleados cuya fecha de vigencia esté a 30 días.
+        Dispara la alerta solo una vez.
+        """
+        today = date.today()
+        limite = today + timedelta(days=30)
+
+        empleados = self.search([
+            ('fecha_vigencia_li', '=', limite),
+            ('vigencia_alertada', '=', False)
+        ])
+
+        for emp in empleados:
+            # Crear una actividad en el chatter
+            self.env['mail.activity'].create({
+                'res_model_id': self.env['ir.model']._get_id('hr.employee'),
+                'res_id': emp.id,
+                'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
+                'summary': 'Vigencia próxima a vencer',
+                'note': f'La fecha de vigencia del examen médico ({emp.fecha_vigencia_li}) vence en 30 días.',
+                'user_id': emp.user_id.id or self.env.user.id,
+            })
+            # Marcar que ya se alertó → no se vuelve a repetir
+            emp.vigencia_alertada = True
