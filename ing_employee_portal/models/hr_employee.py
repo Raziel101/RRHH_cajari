@@ -56,29 +56,32 @@ class HrEmployee(models.Model):
 
     vigencia_alertada = fields.Boolean(string="Alerta enviada", default=False)
 
-    @api.model
-    def cron_check_vigencia(self):
-        """
-        Verifica empleados cuya fecha de vigencia esté a 30 días.
-        Dispara la alerta solo una vez.
-        """
-        today = date.today()
-        limite = today + timedelta(days=30)
-
+    def _cron_alerta_vencimiento(self):
+        """Genera una actividad 30 días antes de la fecha de vigencia"""
+        hoy = date.today()
         empleados = self.search([
-            ('fecha_vigencia_li', '=', limite),
-            ('vigencia_alertada', '=', False)
+            ('fecha_vigencia_li', '!=', False)
         ])
 
-        for emp in empleados:
-            # Crear una actividad en el chatter
-            self.env['mail.activity'].create({
-                'res_model_id': self.env['ir.model']._get_id('hr.employee'),
-                'res_id': emp.id,
-                'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
-                'summary': 'Vigencia próxima a vencer',
-                'note': f'La fecha de vigencia del examen médico ({emp.fecha_vigencia_li}) vence en 30 días.',
-                'user_id': emp.user_id.id or self.env.user.id,
-            })
-            # Marcar que ya se alertó → no se vuelve a repetir
-            emp.vigencia_alertada = True
+        for empleado in empleados:
+            if empleado.fecha_vigencia_li:
+                alerta_fecha = empleado.fecha_vigencia_li - timedelta(days=30)
+                if alerta_fecha == hoy:
+                    # Verificar que no se haya creado ya una actividad para este vencimiento
+                    existe = self.env['mail.activity'].search([
+                        ('res_model', '=', 'hr.employee'),
+                        ('res_id', '=', empleado.id),
+                        ('activity_type_id', '=', self.env.ref('mail.mail_activity_data_todo').id),
+                        ('summary', '=', 'Vencimiento de psicofísico'),
+                    ], limit=1)
+
+                    if not existe:
+                        self.env['mail.activity'].create({
+                            'res_model': 'hr.employee',
+                            'res_id': empleado.id,
+                            'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
+                            'user_id': empleado.user_id.id or self.env.uid,
+                            'summary': 'Vencimiento de psicofísico',
+                            'note': f'El psicofísico de {empleado.name} vence el {empleado.fecha_vigencia_li}',
+                            'date_deadline': empleado.fecha_vigencia_li,
+                        })

@@ -5,7 +5,8 @@
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
             <!-- Pestaña Psicofísicos -->
-            <xpath expr="//sheet/notebook" position="inside">
+            <!--<xpath expr="//sheet/notebook/page[last()]" position="before">-->
+            <xpath expr="//sheet/notebook/page[@name='hr_settings']" position="after">
                 <page string="Psicofísicos">
                     <group>
                         <field name="fecha_examen_li"/>
