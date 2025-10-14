@@ -63,25 +63,27 @@ class HrEmployee(models.Model):
             ('fecha_vigencia_li', '!=', False)
         ])
 
+        model_id = self.env['ir.model'].sudo().search([('model', '=', 'hr.employee')]).id
         for empleado in empleados:
-            if empleado.fecha_vigencia_li:
-                alerta_fecha = empleado.fecha_vigencia_li - timedelta(days=30)
-                if alerta_fecha == hoy:
-                    # Verificar que no se haya creado ya una actividad para este vencimiento
-                    existe = self.env['mail.activity'].search([
-                        ('res_model', '=', 'hr.employee'),
-                        ('res_id', '=', empleado.id),
-                        ('activity_type_id', '=', self.env.ref('mail.mail_activity_data_todo').id),
-                        ('summary', '=', 'Vencimiento de psicofísico'),
-                    ], limit=1)
+            alerta_fecha = empleado.fecha_vigencia_li - timedelta(days=30)
+            import logging 
+            if alerta_fecha == hoy:
+                # Verificar que no se haya creado ya una actividad para este vencimiento
+                existe = self.env['mail.activity'].search([
+                    ('res_model', '=', 'hr.employee'),
+                    ('res_id', '=', empleado.id),
+                    ('activity_type_id', '=', self.env.ref('mail.mail_activity_data_todo').id),
+                    ('summary', '=', 'Vencimiento de psicofísico'),
+                ], limit=1)
 
-                    if not existe:
-                        self.env['mail.activity'].create({
-                            'res_model': 'hr.employee',
-                            'res_id': empleado.id,
-                            'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
-                            'user_id': empleado.user_id.id or self.env.uid,
-                            'summary': 'Vencimiento de psicofísico',
-                            'note': f'El psicofísico de {empleado.name} vence el {empleado.fecha_vigencia_li}',
-                            'date_deadline': empleado.fecha_vigencia_li,
-                        })
+                if not existe:
+                    res = self.env['mail.activity'].create({
+                        'res_model_id': model_id,
+                        'res_id': empleado.id,
+                        'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
+                        'user_id': empleado.user_id.id or self.env.uid,
+                        'summary': 'Vencimiento de psicofísico',
+                        'note': f'El psicofísico de {empleado.name} vence el {empleado.fecha_vigencia_li}',
+                        'date_deadline': empleado.fecha_vigencia_li,
+                    })
+                    
