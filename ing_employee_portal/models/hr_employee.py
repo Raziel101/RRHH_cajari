@@ -57,17 +57,24 @@ class HrEmployee(models.Model):
     vigencia_alertada = fields.Boolean(string="Alerta enviada", default=False)
 
     def _cron_alerta_vencimiento(self):
-        """Genera una actividad 30 días antes de la fecha de vigencia"""
+        """Genera una actividad y una alerta en canal 30 días antes de la fecha de vigencia"""
         hoy = date.today()
         empleados = self.search([
             ('fecha_vigencia_li', '!=', False)
         ])
 
         model_id = self.env['ir.model'].sudo().search([('model', '=', 'hr.employee')]).id
+        canal = self.env['mail.channel'].sudo().search([('name', '=', 'Vencimiento Licencia Psicofisico')], limit=1)
+        if not canal:
+            canal = self.env['mail.channel'].sudo().create({
+                'name': 'Vencimiento Licencia Psicofisico',
+                'channel_type': 'channel',
+                'public': 'public',
+            })
+
         for empleado in empleados:
             alerta_fecha = empleado.fecha_vigencia_li - timedelta(days=30)
-            import logging 
-            if alerta_fecha == hoy:
+            if alerta_fecha == hoy and not empleado.vigencia_alertada:
                 # Verificar que no se haya creado ya una actividad para este vencimiento
                 existe = self.env['mail.activity'].search([
                     ('res_model', '=', 'hr.employee'),
@@ -77,7 +84,7 @@ class HrEmployee(models.Model):
                 ], limit=1)
 
                 if not existe:
-                    res = self.env['mail.activity'].create({
+                    self.env['mail.activity'].create({
                         'res_model_id': model_id,
                         'res_id': empleado.id,
                         'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
@@ -86,4 +93,16 @@ class HrEmployee(models.Model):
                         'note': f'El psicofísico de {empleado.name} vence el {empleado.fecha_vigencia_li}',
                         'date_deadline': empleado.fecha_vigencia_li,
                     })
-                    
+
+                # 📢 Enviar mensaje al canal de conversación
+                canal.message_post(
+                    body=(
+                        f"⚠️ <b>Vencimiento de Licencia Psicofísico</b><br/>"
+                        f"Empleado: <b>{empleado.name}</b><br/>"
+                        f"Fecha de vencimiento: {empleado.fecha_vigencia_li.strftime('%d/%m/%Y')}"
+                    ),
+                    subtype_xmlid="mail.mt_comment"
+                )
+
+                # Marcar como alertado para no duplicar
+                empleado.vigencia_alertada = True
