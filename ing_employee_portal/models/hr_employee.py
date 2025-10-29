@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
-from odoo import fields, models,api
+from odoo import fields, models, api
 from datetime import date, timedelta
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
     department_id = fields.Many2one(string='Departamento', tracking=True)
     job_title = fields.Char(string='Título del trabajo', tracking=True)
-    license_class = fields.Many2many('ing.type.lic', string='Clases de licencias de conducir', tracking=True, store=True)
+    license_class = fields.Many2many('ing.type.lic', string='Clases de licencias de conducir', tracking=True,
+                                     store=True)
     category_ids = fields.Many2many(
         'hr.employee.category', 'employee_category_rel',
         'emp_id', 'category_id',
@@ -46,36 +50,43 @@ class HrEmployee(models.Model):
     fecha_examen_li = fields.Date(string='Fecha de Examen', tracking=True)
     fecha_dictamen_li = fields.Date(string='Fecha de Dictamen', tracking=True)
     fecha_vigencia_li = fields.Date(string='Fecha de Vigencia', tracking=True)
-    dictamen = fields.Selection(
-        [
+    dictamen = fields.Selection([
             ('APTO', 'Apto'),
             ('RETENIDO', 'Retenido'),
-        ],
-        string="Dictamen",
-    )
-
+        ], string="Dictamen")
     vigencia_alertada = fields.Boolean(string="Alerta enviada", default=False)
 
     def _cron_alerta_vencimiento(self):
-        """Genera una actividad y una alerta en canal 30 días antes de la fecha de vigencia"""
+        """Genera una actividad 30 días antes de la fecha de vigencia y envía alerta al canal"""
         hoy = date.today()
         empleados = self.search([
             ('fecha_vigencia_li', '!=', False)
         ])
 
-        model_id = self.env['ir.model'].sudo().search([('model', '=', 'hr.employee')]).id
-        canal = self.env['mail.channel'].sudo().search([('name', '=', 'Vencimiento Licencia Psicofisico')], limit=1)
+        # Buscar canal, si no existe lo creamos
+        canal = self.env['mail.channel'].sudo().search([
+            ('name', '=', 'Vencimiento Licencia Psicofisico')
+        ], limit=1)
+
         if not canal:
             canal = self.env['mail.channel'].sudo().create({
                 'name': 'Vencimiento Licencia Psicofisico',
-                'channel_type': 'channel',
-                'public': 'public',
+                'public': 'public',  # visible para todos
+                'channel_type': 'channel',  # sala de conversación
             })
 
+        # Agregar TODOS los usuarios de Odoo al canal (solo una vez)
+        all_partners = self.env['res.users'].sudo().search([]).mapped('partner_id')
+        canal.write({'channel_partner_ids': [(6, 0, all_partners.ids)]})
+
+        model_id = self.env['ir.model'].sudo().search([('model', '=', 'hr.employee')]).id
+
         for empleado in empleados:
-            alerta_fecha = empleado.fecha_vigencia_li - timedelta(days=30)
-            if alerta_fecha == hoy and not empleado.vigencia_alertada:
-                # Verificar que no se haya creado ya una actividad para este vencimiento
+            fecha_vigencia = fields.Date.from_string(empleado.fecha_vigencia_li)
+            alerta_fecha = fecha_vigencia - timedelta(days=30)
+
+            if alerta_fecha == hoy:
+                # Verificar si ya existe actividad
                 existe = self.env['mail.activity'].search([
                     ('res_model', '=', 'hr.employee'),
                     ('res_id', '=', empleado.id),
@@ -84,25 +95,28 @@ class HrEmployee(models.Model):
                 ], limit=1)
 
                 if not existe:
+                    # Crear actividad en la ficha del empleado
                     self.env['mail.activity'].create({
                         'res_model_id': model_id,
                         'res_id': empleado.id,
                         'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
                         'user_id': empleado.user_id.id or self.env.uid,
                         'summary': 'Vencimiento de psicofísico',
-                        'note': f'El psicofísico de {empleado.name} vence el {empleado.fecha_vigencia_li}',
-                        'date_deadline': empleado.fecha_vigencia_li,
+                        'note': f'El psicofísico de {empleado.name} vence el {fecha_vigencia.strftime("%d/%m/%Y")}',
+                        'date_deadline': fecha_vigencia,
                     })
 
-                # 📢 Enviar mensaje al canal de conversación
-                canal.message_post(
-                    body=(
-                        f"⚠️ <b>Vencimiento de Licencia Psicofísico</b><br/>"
-                        f"Empleado: <b>{empleado.name}</b><br/>"
-                        f"Fecha de vencimiento: {empleado.fecha_vigencia_li.strftime('%d/%m/%Y')}"
-                    ),
-                    subtype_xmlid="mail.mt_comment"
-                )
+                    # Mensaje en el canal visible y notificado a todos
+                    canal.message_post(
+                        body=(
+                            f"⚠️ <b>Alerta de vencimiento de Licencia Psicofísico</b><br/>"
+                            f"Empleado: <b>{empleado.name}</b><br/>"
+                            f"Fecha de vencimiento: {fecha_vigencia.strftime('%d/%m/%Y')}"
+                        ),
+                        subtype_xmlid="mail.mt_comment"
+                    )
 
-                # Marcar como alertado para no duplicar
-                empleado.vigencia_alertada = True
+
+
+
+

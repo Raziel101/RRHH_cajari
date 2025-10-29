@@ -13,6 +13,7 @@
                         <field name="fecha_dictamen_li"/>
                         <field name="fecha_vigencia_li"/>
                         <field name="dictamen"/>
+                        <field name="vigencia_alertada"/>
                     </group>
                 </page>
             </xpath>
