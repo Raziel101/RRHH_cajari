@@ -18,6 +18,15 @@ class HrEmployee(models.Model):
         groups="hr.group_hr_manager,ing_contratos.group_ing_rrhh_contratos_admin_rrhh,ing_contratos.group_ing_rrhh_contratos_encargado,ing_contratos.group_ing_rrhh_contratos_admin",
         string='Tags', tracking=True, store=True)
 
+    fecha_examen_li = fields.Date(string='Fecha de Examen', tracking=True)
+    fecha_dictamen_li = fields.Date(string='Fecha de Dictamen', tracking=True)
+    fecha_vigencia_li = fields.Date(string='Fecha de Vigencia', tracking=True)
+    dictamen = fields.Selection([
+            ('APTO', 'Apto'),
+            ('RETENIDO', 'Retenido'),
+        ], string="Dictamen")
+    vigencia_alertada = fields.Boolean(string="Alerta enviada", default=False)
+
     def get_job(self):
         return self.job_title if self.view_job_title else self.job_title_for
 
@@ -47,17 +56,64 @@ class HrEmployee(models.Model):
                 )
         return res
 
-    fecha_examen_li = fields.Date(string='Fecha de Examen', tracking=True)
-    fecha_dictamen_li = fields.Date(string='Fecha de Dictamen', tracking=True)
-    fecha_vigencia_li = fields.Date(string='Fecha de Vigencia', tracking=True)
-    dictamen = fields.Selection([
-            ('APTO', 'Apto'),
-            ('RETENIDO', 'Retenido'),
-        ], string="Dictamen")
-    vigencia_alertada = fields.Boolean(string="Alerta enviada", default=False)
+    def _generate_activity_psychophysical_expiration(self):
+        """Genera una actividad y aviso cuando el psicofísico vence en 30 días"""
+        target_date = date.today() + timedelta(days=30)
 
-    def _cron_alerta_vencimiento(self):
-        """Genera una actividad 30 días antes de la fecha de vigencia y envía alerta al canal"""
+        employees = self.search([
+            ('fecha_vigencia_li', '!=', False),
+            ('fecha_vigencia_li', '<=', target_date),
+        ])
+
+        # Buscar canal (o crearlo si no existe)
+        channel = self.env['mail.channel'].sudo().search([
+            ('name', '=', 'Vencimiento Licencia Psicofisico')
+        ], limit=1)
+
+        if not channel:
+            channel = self.env['mail.channel'].sudo().create({
+                'name': 'Vencimiento Licencia Psicofisico',
+                'public': 'public',  # Visible para todos
+                'channel_type': 'channel',
+            })
+            # Agregar TODOS los usuarios del sistema al canal
+            all_partners = self.env['res.users'].sudo().search([]).mapped('partner_id')
+            channel.write({'channel_partner_ids': [(6, 0, all_partners.ids)]})
+
+        # Crear actividad y enviar aviso
+        for emp in employees:
+            fecha_vig = fields.Date.from_string(emp.fecha_vigencia_li)
+
+            # Evitar crear duplicados
+            exist = self.env['mail.activity'].search([
+                ('res_model', '=', 'hr.employee'),
+                ('res_id', '=', emp.id),
+                ('summary', '=', 'Vencimiento de psicofísico')
+            ], limit=1)
+
+            if not exist:
+                # Crear actividad
+                self.env['mail.activity'].create({
+                    'res_model_id': self.env.ref('hr.model_hr_employee').id,
+                    'res_id': emp.id,
+                    'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
+                    'user_id': emp.user_id.id or self.env.uid,
+                    'summary': 'Vencimiento de psicofísico',
+                    'note': f'El psicofísico de {emp.name} vence el {fecha_vig.strftime("%d/%m/%Y")}',
+                    'date_deadline': fecha_vig,
+                })
+
+                # Enviar mensaje al canal
+                channel.message_post(
+                    body=(
+                        f"⚠️ <b>Vencimiento de Psicofísico</b><br/>"
+                        f"Empleado: <b>{emp.name}</b><br/>"
+                        f"Fecha de vencimiento: <b>{fecha_vig.strftime('%d/%m/%Y')}</b>"
+                    ),
+                    subtype_xmlid="mail.mt_comment"
+                )
+
+    """def _cron_alerta_vencimiento(self):
         hoy = date.today()
         empleados = self.search([
             ('fecha_vigencia_li', '!=', False)
@@ -114,8 +170,7 @@ class HrEmployee(models.Model):
                             f"Fecha de vencimiento: {fecha_vigencia.strftime('%d/%m/%Y')}"
                         ),
                         subtype_xmlid="mail.mt_comment"
-                    )
-
+                    )"""
 
 
 

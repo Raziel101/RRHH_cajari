@@ -1,12 +1,16 @@
 <odoo>
-    <record id="cron_alerta_vencimiento_psicofisico" model="ir.cron">
-        <field name="name">Alerta de vencimiento psicofísico</field>
+    <record id="activities_scheduler_action_psychophysical_expiration" model="ir.cron">
+        <field name="name">Alerta de vencimiento psicofísico2</field>
         <field name="model_id" ref="hr.model_hr_employee"/>
         <field name="state">code</field>
-        <field name="code">model._cron_alerta_vencimiento()</field>
+        <field name="code">model._generate_activity_psychophysical_expiration()</field>
+        <field name="user_id" ref="base.user_root"/>
         <field name="interval_number">1</field>
         <field name="interval_type">days</field>
         <field name="numbercall">-1</field>
+        <field name="priority">6</field>
         <field name="active">True</field>
+        <field eval="True" name="doall"/>
     </record>
+
 </odoo>
