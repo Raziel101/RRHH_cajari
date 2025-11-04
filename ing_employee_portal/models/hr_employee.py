@@ -56,6 +56,7 @@ class HrEmployee(models.Model):
                 )
         return res
 
+    @api.model
     def _generate_activity_psychophysical_expiration(self):
         """Genera una actividad y aviso cuando el psicofísico vence en 30 días"""
         target_date = date.today() + timedelta(days=30)
