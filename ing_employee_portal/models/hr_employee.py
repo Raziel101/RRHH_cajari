@@ -58,15 +58,19 @@ class HrEmployee(models.Model):
 
     @api.model
     def _generate_activity_psychophysical_expiration(self):
-        """Genera una actividad y aviso cuando el psicofísico vence en 30 días"""
-        target_date = date.today() + timedelta(days=30)
+        """Aviso diario de psicofísicos que vencen en menos de 30 días."""
 
+        hoy = date.today()
+        target_date = hoy + timedelta(days=30)
+
+        # Empleados cuyo psicofísico vence dentro de 30 días
         employees = self.search([
             ('fecha_vigencia_li', '!=', False),
+            ('fecha_vigencia_li', '>=', hoy),
             ('fecha_vigencia_li', '<=', target_date),
         ])
 
-        # Buscar canal (o crearlo si no existe)
+        # Buscar o crear canal
         channel = self.env['mail.channel'].sudo().search([
             ('name', '=', 'Vencimiento Licencia Psicofisico')
         ], limit=1)
@@ -74,18 +78,17 @@ class HrEmployee(models.Model):
         if not channel:
             channel = self.env['mail.channel'].sudo().create({
                 'name': 'Vencimiento Licencia Psicofisico',
-                'public': 'public',  # Visible para todos
+                'public': 'public',
                 'channel_type': 'channel',
             })
-            # Agregar TODOS los usuarios del sistema al canal
             all_partners = self.env['res.users'].sudo().search([]).mapped('partner_id')
             channel.write({'channel_partner_ids': [(6, 0, all_partners.ids)]})
 
-        # Crear actividad y enviar aviso
+        # Generar alertas
         for emp in employees:
             fecha_vig = fields.Date.from_string(emp.fecha_vigencia_li)
 
-            # Evitar crear duplicados
+            # Crear actividad solo si no existe
             exist = self.env['mail.activity'].search([
                 ('res_model', '=', 'hr.employee'),
                 ('res_id', '=', emp.id),
@@ -93,7 +96,6 @@ class HrEmployee(models.Model):
             ], limit=1)
 
             if not exist:
-                # Crear actividad
                 self.env['mail.activity'].create({
                     'res_model_id': self.env.ref('hr.model_hr_employee').id,
                     'res_id': emp.id,
@@ -104,15 +106,14 @@ class HrEmployee(models.Model):
                     'date_deadline': fecha_vig,
                 })
 
-                # Enviar mensaje al canal
-                channel.message_post(
-                    body=(
-                        f"⚠️ <b>Vencimiento de Psicofísico</b><br/>"
-                        f"Empleado: <b>{emp.name}</b><br/>"
-                        f"Fecha de vencimiento: <b>{fecha_vig.strftime('%d/%m/%Y')}</b>"
-                    ),
-                    subtype_xmlid="mail.mt_comment"
-                )
+            # Mensaje en canal (AVISO TODOS LOS DÍAS)
+            channel.message_post(
+                body=(
+                    f"⚠️ <b>Vencimiento próximo de Psicofísico</b><br/>"
+                    f"<b>{emp.name}</b> vence el <b>{fecha_vig.strftime('%d/%m/%Y')}</b>"
+                ),
+                subtype_xmlid="mail.mt_comment"
+            )
 
     """def _cron_alerta_vencimiento(self):
         hoy = date.today()

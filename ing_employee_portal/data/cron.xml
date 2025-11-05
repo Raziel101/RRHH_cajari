@@ -12,4 +12,5 @@
         <field name="active">True</field>
         <field eval="True" name="doall"/>
     </record>
+
 </odoo>
