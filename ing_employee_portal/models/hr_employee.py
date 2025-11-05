@@ -63,14 +63,14 @@ class HrEmployee(models.Model):
         hoy = date.today()
         target_date = hoy + timedelta(days=30)
 
-        # Empleados cuyo psicofísico vence dentro de 30 días
-        employees = self.search([
+        # Ejecutar la búsqueda con privilegios elevados
+        employees = self.sudo().search([
             ('fecha_vigencia_li', '!=', False),
             ('fecha_vigencia_li', '>=', hoy),
             ('fecha_vigencia_li', '<=', target_date),
         ])
 
-        # Buscar o crear canal
+        # Buscar o crear canal con sudo
         channel = self.env['mail.channel'].sudo().search([
             ('name', '=', 'Vencimiento Licencia Psicofisico')
         ], limit=1)
@@ -82,21 +82,20 @@ class HrEmployee(models.Model):
                 'channel_type': 'channel',
             })
             all_partners = self.env['res.users'].sudo().search([]).mapped('partner_id')
-            channel.write({'channel_partner_ids': [(6, 0, all_partners.ids)]})
+            channel.sudo().write({'channel_partner_ids': [(6, 0, all_partners.ids)]})
 
-        # Generar alertas
         for emp in employees:
             fecha_vig = fields.Date.from_string(emp.fecha_vigencia_li)
 
-            # Crear actividad solo si no existe
-            exist = self.env['mail.activity'].search([
+            # Verificar actividad existente con sudo
+            exist = self.env['mail.activity'].sudo().search([
                 ('res_model', '=', 'hr.employee'),
                 ('res_id', '=', emp.id),
                 ('summary', '=', 'Vencimiento de psicofísico')
             ], limit=1)
 
             if not exist:
-                self.env['mail.activity'].create({
+                self.env['mail.activity'].sudo().create({
                     'res_model_id': self.env.ref('hr.model_hr_employee').id,
                     'res_id': emp.id,
                     'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
@@ -106,8 +105,8 @@ class HrEmployee(models.Model):
                     'date_deadline': fecha_vig,
                 })
 
-            # Mensaje en canal (AVISO TODOS LOS DÍAS)
-            channel.message_post(
+            # Mensaje diario en canal
+            channel.sudo().message_post(
                 body=(
                     f"⚠️ <b>Vencimiento próximo de Psicofísico</b><br/>"
                     f"<b>{emp.name}</b> vence el <b>{fecha_vig.strftime('%d/%m/%Y')}</b>"
