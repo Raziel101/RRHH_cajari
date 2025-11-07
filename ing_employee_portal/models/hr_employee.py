@@ -66,7 +66,6 @@ class HrEmployee(models.Model):
 
         employees = self.sudo().search([
             ('fecha_vigencia_li', '!=', False),
-            ('fecha_vigencia_li', '>=', hoy),
             ('fecha_vigencia_li', '<=', target_date),
         ])
 
