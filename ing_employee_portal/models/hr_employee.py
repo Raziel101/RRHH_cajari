@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import fields, models, api
+from odoo import fields, models, api, SUPERUSER_ID
 from datetime import date, timedelta
 import logging
 
@@ -58,19 +58,19 @@ class HrEmployee(models.Model):
 
     @api.model
     def _generate_activity_psychophysical_expiration(self):
-        """Aviso diario de psicofísicos que vencen en menos de 30 días."""
+        # Forzar siempre ejecución como superusuario
+        self = self.with_user(SUPERUSER_ID).sudo()
 
         hoy = date.today()
         target_date = hoy + timedelta(days=30)
 
-        # Ejecutar la búsqueda con privilegios elevados
         employees = self.sudo().search([
             ('fecha_vigencia_li', '!=', False),
             ('fecha_vigencia_li', '>=', hoy),
             ('fecha_vigencia_li', '<=', target_date),
         ])
 
-        # Buscar o crear canal con sudo
+        # Canal
         channel = self.env['mail.channel'].sudo().search([
             ('name', '=', 'Vencimiento Licencia Psicofisico')
         ], limit=1)
@@ -84,10 +84,13 @@ class HrEmployee(models.Model):
             all_partners = self.env['res.users'].sudo().search([]).mapped('partner_id')
             channel.sudo().write({'channel_partner_ids': [(6, 0, all_partners.ids)]})
 
+        # Usuario responsable que recibirá las actividades
+        admin_user = self.env.ref('base.user_admin').id
+
         for emp in employees:
             fecha_vig = fields.Date.from_string(emp.fecha_vigencia_li)
 
-            # Verificar actividad existente con sudo
+            # Actividad (solo una vez)
             exist = self.env['mail.activity'].sudo().search([
                 ('res_model', '=', 'hr.employee'),
                 ('res_id', '=', emp.id),
@@ -99,17 +102,18 @@ class HrEmployee(models.Model):
                     'res_model_id': self.env.ref('hr.model_hr_employee').id,
                     'res_id': emp.id,
                     'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
-                    'user_id': emp.user_id.id or self.env.uid,
+                    'user_id': admin_user,  # ← YA NO SE ASIGNA AL EMPLEADO
                     'summary': 'Vencimiento de psicofísico',
                     'note': f'El psicofísico de {emp.name} vence el {fecha_vig.strftime("%d/%m/%Y")}',
                     'date_deadline': fecha_vig,
                 })
 
-            # Mensaje diario en canal
+            # Mensaje diario al canal
             channel.sudo().message_post(
                 body=(
-                    f"⚠️ <b>Vencimiento próximo de Psicofísico</b><br/>"
-                    f"<b>{emp.name}</b> vence el <b>{fecha_vig.strftime('%d/%m/%Y')}</b>"
+                    f"⚠️ <b>Psicofísico Próximo a Vencer</b><br/>"
+                    f"<b>{emp.name}</b><br/>"
+                    f"Vence el <b>{fecha_vig.strftime('%d/%m/%Y')}</b>"
                 ),
                 subtype_xmlid="mail.mt_comment"
             )
