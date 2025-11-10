@@ -24,7 +24,7 @@ class HrEmployee(models.Model):
     dictamen = fields.Selection([
             ('APTO', 'Apto'),
             ('RETENIDO', 'Retenido'),
-        ], string="Dictamen", tracking=True))
+        ], string="Dictamen", tracking=True)
     vigencia_alertada = fields.Boolean(string="Alerta enviada", default=False)
 
     def get_job(self):
