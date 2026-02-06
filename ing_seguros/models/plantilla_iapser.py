@@ -17,7 +17,7 @@ class plantilla_iasper(models.Model):
     _order = 'fecha_creacion desc'
 
     # Datos del siniestro
-    poliza_numero = fields.Char(string="Póliza N°", default="80357/12",required=True)
+    poliza_numero = fields.Char(string="Póliza N°", default="84352/12",required=True)
     siniestro_numero = fields.Char(string="Siniestro N°")
     nota = fields.Text(string="Nota",default="Este formulario debe remitirse junto con el INFORME MÉDICO, inmediatamente de producido el siniestro.")
 
