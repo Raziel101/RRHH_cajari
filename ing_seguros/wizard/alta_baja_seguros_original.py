@@ -125,7 +125,7 @@ class AltaBajaWz(models.TransientModel):
         emails_to = self.env['ing.seguros.config'].search([])
 
         self.env['mail.mail'].sudo().create({
-            'subject': f'Solicitud de {tipo} de seguros Póliza 80357/12',
+            'subject': f'Solicitud de {tipo} de seguros Póliza 84352/12',
             'body_html': f'''<h3>Buenos días:</h3>
             Buenos días:
                         Por medio del presente, adjunto planilla con el listado del personal contratado con el fin de solicitar la {tipo} de seguro. 

@@ -101,7 +101,7 @@ class AltaBajaWz(models.TransientModel):
 
         # 🔹 Enviar el email con el adjunto
         mail_values = {
-            'subject': f'Solicitud de {tipo} de seguros - Póliza 80357/12',
+            'subject': f'Solicitud de {tipo} de seguros - Póliza 84352/12',
             'body_html': f'''<h3>Buenos días:</h3>
             Por medio del presente, adjunto la planilla del personal contratado para la solicitud de {tipo} de seguro.<br>
             <br>
