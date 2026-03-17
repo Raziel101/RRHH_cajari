@@ -459,8 +459,10 @@ class FormGeneral(models.Model):
     @api.model
     def _generate_activity_by_date_reentry(self):
         today = date.today()
+        one_year_ago = today - timedelta(days=366)
+
         lics = self.search([('tipo_lic_id','=',self.env.ref('ing_licencias.lic_no_remunerada').id),
-                            ('state','=','confirmada')])
+                            ('state','=','confirmada'), ('fecha_reingreso','>=', one_year_ago)])
         l_aux = []
         for l in lics:
             if today <= l.fecha_reingreso <= today + timedelta(days=7):
