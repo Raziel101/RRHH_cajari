@@ -204,7 +204,7 @@ class FormGeneral(models.Model):
             employee_id = self.env['ing.licencias.base'].browse(emp_id).employee_id.id
             hours_sev = self.base_form_id.employee_id.check_availability_hours_sev(employee_id)
             if 6 * (vals.get('dias_solicitados') or self.dias_solicitados) > hours_sev:
-                if vals.get('state') not in ['cancelada', 'revisar']:
+                if vals.get('state') not in ['cancelada', 'revisar', 'borrador']:
                     return False
         return True
 
@@ -461,8 +461,14 @@ class FormGeneral(models.Model):
         today = date.today()
         one_year_ago = today - timedelta(days=366)
 
+        planta_permanente = self.env.ref('ing_ausencias.planta_permanente').id
+        planta_temporaria = self.env.ref('ing_ausencias.planta_temporaria').id
+
         lics = self.search([('tipo_lic_id','=',self.env.ref('ing_licencias.lic_no_remunerada').id),
-                            ('state','=','confirmada'), ('fecha_reingreso','>=', one_year_ago)])
+                            ('state','=','confirmada'), ('fecha_reingreso','>=', one_year_ago),
+                            ('base_form_id.employee_id.tipo_contrato_id', 'in',[planta_permanente, planta_temporaria]
+        ),])
+
         l_aux = []
         for l in lics:
             if today <= l.fecha_reingreso <= today + timedelta(days=7):
