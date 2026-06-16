@@ -28,7 +28,6 @@
                         <field name="tomador_numero" invisible="1"/>
                         <field name="tomador_localidad" invisible="1"/>
                         <field name="tomador_dpto" invisible="1" />
-                        <field name="tomador_email" invisible="1"/>
                         <field name="employee_id"/>
                         <!--<field name="asegurado_nombre"/>-->
                         <field name="asegurado_dni" invisible="1"/>
@@ -71,20 +70,22 @@
                         <field name="parte_cuerpo_lesionado2"/>
                         <separator/>
                         <field name="tipo_lesion2"/>
-                        <!--<field name="medico_primera_atencion"/>-->
+                        <separator/>
+                        <field name="medico_primera_atencion"/>
                     </group>
-                    <!--<group string="Testigos">
+                    <group string="Testigos">
                         <field name="hubo_testigos"/>
                         <field name="nombres_testigos" attrs="{'invisible': [('hubo_testigos', '=', False)]}"/>
                         <field name="domicilios_testigos" attrs="{'invisible': [('hubo_testigos', '=', False)]}"/>
                         <field name="sumario_policial"/>
                         <field name="autoridad"/>
-                    </group>-->
+                    </group>
                     <group string="Datos del Denunciante">
-                        <field name="tipo_denunciante" invisible="1"/>
-                        <field name="denunciante_nombre" invisible="1"/>
-                        <field name="denunciante_domicilio" invisible="1"/>
+                        <field name="tipo_denunciante"/>
+                        <field name="denunciante_nombre"/>
+                        <field name="denunciante_domicilio"/>
                         <field name="denunciante_telefono_fondo" string="Teléfono del Denunciante"/>
+                        <field name="tomador_email"/>
                     </group>
                 </sheet>
             </form>

@@ -30,7 +30,7 @@ class plantilla_iasper(models.Model):
     tomador_numero = fields.Char(string="N°", default=lambda self: self._get_company_value('street2'))
     tomador_localidad = fields.Char(string="Localidad Denunciante", default=lambda self: self._get_company_value('city'))
     tomador_dpto = fields.Char(string="Dpto", default="Federación")
-    tomador_email = fields.Char(string="E-mail Denunciante", default=lambda self: self._get_company_value('email'))
+    tomador_email = fields.Char(string="E-mail Denunciante", default="gestion.rrhh@chajari.gob.ar", attrs="{'readonly':[('locked','=',True)]}")#"default=lambda self: self._get_company_value('email')")
 
 
     # Datos del asegurado
@@ -49,7 +49,7 @@ class plantilla_iasper(models.Model):
 
     # Datos del Beneficiario
     beneficiario_nombre = fields.Char(string="Apellido y Nombre del Beneficiario")
-    cuenta_obra_social = fields.Boolean(string="¿Cuenta con Obra Social?")
+    cuenta_obra_social = fields.Boolean(string="¿Cuenta con Obra Social?", default=False)
     especificar_obra_social = fields.Char(string="Especificar")
 
     # Circunstancias del accidente
@@ -156,7 +156,7 @@ class plantilla_iasper(models.Model):
                                     ('Cabeza y Cuello', 'Cabeza y Cuello'),
                                     ('Miembros superiores', 'Miembros superiores'),
                                     ('Miembros inferiores', 'Miembros inferiores')], string="Parte del cuerpo lesionado")
-    medico_primera_atencion = fields.Char(string="Nombe del médico o establecimiento transitorio que prestó primeros auxilios")
+    medico_primera_atencion = fields.Char(string="Nombe del médico o establecimiento transitorio que prestó primeros auxilios", default="Clínica de la Unión")
 
     # Testigos y denuncia
     hubo_testigos = fields.Boolean(string="¿Hubo testigos del accidente?")
@@ -170,6 +170,7 @@ class plantilla_iasper(models.Model):
         ('empleador', 'Empleador'),
         ('representante', 'Representantes Legales'),
         ('beneficiario', 'Beneficiarios'),
+        ('empleado/a municipal','Empleado/a municipal'),
         ('otro', 'Otro')
     ], string="¿Quién es el denunciante?")
 
@@ -274,6 +275,7 @@ class plantilla_iasper(models.Model):
             record.tomador_localidad = self._get_company_value('city')
             record.tomador_dpto = self._get_company_value('company_registry')#state_id.name
             record.tomador_email = self._get_company_value('email')
+
 
     imagen_fondo = fields.Binary(compute="_get_imagen_fondo", store=False)
 

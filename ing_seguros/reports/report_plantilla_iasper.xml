@@ -70,9 +70,10 @@
                             <span class="field-overlay" style="position: absolute; top: 260px; left: 120px; font-size: 12px;"><t t-esc="o.asegurado_localidad"/></span>
                             <span class="field-overlay" style="position: absolute; top: 260px; left: 457px; font-size: 12px;"><t t-esc="o.asegurado_provincia"/></span>
                             <span class="field-overlay" style="position: absolute; top: 260px; left: 680px; font-size: 12px;"><t t-esc="o.asegurado_cp"/></span>
-                            <span class="field-overlay" style="position: absolute; top: 280px; left: 120px; font-size: 12px;"><t t-esc="o.asegurado_email"/></span>
-                            <span class="field-overlay" style="position: absolute; top: 295px; left: 180px; font-size: 12px; display: inline-block; max-width: 900px; overflow: hidden; word-wrap: break-word;"><t t-esc="o.tarea_efectuada"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 280px; left: 120px; font-size: 12px;"><t t-esc="o.tomador_email"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 295px; left: 180px; font-size: 12px; display: inline-block; max-width: 900px; overflow: hidden; word-wrap: break-word;"><t t-esc="o.actividad_accidentado"/></span>
                             <span class="field-overlay" style="position: absolute; top: 295px; left: 680px; font-size: 12px;"><t t-esc="o.asegurado_edad"/></span>
+                            <t t-if="o.cuenta_obra_social"><span class="field-overlay" style="position:absolute; top:340px; left:235px;">✓</span></t><t t-else=""><span class="field-overlay" style="position:absolute; top:340px; left:260px;">✓</span></t>
                             <!--<span class="field-overlay" style="top: 605px; left: 470px;"><t t-esc="o.beneficiario_nombre"/></span>
                             <span class="field-overlay" style="top: 705px; left: 200px;"><t t-esc="o.especificar_obra_social"/></span>-->
 
@@ -88,6 +89,16 @@
                             <span class="field-overlay" style="position: absolute; top: 605px; left: 235px; font-size: 12px;"><t t-esc="o.parte_cuerpo_lesionado2"/></span>
                             <span class="field-overlay" style="position: absolute; top: 585px; left: 482px; font-size: 12px; max-width: 670px; display: inline-block; overflow: hidden; word-wrap: break-word;"><t t-esc="o.tipo_lesion"/></span>
                             <span class="field-overlay" style="position: absolute; top: 605px; left: 482px; font-size: 12px; max-width: 670px; display: inline-block; overflow: hidden; word-wrap: break-word;"><t t-esc="o.tipo_lesion2"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 645px; left: 150px; font-size: 12px;"><t t-esc="o.medico_primera_atencion"/></span>
+                            <t t-if="o.hubo_testigos"><span class="field-overlay" style="position:absolute; top:660px; left:235px;">✓</span></t><t t-else=""><span class="field-overlay" style="position:absolute; top:660px; left:280px;">✓</span></t>
+                            <span class="field-overlay" style="position: absolute; top: 685px; left: 200px; font-size: 12px;"><t t-esc="o.nombres_testigos"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 720px; left: 200px; font-size: 12px;"><t t-esc="o.domicilios_testigos"/></span>
+                            <!--<span class="field-overlay" style="position:absolute; top:750px; left:235px; font-size:16px;"><t t-esc="'✓' if o.sumario_policial else ''"/></span>-->
+                            <t t-if="o.sumario_policial"><span class="field-overlay" style="position:absolute; top:750px; left:235px;">✓</span></t><t t-else=""><span class="field-overlay" style="position:absolute; top:750px; left:280px;">✓</span></t>
+                            <span class="field-overlay" style="position: absolute; top: 795px; left: 150px; font-size: 12px;"><t t-esc="o.autoridad"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 830px; left: 150px; font-size: 12px;"><t t-esc="o.tipo_denunciante"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 850px; left: 160px; font-size: 12px;"><t t-esc="o.denunciante_nombre"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 865px; left: 200px; font-size: 12px;"><t t-esc="o.denunciante_domicilio"/></span>
                             <span class="field-overlay" style="position: absolute; top: 1000px; left: 130px; font-size: 12px;"><t t-esc="o.denunciante_telefono_fondo"/></span>
                             <span class="field-overlay" style="position: absolute; top: 1000px; left: 450px; font-size: 12px;">
                                 Chajarí,<t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')"/>
@@ -99,14 +110,8 @@
                                 <t t-if="not now">Chajarí, [sin fecha actual]</t>
                             </span>-->
 
-                            <!--<span class="field-overlay" style="top: 1190px; left: 150px;"><t t-esc="o.medico_primera_atencion"/></span>
-                            <span class="field-overlay" style="top: 1290px; left: 340px;"><t t-esc="o.nombres_testigos"/></span>
-                            <span class="field-overlay" style="top: 1360px; left: 340px;"><t t-esc="o.domicilios_testigos"/></span>
-                            <span class="field-overlay" style="top: 1470px; left: 150px;"><t t-esc="o.autoridad"/></span>-->
-                            <!-- Datos del Denunciante
-                            <span class="field-overlay" style="top: 1540px; left: 150px;"><t t-esc="o.tipo_denunciante"/></span>
-                            <span class="field-overlay" style="top: 1580px; left: 300px;"><t t-esc="o.denunciante_nombre"/></span>
-                            <span class="field-overlay" style="top: 1615px; left: 380px;"><t t-esc="o.denunciante_domicilio"/></span>-->
+                            <!-- Datos del Denunciante-->
+
                         </div>
                     </main>
                 </div>
