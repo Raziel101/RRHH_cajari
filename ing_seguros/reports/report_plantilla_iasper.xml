@@ -89,14 +89,14 @@
                             <span class="field-overlay" style="position: absolute; top: 605px; left: 235px; font-size: 12px;"><t t-esc="o.parte_cuerpo_lesionado2"/></span>
                             <span class="field-overlay" style="position: absolute; top: 585px; left: 482px; font-size: 12px; max-width: 670px; display: inline-block; overflow: hidden; word-wrap: break-word;"><t t-esc="o.tipo_lesion"/></span>
                             <span class="field-overlay" style="position: absolute; top: 605px; left: 482px; font-size: 12px; max-width: 670px; display: inline-block; overflow: hidden; word-wrap: break-word;"><t t-esc="o.tipo_lesion2"/></span>
-                            <span class="field-overlay" style="position: absolute; top: 645px; left: 150px; font-size: 12px;"><t t-esc="o.medico_primera_atencion"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 645px; left: 50px; font-size: 12px;"><t t-esc="o.medico_primera_atencion"/></span>
                             <t t-if="o.hubo_testigos"><span class="field-overlay" style="position:absolute; top:660px; left:235px;">✓</span></t><t t-else=""><span class="field-overlay" style="position:absolute; top:660px; left:280px;">✓</span></t>
-                            <span class="field-overlay" style="position: absolute; top: 685px; left: 200px; font-size: 12px;"><t t-esc="o.nombres_testigos"/></span>
-                            <span class="field-overlay" style="position: absolute; top: 720px; left: 200px; font-size: 12px;"><t t-esc="o.domicilios_testigos"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 685px; left: 190px; font-size: 12px;"><t t-esc="o.nombres_testigos"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 720px; left: 190px; font-size: 12px;"><t t-esc="o.domicilios_testigos"/></span>
                             <!--<span class="field-overlay" style="position:absolute; top:750px; left:235px; font-size:16px;"><t t-esc="'✓' if o.sumario_policial else ''"/></span>-->
                             <t t-if="o.sumario_policial"><span class="field-overlay" style="position:absolute; top:750px; left:235px;">✓</span></t><t t-else=""><span class="field-overlay" style="position:absolute; top:750px; left:280px;">✓</span></t>
-                            <span class="field-overlay" style="position: absolute; top: 795px; left: 150px; font-size: 12px;"><t t-esc="o.autoridad"/></span>
-                            <span class="field-overlay" style="position: absolute; top: 830px; left: 150px; font-size: 12px;"><t t-esc="o.tipo_denunciante"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 795px; left: 50px; font-size: 12px;"><t t-esc="o.autoridad"/></span>
+                            <span class="field-overlay" style="position: absolute; top: 830px; left: 50px; font-size: 12px;"><t t-esc="o.tipo_denunciante"/></span>
                             <span class="field-overlay" style="position: absolute; top: 850px; left: 160px; font-size: 12px;"><t t-esc="o.denunciante_nombre"/></span>
                             <span class="field-overlay" style="position: absolute; top: 865px; left: 200px; font-size: 12px;"><t t-esc="o.denunciante_domicilio"/></span>
                             <span class="field-overlay" style="position: absolute; top: 1000px; left: 130px; font-size: 12px;"><t t-esc="o.denunciante_telefono_fondo"/></span>

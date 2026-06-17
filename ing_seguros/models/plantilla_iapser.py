@@ -159,23 +159,23 @@ class plantilla_iasper(models.Model):
     medico_primera_atencion = fields.Char(string="Nombe del médico o establecimiento transitorio que prestó primeros auxilios", default="Clínica de la Unión")
 
     # Testigos y denuncia
-    hubo_testigos = fields.Boolean(string="¿Hubo testigos del accidente?")
+    hubo_testigos = fields.Boolean(string="¿Hubo testigos del accidente?",required=True)
     nombres_testigos = fields.Text(string="Nombres y Apellidos testigos")
     domicilios_testigos = fields.Text(string="Domicilios testigo")
-    sumario_policial = fields.Boolean(string="¿Se instruyó sumario policial?")
+    sumario_policial = fields.Boolean(string="¿Se instruyó sumario policial?",required=True)
     autoridad = fields.Char(string="¿A qué autoridad fue elevado? (si es juez indíquese también Secretaría)")
 
     # Datos del denunciante
     tipo_denunciante = fields.Selection([
-        ('empleador', 'Empleador'),
-        ('representante', 'Representantes Legales'),
-        ('beneficiario', 'Beneficiarios'),
-        ('empleado/a municipal','Empleado/a municipal'),
-        ('otro', 'Otro')
-    ], string="¿Quién es el denunciante?")
+        ('Empleador', 'Empleador'),
+        ('Representante', 'Representantes Legales'),
+        ('Beneficiario', 'Beneficiarios'),
+        ('Empleado/a municipal','Empleado/a municipal'),
+        ('Otro', 'Otro')
+    ], string="¿Quién es el denunciante?", required=True)
 
-    denunciante_nombre = fields.Char(string="Apellido y Nombre denunciante")
-    denunciante_domicilio = fields.Char(string="Domicilio del Denunciante")
+    denunciante_nombre = fields.Char(string="Apellido y Nombre denunciante", required=True)
+    denunciante_domicilio = fields.Char(string="Domicilio del Denunciante", required=True)
 
     denunciante_telefono_fondo = fields.Char(String="Telefono del Denunciante", required=True)
 
