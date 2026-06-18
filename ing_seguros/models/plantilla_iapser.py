@@ -167,11 +167,11 @@ class plantilla_iasper(models.Model):
 
     # Datos del denunciante
     tipo_denunciante = fields.Selection([
-        ('Empleador', 'Empleador'),
-        ('Representante', 'Representantes Legales'),
-        ('Beneficiario', 'Beneficiarios'),
-        ('Empleado/a municipal','Empleado/a municipal'),
-        ('Otro', 'Otro')
+        ('empleador', 'Empleador'),
+        ('representante', 'Representantes Legales'),
+        ('beneficiario', 'Beneficiarios'),
+        ('empleado/a municipal','Empleado/a municipal'),
+        ('otro', 'Otro')
     ], string="¿Quién es el denunciante?", required=True)
 
     denunciante_nombre = fields.Char(string="Apellido y Nombre denunciante", required=True)
