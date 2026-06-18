@@ -85,7 +85,7 @@
                         <field name="denunciante_nombre"/>
                         <field name="denunciante_domicilio"/>
                         <field name="denunciante_telefono_fondo" string="Teléfono del Denunciante"/>
-                        <field name="tomador_email" readonly="1"/>
+                        <field name="tomador_email" readonly="1" invisible="1"/>
                     </group>
                 </sheet>
             </form>
