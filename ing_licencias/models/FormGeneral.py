@@ -461,13 +461,9 @@ class FormGeneral(models.Model):
         today = date.today()
         one_year_ago = today - timedelta(days=366)
 
-        planta_permanente = self.env.ref('ing_ausencias.planta_permanente').id
-        planta_temporaria = self.env.ref('ing_ausencias.planta_temporaria').id
 
         lics = self.search([('tipo_lic_id','=',self.env.ref('ing_licencias.lic_no_remunerada').id),
-                            ('state','=','confirmada'), ('fecha_reingreso','>=', one_year_ago),
-                            ('base_form_id.employee_id.tipo_contrato_id', 'in',[planta_permanente, planta_temporaria]
-        ),])
+                            ('state','=','confirmada'), ('fecha_reingreso','>=', one_year_ago),])
 
         l_aux = []
         for l in lics:
