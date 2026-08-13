@@ -51,6 +51,10 @@
                     </div>
                 </xpath>
 
+                <xpath expr="//field[@name='work_location']" position="after">
+                    <field name="doble_contrato" /><!--attrs="{'invisible': [('tipo_contrato_id', 'not in', [3, 7])]}"-->
+                </xpath>
+
                 <xpath expr="//field[@name='visa_expire']" position="after">
                     <field name="date_first_contract"/>
                     <field name="date_init_plant"/>

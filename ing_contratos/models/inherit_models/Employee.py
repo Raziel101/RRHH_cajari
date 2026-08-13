@@ -13,6 +13,8 @@ class Employee(models.Model):
     funcion = fields.Char(string=u"Funcion", compute='_get_funcion_desempenia', tracking=True)
     date_first_contract = fields.Date(string=u'Fecha de 1er Contrato', tracking=True)
     date_init_plant = fields.Date(string=u'Fecha de inicio de planta', tracking=True)
+    doble_contrato = fields.Boolean(string='Doble Contrato', tracking=True)
+
 
     def _get_domain_t_contract(self):
         names = ['planta_temporaria','planta_permanente','locacion','contrato_facturacion','pago_unico','funcionarios_publicos']

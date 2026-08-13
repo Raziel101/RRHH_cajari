@@ -56,6 +56,8 @@ class Contrato(models.Model):
                                    states=_READONLYSTATES)
     attach_ids = fields.Many2many('ir.attachment', string='Adjuntos', domain="[('res_id','=',id)]", copy=True)
 
+
+
     # Related
     tipo_contrato = fields.Char(related="tipo_contrato_id.name", store=True, readonly=True, copy=True)
     telefono = fields.Char(related="employee_id.telefono", store=True, readonly=False, required=True, copy=True)
