@@ -463,7 +463,7 @@ class FormGeneral(models.Model):
 
 
         lics = self.search([('tipo_lic_id','=',self.env.ref('ing_licencias.lic_no_remunerada').id),
-                            ('state','=','confirmada'), ('fecha_reingreso','>=', one_year_ago),])
+                            ('state','=','confirmada'), ('fecha_inicio', '>=', one_year_ago),('fecha_reingreso', '>=', today),('fecha_reingreso', '<=', today + timedelta(days=7)),])
 
         l_aux = []
         for l in lics:
